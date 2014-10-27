@@ -1,0 +1,248 @@
+!!! 5
+html
+  head
+    title WZLY Admin Interface
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    //
+       Bootstrap 
+    link(href='css/bootstrap.min.css', rel='stylesheet', media='screen')
+    link(href='css/datepicker.css', rel='stylesheet')
+    //
+       Styling 
+    link(href='css/style.css', rel='stylesheet', media='screen')
+    link(href='http://fonts.googleapis.com/css?family=Oswald:400,300', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='css/scheduler.css')
+  body
+    .wrapper
+      .scheduler-window
+        .row-fluid
+          .span3
+            h1
+              | Scheduler
+              i.icon.icon-question-sign(title='Click for instructions', alt='Click for instructions')
+          .span5
+            #info.message
+            #error.message
+          .span4.entry-buttons
+            span.pull-right
+              a#add-entry.add.btn(href='#', title='Add entries to the schedule')
+                i.icon.icon-plus
+                | Entry
+              a#remove-entries.delete.btn(href='#', title='Remove all entries from the schedule')
+                i.icon.icon-minus
+                | All Entries
+        form#add-entry-form.formine(action='#', method='get')
+          #add-entry-section.actions
+            input#entry-name(type='text', name='entry-name', placeholder='DJ Name(s)')
+            input#entry-show(type='text', name='entry-show', placeholder='Show Name')
+            input#entry-id(type='text', name='entry-id', placeholder='Username')
+            a#save.accept.btn(href='#', title='Add entries to the schedule') Save
+            a#cancel.cancel.btn(href='#', title='Cancel adding') Cancel
+            //
+               <ol>
+                                <li>Enter a name.</li>
+                                <li>Drag the mouse across the schedule to select the available times. Hold the <code>CTRL</code> key to select multiple times.</li>
+                                <li>Click "Add."</li>
+                              </ol> 
+        table#schedule.table-condensed
+          thead
+            tr
+              th Time
+              th Sunday
+              th Monday
+              th Tuesday
+              th Wednesday
+              th Thursday
+              th Friday
+              th Saturday
+          tbody
+            tr
+              th 8am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 9am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 10am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 11am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 12pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 1pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 2pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 3pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 4pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 5pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 6pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 7pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 8pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 9pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 10pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 11pm
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 12am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 1am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+            tr
+              th 2am
+              td
+              td
+              td
+              td
+              td
+              td
+              td
+        a#add-row.add.btn(href='#', title='Add a new row to the schedule')
+          i.icon.icon-plus
+          | Row
+        //
+          <a id="remove-row" class="delete btn" href="#" title="Delete the last row in the schedule"><i class="icon icon-minus"></i> Row</a>
+        .scheduler-footer.pull-right
+          form.scheduleCodeField(method='post', action='/schedule-edit', onsubmit='return depositCode()')
+            textarea(name='code', style='display: none;')
+            textarea(name='collection', style='display: none;')
+            a(href='admin-interface.html')
+              button.btn Discard Changes
+            button.btn.btn-custom(type='submit') Publish
+    script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js')
+    script(type='text/javascript', src='http://apps.zarjay.net/scheduler/v2.1//scripts/jquery-ui-1.8rc2.custom.min.js')
+    script(src='js/scheduler.js')
+    script(src='js/underscore-min.js')
+    script(src='js/backbone-min.js')
+    script(src='js/models/edit-schedule-models.js')
+    script(src='js/interface.js')

@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  .container
+
+    include admin-sidebar
+    .content
+      h2 Charts
+      table.table.table-striped.table-condensed.table-albums
+        thead
+          tr
+            th Number
+            th Album
+            th Artist
+            th Count
+        tbody
+          each album, i in charts
+            tr
+              td #{i+1}.
+              td #{album.album}
+              td #{album.artist}
+              td #{album.count}
+            
+    //end container
+    script(src='javascripts/jquery-1.10.2.min.js')
+    script(src='javascripts/bootstrap.min.js')
+    script(src='javascripts/bootstrap-datepicker.js')
+

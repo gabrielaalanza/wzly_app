@@ -1,0 +1,33 @@
+extends layout
+
+
+block content
+  .container
+    h2 Users
+    form.user-form(action='/../signup', method='post')
+      | DJ Name:
+      br
+      input(type='text', name='name')
+      br
+      | DJ Username:
+      br
+      input(type='text', name='username')
+      br
+      button.btn(type='submit') Add DJ
+    table.table.table-striped.table-condensed
+      thead
+        tr
+          th DJ
+          th Username
+          th 
+      tbody
+        each user, i in users
+          tr
+            td #{user.local.name}
+            td #{user.local.username}
+            td x
+    //end container
+    script(src='javascripts/jquery-1.10.2.min.js')
+    script(src='javascripts/bootstrap.min.js')
+    script(src='javascripts/bootstrap-datepicker.js')
+

@@ -1,0 +1,172 @@
+extends layout
+
+block content
+  .container
+    h3.logout.pull-right
+      form(action='/logout', method='get')
+        button(type='submit')
+          i.icon.icon-off
+            a(href="/logout")
+              | Logout
+    h1.interface-title Gabriela Lanza
+    .content
+      .side-menu
+        ul
+          li.musiclog Music Log
+          li.viewplaylists View Playlists
+          li.manageprof Manage Profile
+      .controls
+        .log.control
+          form.log-form(action='/musiclog', method='post')
+            //
+              Modal to add show anme/description
+            .addname-modal.modal.hide.fade
+              //
+                <form class="log-form" action="/musiclog-description" method="post">
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                h3 Add/Edit Show Name and Description
+              .modal-body
+                input.input-block-level(type='text', placeholder='Show Name', name='show_name')
+                textarea.input-block-level(rows='6', placeholder='Description', name='description')
+              .modal-footer
+                p
+                  | You must hit "submit" at the bottom of the page for these changes to take effect.
+              //
+                </form>
+            h2
+              | Playlist
+              span.smaller-header for
+              span.current-date
+                img.loading(src='img/loading.gif')
+              span.smaller-header
+                | or
+                span.change-date(data-date='1-01-2013', data-date-format='dd-mm-yyyy') change date
+              | .
+            input(type='datetime', style='display: none;', name='playlist_date')
+            a.btn.btn-small.add-show-name(href='.addname-modal', role='button', data-toggle='modal')
+              i.icon.icon-pencil
+              | Show Name/Description
+            em (optional)
+            p.lastEntered
+            table.log-table
+              tr
+                td
+                  h3 Song
+                td
+                  h3 Artist
+                td
+                  h3 HR ID
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s1')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a1')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr1')
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s2')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a2')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr2')
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s3')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a3')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr3')
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s4')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a4')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr4')
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s5')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a5')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr5')
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s6')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a6')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr6')
+              tr
+                td.col-long
+                  input.input-block-level(type='text', placeholder='', name='s7')
+                td.col-med
+                  input.input-block-level(type='text', placeholder='', name='a7')
+                td.col-short
+                  input.input-block-level(type='text', placeholder='', name='hr7')
+              tr
+                td
+                td
+                td
+                  button.btn.pull-right(type='submit') Submit
+        .playlists.control
+          h2.pull-left Playlist Viewer
+          .pull-right
+            | Playlist for:
+            select.pick-date
+              option 10/6/13
+              option 10/6/13
+              option 10/6/13
+              option 10/6/13
+              option 10/6/13
+          table.table.table-striped.table-condensed.table-playlists
+            thead
+              tr
+                th Song
+                th Artist
+            tbody
+              tr
+                td The Suburbs
+                td
+                  | Arcade Fire
+                  br
+        .profile.control
+          h2
+            | Your Profile
+          .row-fluid
+            form.profile-form(action='/djprofile', method='post', enctype='multipart/form-data')
+              .span4
+                h3 The Basics
+                input.input-block-level(type='text', name='dj_name', placeholder='Name')
+                input.input-block-level(type='text', name='dj_showname', placeholder='Show Name')
+                h3
+                  | A profile picture
+                img.prof-pic(src='img/prof.png')
+                br
+                input(type='file', name='dj_picture')
+              .span7
+                h3
+                  | A short bio
+                textarea.input-block-level(rows='9', name='dj_bio')
+                h3
+                  | Favorite bands
+                input.input-block-level(type='text', placeholder='1.', name='dj_band1')
+                br
+                input.input-block-level(type='text', placeholder='2.', name='dj_band2')
+                br
+                input.input-block-level(type='text', placeholder='3.', name='dj_band3')
+                br
+                input.input-block-level(type='text', placeholder='4.', name='dj_band4')
+                br
+                input.input-block-level(type='text', placeholder='5.', name='dj_band5')
+                br
+                button.btn.pull-right.btn-custom(type='submit') Save
+  //
+     end container
+  script(src='javascripts/jquery-1.10.2.min.js')
+  script(src='javascripts/bootstrap.min.js')
+  script(src='javascripts/bootstrap-datepicker.js')
+  script(src='javascripts/interface.js')
+  script(src='javascripts/user.js')

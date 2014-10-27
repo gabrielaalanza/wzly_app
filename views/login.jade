@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    .container
+      // Sign-in form 
+      form.form-signin(method='post', action='/login')
+        h1.form-signin-heading WZLY Interface Signup
+        input.input-block-level(type='text', placeholder='Username', name='username', autofocus)
+        input.input-block-level(type='password', placeholder='Password', name='password')
+        button.btn.pull-right(type='submit') Sign in
+        p.loginerror #{error}
+    // Javascript files 
+    script(src='jquery/jquery-1.10.2.min.js')
+    script(src='javascripts/bootstrap.min.js')
+    script(src='javascripts/login.js')
+    script(src='javascripts/underscore-min.js')
+    script(src='javascripts/backbone-min.js')

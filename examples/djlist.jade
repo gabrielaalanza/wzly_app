@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    h1.
+        User List
+    ul
+        each dj, i in djlist
+            li.
+                #{dj.username}
+                <br>
+                #{dj.name}
+                <br> 
+                #{dj.show_name}
+                <br> 
+                #{dj.bio}

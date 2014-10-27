@@ -1,0 +1,73 @@
+extends layout
+
+block content
+  .container 
+    .pic-box.gm(data-position='General Manager')
+      img(src='img/prof.png')
+      | General Manager
+    .pic-box.sec(data-position='Secretary')
+      img(src='img/prof.png')
+      | Secretary
+    .pic-box.emd(data-position='External Music Director')
+      img(src='img/prof.png')
+      | External MD
+    .pic-box.imd(data-position='Internal Music Director')
+      img(src='img/prof.png')
+      | Internal MD
+    .pic-box.pro(data-position='Promotions Director')
+      img(src='img/prof.png')
+      | Promotions
+    .pic-box.pub(data-position='Publicity Director')
+      img(src='img/prof.png')
+      | Publicity
+    .pic-box.sam(data-position='Software & Media Director')
+      img(src='img/prof.png')
+      | Software & Media
+    .pic-box.prg(data-position='Programming Director')
+      img(src='img/prof.png')
+      | Programming
+    .pic-box.tch(data-position='Tech Director')
+      img(src='img/prof.png')
+      | Tech
+    .pic-box.se1(data-position='Special Events Coordinator_1')
+      img(src='img/prof.png')
+      | Special Events
+    .pic-box.se2(data-position='Special Events Coordinator_2')
+      img(src='img/prof.png')
+      | Special Events
+    .pic-box.int(data-position='Intern Coordinator')
+      img(src='img/prof.png')
+      | Intern Coordinator
+    .pic-box.lib(data-position='Record Librarian')
+      img(src='img/prof.png')
+      | Record Librarian
+    .pic-box.mon(data-position='Business Director')
+      img(src='img/prof.png')
+      | Business Director
+    .pic-box.new(data-position='News Director')
+      img(src='img/prof.png')
+      | News Director
+    .eboard(style="display: block; clear: both;")
+      form(action='/admin/eboard', method='post')
+        h3 Choose a Position
+        input(type='text', name='position', style='display: none;', value='')
+        //input(type='file', name='member_picture')
+        input.input-block-level(type='text', placeholder='Name', name='name')
+        input.input-block-level(type='text', placeholder='Class Year', name='year')
+        input.input-block-level(type='text', placeholder='Show Name', name='show')
+        input.input-block-level(type='text', placeholder='Show Day/Time', name='time')
+        input.input-block-level(type='text', placeholder='Power Animal', name='animal')
+        textarea.input-block-level(rows='2', placeholder='Top 5 Favorite Bands', name='bands')
+        textarea.input-block-level(rows='2', placeholder='Best Concert', name='concert')
+        textarea.input-block-level(rows='3', placeholder='What do you think about before you go on air?', name='thoughts')
+        textarea.input-block-level(rows='3', placeholder='If you could interview any artist or band, who would it be and what would you ask?', name='interview')
+        button.btn.pull-right.btn-custom(type='submit') Save
+    
+    //end container
+    script(type='text/javascript').                                   
+      var local_data =!{JSON.stringify(eboarders)}
+      console.log(local_data)
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/eboard.js')
+
