@@ -28,13 +28,14 @@ var userSchema = new Schema({
         band4        : String,
         band5        : String
     },
-    playlist         : [{
+    playlists        : [{
         name         : String,
         description  : String,
         startIndex   : Number,
         endIndex     : Number,
         date         : { type: Date, default: Date.now }
-    }]
+    }],
+    live             : {type: Boolean, default: false }
 
 });
 

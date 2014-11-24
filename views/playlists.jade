@@ -1,0 +1,34 @@
+extends layout
+
+
+block content
+  .container
+
+    include dj-sidebar
+    .content
+      .charts_select.pull-right
+        | Playlist on: 
+        select
+          option Choose date
+          each item in user.playlists
+            option #{item.date}
+      h2 Playlists
+      p.emp.zero-state Select a date to see playlist
+      table.table.table-striped.table-condensed.table-albums.table-playlists.hide
+        thead
+          tr
+            th Number
+            th Name
+            th Artist
+            th Album
+        tbody
+    //end container
+    script(type='text/javascript').                                   
+      var songs =!{JSON.stringify(songs)}
+      console.log(songs)
+      var user =!{JSON.stringify(user)}
+      console.log(user)
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/playlists.js')
+

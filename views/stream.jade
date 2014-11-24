@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  .container
+
+    include admin-sidebar
+    .content
+      button.btn.pull-right Download CSV
+      h2 Stream
+      table.table.table-striped.table-condensed.table-albums
+        thead
+          tr
+            th Song
+            th Artist
+            th Album
+            th 
+        tbody
+          each song, i in songs
+            - var now = moment()
+            - var date = moment(song.date)
+            tr
+              td #{song.name}
+              td #{song.artist}
+              td #{song.album}
+              - if (now.diff(date, 'days') === 0)
+                td #{moment(song.date).format('h:mm a')}
+              - else if (now.diff(date, 'days') === 1)
+                td #{moment(song.date).fromNow()} at #{moment(song.date).format('h:mm a')}
+              - else
+                td #{moment(song.date).format('MMM Do YY h:mm a')}
+            
+    //end container
+    script(src='javascripts/jquery-1.10.2.min.js')
+    script(src='javascripts/bootstrap.min.js')
+    script(src='javascripts/bootstrap-datepicker.js')
+

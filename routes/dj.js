@@ -140,8 +140,6 @@ module.exports = function(passport){
             //then, store the song in memory
             //then, update playlist tracker
 
-            console.log(req.body);
-
             //if hr
             if(req.body.hrID) {
                 var query = {'hrID': req.body.hrID};
@@ -152,7 +150,7 @@ module.exports = function(passport){
                     if (err) {
                         console.log('error updating album play count: '+err);
                     }
-                    console.log('updated play count of album: '+album);
+                    console.log('updated play count of album: '+album.name+'\n');
                 })
             }
 
@@ -162,37 +160,140 @@ module.exports = function(passport){
             song.artist = req.body.artist;
             song.album = req.body.album;
 
-            console.log("Saving song: "+song)
+            console.log("Saving song: "+song+'\n');
+
+            var position;
 
             Song.nextCount(function(err, count) {
 
                 song.save(function(err, result){
                     if(err) {
-                        console.log("This is an error: "+err);
+                        console.log("There was an error adding this song: "+err);
                     } else {
 
-                        console.log({message:'Song Added'});
+                        console.log('Song Added');
                     }
                 });
-                console.log("Song position: "+count);
+                console.log("Song position is: "+count+'\n');
+                position = count;
             });
 
             //then, update user profile to claim this song in playlist
             var query = {'_id': req.user.id};
-            var update = {};
-            var options = {$set: {author:"Jessica"}};
+
+            User.findOne(query, function(err, user) {
+
+                //get the playlist
+
+                var playlist = user.playlists[user.playlists.length-1];
+                console.log("Playlist: "+playlist+'\n');
+
+                //check to see if this is the first song in the playlists
+                if(typeof playlist.startIndex == 'undefined') {
+                    //if so, update the start index
+                    playlist.startIndex = position;
+
+                } else {
+                    //if not, update the end index
+                    playlist.endIndex = position;
+                }
+
+                user.save(function(err, result){
+                    if(err) {
+                        console.log('error saving ('+user.local.username+') playlist index: '+err);
+                    } else {
+
+                        console.log(user.local.username+"'s playlist has been saved \n");
+                    }
+                });
+
+            });
 
             res.redirect('back');
         })
         .get(function(req, res){
-
-            console.log(req.user);
 
             res.render('log', {
                 title: "Music Log",
                 user : req.user // get the user out of session and pass to template
             });
 
+        });
+
+    router.route('/playlists')
+        .get(function(req, res){
+
+            Song.find(function(err,songs){
+               if(err) {
+                    console.log("there was an error loading songs");
+                } else {
+                    res.render('playlists', {
+                        title: 'Past Playlists',
+                        songs : songs,
+                        user : req.user // get the user out of session and pass to template
+                    });
+                }
+            });
+
+        });
+
+    router.route('/go-live')
+        .post( function(req, res){
+
+            //change live status to "true"
+            //create new playlist and add it to the user's list of playlists
+
+            var query = {'_id': req.user.id};
+
+            User.findOne(query, function(err, user) {
+
+                user.live = true;
+
+                var currentDate = new Date;
+                var playlist = {
+                    date: currentDate 
+                }
+
+                user.playlists.push(playlist);
+
+                user.save(function(err, result){
+                    if(err) {
+                        console.log('error setting user ('+user+') to live: '+err);
+                    } else {
+
+                        console.log(user+' is now live');
+                    }
+                });
+
+            });
+
+            res.redirect('back');
+        });
+
+    router.route('/finish-playlist')
+        .post( function(req, res){
+
+            //change live status to "true"
+            //create new playlist and add it to the user's list of playlists
+
+            var query = {'_id': req.user.id};
+
+            User.findOne(query, function(err, user) {
+
+                user.live = false;
+
+                user.save(function(err, result){
+                    if(err) {
+                        console.log('error setting finishing playlist for '+user+': '+err);
+                    } else {
+
+                        console.log(user+' is no longer live');
+                    }
+                });
+
+            });
+
+            res.redirect('back');
         });
 
     return router;

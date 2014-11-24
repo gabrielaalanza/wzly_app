@@ -16,3 +16,4 @@ Tasks:
 13. Optional "turn on full charting" feature
 14. Messages?
 15. Add Description and name to playlists
+16. Go live in session store?

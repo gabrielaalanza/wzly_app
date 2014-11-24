@@ -24,6 +24,10 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 var configDB = require('./config/database.js');
 
+// ** Moment ** //
+var moment = require('moment');
+moment().format();
+
 var app = express();
 
 // db configuration ==========================================================
@@ -76,7 +80,7 @@ var methodOverride = require('method-override')
 app.use(methodOverride('X-HTTP-Method-Override'))
 
 // required for passport
-app.use(session({ secret: 'eLecTr!cL@d!Ez' })); // session secret
+app.use(session({cookie: { path: '/', httpOnly: true, maxAge: null}, secret: 'eLecTr!cL@d!Ez' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session

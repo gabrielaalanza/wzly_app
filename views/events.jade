@@ -2,97 +2,125 @@ extends layout
 
 block content
   .container
-    form(action='/admin/events', method='post')
-      .modal-header
-        h3 Add/Edit Event
-      .modal-body
-        input(name='id', type='text', style='display: none;')
-        | Event Name:
-        input.input-block-level(type='text', placeholder='', name='name')
-        | Date:
-        input.event-date(type='date', name='date')
-        
-        br
-        | Time:
-        br
-        .start_time
-          select.short-field.start_hour(name = "start_hour")
-            option 1
-            option 2
-            option 3
-            option 4
-            option 5
-            option 6
-            option 7
-            option 8
-            option 9
-            option 10
-            option 11
-            option 12
-          | :
-          input.short-field.start_minute(type='text', value='00', name = "start_minute")
-          select.short-field.start_ampm(name = 'start_ampm')
-            option PM
-            option AM
-        | until
-        .end-time
-          select.short-field.end_hour(name='end_hour')
-            option 1
-            option 2
-            option 3
-            option 4
-            option 5
-            option 6
-            option 7
-            option 8
-            option 9
-            option 10
-            option 11
-            option 12
-          | :
-          input.short-field.end_minute(type='text', value='00', name='end_minute')
-          select.short-field.end_ampm(name='end_ampm')
-            option AM
-            option PM
-        | Location:
-        input.input-block-level(type='text', placeholder='', name='location')
-        | Description:
-        textarea.input-block-level(rows='3', placeholder='', name='description')
-        //| Spam:
-          br
-          input(type='file', name='spam')
-        p.spam_view There is no spam for this event uploaded yet.
-        button.btn.btn-custom(type='submit', name='submit') Save changes
-    h2 WZLY Events
-    button.btn.pull-right(data-target='.events-modal', role='button', data-toggle='modal')
-      i.icon-plus
-      | Add Event
-    table.table.table-striped.events-table
-      thead
-        tr
-          th Name
-          th Date
-          th Time
-          th Location
-          th Edit
-          th Delete
-      tbody
-        each event, i in events
+
+    include admin-sidebar
+    .content
+      .events-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Event" aria-hidden="true")
+        .modal-dialog
+          form.events-form.form-with-labels(action='/admin/events', method='post')
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal')
+                  span(aria-hidden='true') ×
+                  span.sr-only Close
+                h4.modal-title Add/Edit Event
+              .modal-body
+                input(name='id', type='text', style='display: none;')
+                .row
+                  .col-sm-3
+                    label.inline(for='name') Event Name
+                  .col-sm-9
+                    input.full(type='text', placeholder='', name='name')
+                .row
+                  .col-sm-3
+                    label.inline(for='date') Date
+                  .col-sm-9
+                    input.event-date(type='date', name='date')
+                .row
+                  .col-sm-3
+                    label.inline(for='time') Time
+                  .col-sm-9
+                    span.start_time
+                      select.short-field.start_hour(name = "start_hour")
+                        option 1
+                        option 2
+                        option 3
+                        option 4
+                        option 5
+                        option 6
+                        option 7
+                        option 8
+                        option 9
+                        option 10
+                        option 11
+                        option 12
+                      | :
+                      input.short-field.start_minute(type='text', value='00', name = "start_minute")
+                      select.short-field.start_ampm(name = 'start_ampm')
+                        option PM
+                        option AM
+                    span.in-between until
+                    span.end-time
+                      select.short-field.end_hour(name='end_hour')
+                        option 1
+                        option 2
+                        option 3
+                        option 4
+                        option 5
+                        option 6
+                        option 7
+                        option 8
+                        option 9
+                        option 10
+                        option 11
+                        option 12
+                      | :
+                      input.short-field.end_minute(type='text', value='00', name='end_minute')
+                      select.short-field.end_ampm(name='end_ampm')
+                        option AM
+                        option PM
+                .row
+                  .col-sm-3
+                    label.inline(for='location') Location 
+                  .col-sm-9
+                    input.full(type='text', placeholder='', name='location')
+                .row
+                  .col-sm-3
+                    label.inline(for='description') Description
+                  .col-sm-9
+                    textarea.full(rows='4', placeholder='', name='description')
+                .row
+                  .col-sm-3
+                    label.inline Spam
+                  .col-sm-9
+                    input(type='file', name='spam')
+                    p.spam_view There is no spam for this event uploaded yet.
+              .modal-footer
+                button.btn(type='button', data-dismiss='modal') Close
+                button.btn.primary(type='submit', name='submit') Save changes
+      button.btn.primary.pull-right(data-target='.events-modal', role='button', data-toggle='modal')
+        span.glyphicon.glyphicon-plus
+        | Add Event
+      h2 WZLY Events
+
+      table.table.table-striped.events-table
+        thead
           tr
-            td #{event.name}
-            td #{event.date}
-            td #{event.start_time} - #{event.end_time}
-            td #{event.location}
-            td(class='edit-event',data-id='#{i}') x
-            td 
-              form(method='post', action='/admin/events/#{event._id}')
-                button(type='submit', role='button') x
+            th Name
+            th Date
+            th Time
+            th Location
+            th Edit
+            th Delete
+        tbody
+          each event, i in events
+            tr
+              td #{event.name}
+              td #{event.date}
+              td #{event.start_time} - #{event.end_time}
+              td #{event.location}
+              td(class='edit-event',data-id='#{i}', data-target='.events-modal', role='button', data-toggle='modal')
+                img(src="/images/icons/edit.png").icon
+              td 
+                form(method='post', action='/admin/events/#{event._id}')
+                  button.clear(type='submit', role='button')
+                    img(src="/images/icons/trash.png").icon
     
     //end container
     script(type='text/javascript').                                   
       var local_data =!{JSON.stringify(events)}
       console.log(local_data)
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/javascripts/jquery.js')
     script(src='/javascripts/bootstrap.min.js')
     script(src='/javascripts/events.js')
 

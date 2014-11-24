@@ -5,9 +5,13 @@ var User = require('../models/user');
 var Chart = require('../models/chart');
 var Event = require('../models/event');
 var Eboarder = require('../models/eboarder');
+var Song = require('../models/song');
 
 var express = require('express');
 var router = express.Router();
+
+var moment = require('moment');
+moment().format();
 
 var autoIncrement = require('mongoose-auto-increment');
 
@@ -121,10 +125,19 @@ module.exports = function(passport){
                if(err) {
                     console.log("there was an error loading charts");
                 } else {
-                    res.render('charts', {
-                        title: 'Current Charts',
-                        charts : charts,
-                        user : req.user // get the user out of session and pass to template
+                    Chart.find().sort({date: -1}).exec(function(err,pastCharts) {
+                        if(err) {
+                            console.log("there was an error loading charts");
+                        } else {
+                            res.render('charts', {
+                                title: 'Current Charts',
+                                moment: moment,
+                                charts : charts,
+                                pastCharts : pastCharts,
+                                week: (pastCharts.length + 1),
+                                user : req.user // get the user out of session and pass to template
+                            });
+                        }
                     });
                 }
             })
@@ -229,7 +242,7 @@ module.exports = function(passport){
     //for deleting an event
     router.route('/events/:id')
         .post(function(req, res){
-
+            console.log('delete event');
             Event.remove({
                 _id: req.params.id
             }, function(err, event) {
@@ -294,6 +307,29 @@ module.exports = function(passport){
                     res.render('eboard', {
                         title: 'Event Manager',
                         eboarders : eboarders,
+                        user : req.user // get the user out of session and pass to template
+                    });
+                }
+            });
+
+        });
+
+    router.route('/stream')
+        .post( function(req, res){
+
+            res.redirect('back');
+
+        })
+        .get(function(req, res){
+
+            Song.find().sort({id: -1}).exec(function(err,songs){
+               if(err) {
+                    console.log("there was an error loading songs");
+                } else {
+                    res.render('stream', {
+                        title: 'Radio Stream',
+                        moment: moment,
+                        songs : songs,
                         user : req.user // get the user out of session and pass to template
                     });
                 }

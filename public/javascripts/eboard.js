@@ -3,8 +3,16 @@ $( document ).ready(function() {
 	//check to see if event should be updated or deleted
 	$(".pic-box").click(function(event){
 
+		$('.pic-box').removeClass('active-eboarder');
+
 		//get position of clicked box
-		var position=$(event.target).parent(".pic-box").data("position");
+		var position=$(event.target).data("position");
+
+		//set title
+		$('.position-title').text(position);
+
+		//highlight row
+		$(event.target).addClass('active-eboarder');
 
 		//populate hidden field
 	    $('[name="position"]').val(position);
@@ -24,6 +32,7 @@ $( document ).ready(function() {
 			    $('[name="concert"]').val(eboarder.concert);
 			    $('[name="thoughts"]').val(eboarder.thoughts);
 			    $('[name="interview"]').val(eboarder.interview);
+
 			    check = false;
 			    break;
 	    	}

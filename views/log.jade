@@ -6,49 +6,29 @@ block content
 
     include dj-sidebar
 
-    form.log-form.line-form(action='/app/log', method='post')
-      //
-        <form class="log-form" action="/musiclog-description" method="post">
-        .modal-header
-          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-          h3 Add/Edit Show Name and Description
-        .modal-body
-          input.input-block-level(type='text', placeholder='Show Name', name='show_name')
-          textarea.input-block-level(rows='6', placeholder='Description', name='description')
-        .modal-footer
-          p
-            | You must hit "submit" at the bottom of the page for these changes to take effect.
-        //
-          </form>
-        h2
-          | Playlist
-          span.smaller-header for
-          span.current-date
-            img.loading(src='img/loading.gif')
-          span.smaller-header
-            | or
-            span.change-date(data-date='1-01-2013', data-date-format='dd-mm-yyyy') change date
-          | .
-        input(type='datetime', style='display: none;', name='playlist_date')
-        a.btn.btn-small.add-show-name(href='.addname-modal', role='button', data-toggle='modal')
-          i.icon.icon-pencil
-          | Show Name/Description
-        em (optional)
-        p.lastEntered
-      
-      input.input-block-level(type='text', placeholder='Song', name='name', class='song')
-      | by <br>
-      input.input-block-level(type='text', placeholder='Artist', name='artist', class='artist')
-      | off of <br>
-      input.input-block-level(type='text', placeholder='Album', name='album', class='album')
-      | <br>
-      input.input-block-level(type='text', placeholder='HR ID', name='hrID', class='hrid')
-      <br>
-      .btn(type='submit') Submit
+    if (user.live == true || typeof(username) !== 'undefined')
 
-    .bottom-bar
-      a(href="") Finish playlist
-    //end container
+      form.log-form.line-form(action='/app/log', method='post')
+        
+        input.input-block-level(type='text', placeholder='Song', name='name', class='song')
+        | by <br>
+        input.input-block-level(type='text', placeholder='Artist', name='artist', class='artist')
+        | off of <br>
+        input.input-block-level(type='text', placeholder='Album', name='album', class='album')
+        | <br>
+        input.input-block-level(type='text', placeholder='HR ID', name='hrID', class='hrid')
+        <br>
+        button.btn(type='submit') Submit
+
+      .bottom-bar
+        form(action='/app/finish-playlist' method='post')
+          button.btn.clear(type="submit") Finish playlist
+      //end container
+
+    else
+
+      form(action='/app/go-live' method='post')
+        button.btn.btn-main(type="submit") Go Live
 
     script(type='text/javascript').                                   
       var local_data =!{JSON.stringify(user)}
@@ -57,3 +37,31 @@ block content
     script(src='javascripts/bootstrap.min.js')
     script(src='/javascripts/profile.js')
 
+//
+  <form class="log-form" action="/musiclog-description" method="post">
+  .modal-header
+    button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+    h3 Add/Edit Show Name and Description
+  .modal-body
+    input.input-block-level(type='text', placeholder='Show Name', name='show_name')
+    textarea.input-block-level(rows='6', placeholder='Description', name='description')
+  .modal-footer
+    p
+      | You must hit "submit" at the bottom of the page for these changes to take effect.
+  
+    </form>
+  h2
+    | Playlist
+    span.smaller-header for
+    span.current-date
+      img.loading(src='img/loading.gif')
+    span.smaller-header
+      | or
+      span.change-date(data-date='1-01-2013', data-date-format='dd-mm-yyyy') change date
+    | .
+  input(type='datetime', style='display: none;', name='playlist_date')
+  a.btn.btn-small.add-show-name(href='.addname-modal', role='button', data-toggle='modal')
+    i.icon.icon-pencil
+    | Show Name/Description
+  em (optional)
+  p.lastEntered
