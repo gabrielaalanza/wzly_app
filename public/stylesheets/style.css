@@ -127,6 +127,10 @@ input.full, textarea.full {
 
 /* **** Table **** */
 
+table.table-striped{
+	font-size: 14px;
+}
+
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
     background-color: rgba(243,235,232,0.15);
 }
@@ -147,10 +151,10 @@ input.full, textarea.full {
 }
 
 table .icon {
-	width: 45px;
+	width: 35px;
 	margin: 0 auto;
 	cursor: pointer;
-	padding: 8px 15px;
+	padding: 0px 10px;
 }
 
 table a {
@@ -290,6 +294,23 @@ table a {
 
 .modal-footer {
 	border-top: 1px solid rgba(243,235,232,0.15)
+}
+
+/* **** Better placeholder text **** */
+.form-signin ::-webkit-input-placeholder {
+   color: #F3EBE8;
+}
+
+.form-signin :-moz-placeholder { /* Firefox 18- */
+   color: #F3EBE8;  
+}
+
+.form-signin ::-moz-placeholder {  /* Firefox 19+ */
+   color: #F3EBE8;  
+}
+
+.form-signin :-ms-input-placeholder {  
+   color: #F3EBE8;  
 }
 
 /****************************/
@@ -585,6 +606,7 @@ body.login:before {
 .active-eboarder {
 	background-color: rgba(215,215,215,0.20);
 }
+
 
 
 

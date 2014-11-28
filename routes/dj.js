@@ -11,6 +11,9 @@ var util = require("util");
 var fs = require("fs"); 
 var path = require('path')
 
+var moment = require('moment');
+moment().format();
+
 var autoIncrement = require('mongoose-auto-increment');
 
 
@@ -229,6 +232,7 @@ module.exports = function(passport){
                 } else {
                     res.render('playlists', {
                         title: 'Past Playlists',
+                        moment: moment,
                         songs : songs,
                         user : req.user // get the user out of session and pass to template
                     });

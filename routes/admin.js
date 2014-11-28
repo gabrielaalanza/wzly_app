@@ -226,12 +226,13 @@ module.exports = function(passport){
         })
         .get(function(req, res){
             
-            Event.find(function(err,events){
+            Event.find().sort({date: 1}).exec(function(err,events) {
                if(err) {
                     console.log("there was an error loading events");
                 } else {
                     res.render('events', {
                         title: 'Event Manager',
+                        moment: moment,
                         events : events,
                         user : req.user // get the user out of session and pass to template
                     });
@@ -334,6 +335,27 @@ module.exports = function(passport){
                     });
                 }
             });
+
+        });
+
+    router.route('/scheduler')
+        .post( function(req, res){
+
+            res.redirect('back');
+
+        })
+        .get(function(req, res){
+
+            /*Song.find().sort({id: -1}).exec(function(err,songs){
+               if(err) {
+                    console.log("there was an error loading songs");
+                } else {*/
+                    res.render('scheduler', {
+                        title: 'Scheduler',
+                        user : req.user // get the user out of session and pass to template
+                    });
+                /*}
+            });*/
 
         });
 

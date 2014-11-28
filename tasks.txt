@@ -12,8 +12,12 @@ Tasks:
 9.  Figure out add users problem
 10. Clean up bits of code, files, console.logs
 11. Add authentication routes in
-12. Fix event dates and auto clean up events
-13. Optional "turn on full charting" feature
+12. Auto clean up events
 14. Messages?
 15. Add Description and name to playlists
 16. Go live in session store?
+17. Forever,js
+18. Cropping images
+19. Report bug/give feedback
+20. Scheduler
+21. Autorefresh stream with AJAX

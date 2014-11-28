@@ -11,9 +11,12 @@ block content
         select
           option Choose date
           each item in user.playlists
-            option #{item.date}
+            option(data-date='#{item.date}') #{moment(item.date).format("MMMM Do YYYY")}
       h2 Playlists
-      p.emp.zero-state Select a date to see playlist
+      - if(user.playlists.length > 0)
+        p.emp.zero-state Select a date to see playlist
+      - else
+        p.emp.zero-state You don't have any playlists yet. 
       table.table.table-striped.table-condensed.table-albums.table-playlists.hide
         thead
           tr

@@ -14,12 +14,14 @@ block content
       table.table.table-striped.table-condensed.table-users
         thead
           tr
+            th
             th DJ
             th Username
-            th 
+            th Delete
         tbody
           each user, i in users
             tr
+              td #{i+1}
               td #{user.local.name}
               td #{user.local.username}
               td 

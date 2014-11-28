@@ -2,7 +2,10 @@
 	.topbar
 		h1 WZLY INTERFACE
 	img(src='/images/dj/glanza.jpg', class="prof-pic")
-	h2 Gabriela Lanza
+	- if(user.local.name)
+		h2 #{user.local.name}
+	- else
+		h2 #{user.local.username}
 	ul
 		li.active
 			a(href='/app/log')

@@ -106,7 +106,7 @@ block content
           each event, i in events
             tr
               td #{event.name}
-              td #{event.date}
+              td #{moment(event.date).format('MMM Do YYYY')}
               td #{event.start_time} - #{event.end_time}
               td #{event.location}
               td(class='edit-event',data-id='#{i}', data-target='.events-modal', role='button', data-toggle='modal')

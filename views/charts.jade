@@ -1,0 +1,48 @@
+extends layout
+
+block content
+  .container
+
+    include admin-sidebar
+    .content
+      form(action='/admin/charts', method='post')
+        button.btn.pull-right(type="submit") Start New Week
+      h2 Week #{week} Charts
+      table.table.table-striped.table-condensed.table-albums
+        thead
+          tr
+            th
+            th Album
+            th Artist
+            th Count
+        tbody
+          each album, i in charts
+            tr
+              td #{i+1}.
+              td #{album.album}
+              td #{album.artist}
+              td #{album.count}
+      .charts_select.pull-right
+        | Charts for: 
+        select
+          option Choose date
+          each item in pastCharts
+            option(data-date='#{item.date}') #{moment(item.date).format("MMMM Do YYYY")}
+      h2 Past Charts
+      p.emp.zero-state Select a date to see charts
+      table.table.table-striped.table-condensed.table-albums.table-pastCharts.hide
+        thead
+          tr
+            th
+            th Album
+            th Artist
+            th Count
+        tbody
+    //end container
+    script(type='text/javascript').                                   
+      var local_data =!{JSON.stringify(pastCharts)}
+      console.log(local_data)
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/charts.js')
+

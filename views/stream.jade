@@ -13,7 +13,7 @@ block content
             th Song
             th Artist
             th Album
-            th 
+            th Time
         tbody
           each song, i in songs
             - var now = moment()
@@ -25,12 +25,11 @@ block content
               - if (now.diff(date, 'days') === 0)
                 td #{moment(song.date).format('h:mm a')}
               - else if (now.diff(date, 'days') === 1)
-                td #{moment(song.date).fromNow()} at #{moment(song.date).format('h:mm a')}
+                td #{moment(date).calendar()}
               - else
-                td #{moment(song.date).format('MMM Do YY h:mm a')}
+                td #{moment(song.date).format('MMM Do')} at #{moment(song.date).format('h:mm a')}
             
     //end container
-    script(src='javascripts/jquery-1.10.2.min.js')
-    script(src='javascripts/bootstrap.min.js')
-    script(src='javascripts/bootstrap-datepicker.js')
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
 
