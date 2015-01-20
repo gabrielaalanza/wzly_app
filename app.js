@@ -31,7 +31,17 @@ moment().format();
 // ** Later ** //
 var later = require('later');
 
+// ** Pagination ** //
+var mongoosePaginate = require('mongoose-paginate');
+var paginate = require('express-paginate');
+
+// ** JSON to CSV ** //
+var json2csv = require('json2csv');
+
 var app = express();
+
+// pagination setup
+app.use(paginate.middleware(10, 50));
 
 // db configuration ==========================================================
 mongoose.connect(configDB.url); // connect to our database
@@ -56,6 +66,7 @@ initPassport(passport);
     next();
 });
 */
+
 // require routes
 var routes = require('./routes/routes')(passport);
 var admin = require('./routes/admin')(passport);

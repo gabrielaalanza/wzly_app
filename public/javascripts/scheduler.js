@@ -2,44 +2,51 @@ $(function() {
 	
 	// Initialize some jQuery objects
 	var 
-		$error = $('#error'),
-		$info = $('#info'),
-		$entry_section = $('#add-entry-section'),
-		$entry_name = $('#entry-name'),
-		$entry_show = $('#entry-show'),
-		$entry_id = $('#entry-id'),
-		$schedule = $('#schedule'),
+		$error = $('.error'),
+		$info = $('.info'),
+		$entry_username = $('.entry-username'),
+		$schedule = $('.schedule'),
 		$clone = $('#clone'),
 		$generate = $('#generate');
 	
+	djSchedule = djSchedule[0];
+
+	if(typeof(djSchedule) === 'undefined') {
+		//djSchedule = createArray(7,24);
+		djSchedule = createSchedule();
+	} else {
+		djSchedule = djSchedule.schedule;
+		//put the DJs into their correct slots
+		renderSchedule();
+		//create a list of current DJs and their slots to check deletes against
+		//var originalDJs = originalDJs();
+	}
+	
+	var djUpdates = [];
+
+	//see if items are being selected
+
 	// Start the setup
 	init();
 	
 	// Setup code
 	function init() {
 		// Hide Stuff
-		$entry_section.hide();
 		$error.hide();
 		$info.hide();
 		
 		// Activate buttons
-		$('#add-entry').click(openEntrySection);
-		$('#save').click(addEntries);
-		$('#cancel').click(closeEntrySection);
-		$('#add-entry-form').submit(addEntries);
-		$('#add-row')
-			.click(addRow)
-			.hover(addRowHighlight, addRowUndoHighlight);
-		$('#remove-row')
-			.click(removeRow)
-			.hover(removeRowHighlight, removeRowUndoHighlight);
-		$('#remove-entries')
+		$entry_username.change(addEntryMode);
+		$('.add-entry-form').submit(addEntries);
+		$('.remove-entries')
 			.click(removeEntries)
 			.hover(removeEntriesHighlight, removeEntriesUndoHighlight);
-		$('#generate').click(generateSchedule);
 		
 		// Whenever entries are created, let them be deletable
-		$('.deletable').live('click', removeEntry);
+		$('.deletable').live('click',removeEntry);
+
+		// Delete highlighted rows on cancel
+		$('.cancel').click(endAddMode);
 		
 		// Prevent text selection on double-click
 		$('.actions a')
@@ -49,85 +56,59 @@ $(function() {
 				return false;
 			});
 
-		//highlight td and th on hover
-		$("td").hover(function(){
-			$(this).closest('table').find('th').eq($(this).index()).toggleClass("active");
-			$(this).parent('tr').find('th:first').toggleClass("active");
+		//submit information and return to rest of interface
+		$('.publish').click(publish);
 
+		//highlight td and th on hover
+		$("td").mouseover(function(){
+			$(this).closest('table').find('th').eq($(this).index()).addClass("current");
+			$(this).parent('tr').find('th:first').addClass("current");
+		}).mouseout(function(){
+			$(this).closest('table').find('th').eq($(this).index()).removeClass("current");
+			$(this).parent('tr').find('th:first').removeClass("current");
 		});
-	}
-	
-	// Add a row to the table
-	function addRow() {
-		$schedule.find('tbody').append('<tr><th><input type="text" /></th><td></td><td></td><td></td><td></td><td></td><td></td><<td></td><</tr>');
-		addRowUndoHighlight();
-		addRowHighlight();
-		return false;
-	}
-	
-	// Highlight bottom row of table to cue user of add action
-	function addRowHighlight() {
-		$schedule.find('tbody tr:last-child *').addClass('adding');
-	}
-	
-	// Undo highlight
-	function addRowUndoHighlight() {
-		$schedule.find('tbody tr *').removeClass('adding');
-	}
-	
-	// Delete last row from the table
-	function removeRow() {
-		$schedule.find('tbody tr').last().remove();
-		removeRowUndoHighlight();
-		removeRowHighlight();
-		return false;
-	}
-	
-	// Highlight row to be deleted to cue user of delete action
-	function removeRowHighlight() {
-		$schedule.find('tbody tr:last-child *').addClass('deleting');
-	}
-	
-	// Undo highlight
-	function removeRowUndoHighlight() {
-		$schedule.find('tbody tr *').removeClass('deleting');
+
+		//show hidden rows
+		$('.show-rows').click(showHiddenRows);
 	}
 	
 	// Show "add entry" section
-	function openEntrySection() {
+	function addEntryMode() {
+
 		// Prevent entry deletion when section is open
 		$schedule.find('.entry').removeClass('deletable').removeAttr('title');
 		
-		// Show section
-		$entry_section.slideDown(function() {
-			$entry_name.focus();
-		});
-		
 		// Make the table cells selectable
-		$schedule.selectable({
-			filter: 'td'
+		var options = {filter: 'td', stop: function (event, ui) {
+				var colIndex = $schedule.find('.ui-selected').index();
+			    var column = $('.schedule tr td:nth-child('+colIndex+')');
+			    $('.schedule td').not('td:nth-child('+colIndex+')').selectable( "disable" );
+			    $schedule.selectable('destroy').selectable(options);
+		    }
+		}
+		$schedule.selectable(options);
+
+		//make sure that only a single column can be selected
+		$(".schedule td").mousedown(function (e) {
+		    var colIndex = $(this).index() + 1;
+		    var column = $('.schedule tr td:nth-child('+colIndex+')');
+		    $('.schedule td').not('td:nth-child('+colIndex+')').removeClass('ui-selected');
+		    $schedule.selectable( "option", "filter", column );
 		});
 
-		$("td").hover(function(){
-			
-		});
-		
 		return false;
 	}
 	
 	// Hide "add entry" section
-	function closeEntrySection() {
-		// Hide section
-		$entry_section.slideUp();
+	function endAddMode() {
 		
 		// Get rid of selectables
 		$schedule.selectable('destroy');
 		$('.ui-selected').removeClass('ui-selected');
+		$(".schedule td").unbind('mousedown');
 		
 		// We're done with input value, so empty it
-		$entry_name.val('');
-		$entry_show.val('');
-		$entry_id.val('');
+		$entry_username.val('');
 		
 		// Make entries deletable
 		$schedule.find('.deletable').attr('title','Click to delete');
@@ -137,42 +118,77 @@ $(function() {
 	
 	// Add entries to table
 	function addEntries() {
-		var entryName = $entry_name.val();
-		var entryId = $entry_id.val();
-		var entryShow = $entry_show.val();
-		entryName = $.trim(entryName);
-		entryId = $.trim(entryId);
-		entryShow = $.trim(entryShow);
+		var entryUsername = $entry_username.val();
+		entryUsername = $.trim(entryUsername);
 		
 		// Get selected table cells
 		var $selected = $('.ui-selected');
+
+		var day = [];
+		var hour = [];
+
+		$('.ui-selected').each( function() {
+			hour.push($(this).attr('data-x'));
+			day.push($(this).attr('data-y'));
+		});
+
+		console.log("hour "+hour);
+		console.log("day "+day);
+
+		var regDJ = false;
+		for (var i = users.length - 1; i >= 0; i--) {
+			if(entryUsername == users[i].local.username) regDJ = true;
+		};
 		
-		if (!entryName) {
+		if (!entryUsername) {
 			$error.message("Hey!", "You didn't enter a name.");
-		} else if (!entryId) {
-			$error.message("Hey!", "You didn't enter a username.");
-		} else if (!$selected.length) {
-			$error.message("Hey!", "You didn't select anything.");
+		} else if (!regDJ) {
+			$error.message(entryUsername," is not yet in the system.")
 		} else {
 			// Add entry to each selected cell
-			var entry = '<span class="entry">' + entryName + '</span>';
+			var entry = '<span class="entry">' + entryUsername + '</span>';
    			$selected.addClass('active deletable');
 
 			$selected.append(entry);
 
-			$selected.attr("data-name",entryName);
-			$selected.attr("data-id",entryId);
-			$selected.attr("data-show",entryShow);
-			$selected.attr("data-col_index",$selected.index()+1);
-			$selected.attr("data-row_index",$selected.parent('tr').index()+1);
-			$selected.attr("data-colspan",$selected.length);
+			$selected.attr("data-username",entryUsername);
+			//$selected.attr("data-col_index",$selected.index()+1);
+			//$selected.attr("data-row_index",$selected.parent('tr').index()+1);
+			//$selected.attr("data-colspan",$selected.length);
 
 			// Close the section
-			closeEntrySection();
+			endAddMode();
 			
-			$info.message(entryName, " has been added.");
+			$info.message(entryUsername, " has been added.");
 
-			updateCollection(entryName, entryShow, entryId, $selected.index()+1, $selected.parent('tr').index()+1, $selected.length);
+			for (var i = 0; i <= day.length - 1; i++) {
+				if(i == 0) {
+					var info = {"name": entryUsername, "colspan": day.length};
+				} else {
+					var info = {"name": entryUsername};
+				}
+				var n = day[i] - 1;
+				var m = hour[i] - 3;
+				if(m<1){
+					m = m+24;
+				}
+				console.log("m: "+m);
+				console.log("hour[i]: "+hour[i]);
+				djSchedule[n][m] = info;	
+			};
+
+			var weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+			var showTime = {'username': entryUsername,
+							'startTime': parseInt(hour[0]),
+							'endTime': parseInt(hour[hour.length-1]) + 1,
+							'dayOfWeek': weekDays[(parseInt(day[0])-1)]}
+
+			djUpdates.push(showTime);
+
+			console.log(JSON.stringify(djSchedule));
+			console.log(JSON.stringify(djUpdates));
+
 		}
 		
 		return false;
@@ -180,19 +196,51 @@ $(function() {
 	
 	// Delete entry from the table
 	function removeEntry() {
+		var name = $(this).attr("data-username");
+		var hour = $(this).attr("data-x");
+
 		var id = $(this).attr("data-id");
 			$(this).html("");
 			$(this).removeClass("active");
 			$(this).removeClass("deletable");
 			$(this).removeAttr("title");
-			$(this).removeAttr("data-name");
-			$(this).removeAttr("data-id");
-			$(this).removeAttr("data-show");
-			$(this).removeAttr("data-col_index");
-			$(this).removeAttr("data-row_index");
-			$(this).removeAttr("data-colspan");
+			$(this).removeAttr("data-username");
 
-		removeFromCollection(id);
+		//delete user from arrays
+		
+		for (var i = djSchedule.length - 1; i >= 0; i--) {
+			for (var n = djSchedule[i].length - 1; n >= 0; n--) {
+				if(djSchedule[i][n].name == name) {
+					djSchedule[i][n] = " ";
+				}
+			};
+		};
+	
+		for (var i = djUpdates.length - 1; i >= 0; i--) {
+			if(djUpdates[i].username===name) {
+				//check to see where in the span this cell falls
+				if(hour == djUpdates[i].startTime ) {
+					//if the hour is the first hour of the range
+					//move the start time up an hour
+					djUpdates[i].startTime = (parseInt(djUpdates[i].startTime)+1);
+				} else if (hour == (parseInt(djUpdates[i].endTime)-1)) {
+					//if the hour is the last hour of the range
+					//move the end time down an hour
+					djUpdates[i].endTime = (parseInt(djUpdates[i].endTime)-1);
+				} else if (parseInt(djUpdates[i].endTime) == (parseInt(djUpdates[i].startTime) +1)) {
+					//if the dj's show is only an hour
+					//remove it from the array
+					djUpdates.splice(i, 1);
+				} else if (djUpdates[i].startTime < hour < (parseInt(djUpdates[i].endTime)-1)) {
+					//if the show is in the middle of the range, not the start or end hours
+					//disregard it
+					djUpdates[i].disregard = hour;
+					//this needs fix for if someone goes and takes away another the first or last time
+				}
+			}
+		};
+
+		console.log(JSON.stringify(djUpdates));
 
 		return false;
 	}
@@ -206,6 +254,7 @@ $(function() {
 			$entries.html("");
 			$entries.removeClass("active");
 			$entries.removeClass("deletable");
+			$entries.removeClass("deleting");
 			$entries.removeAttr("title");
 			$entries.removeAttr("data-name");
 			$entries.removeAttr("data-id");
@@ -213,19 +262,21 @@ $(function() {
 			$entries.removeAttr("data-col_index");
 			$entries.removeAttr("data-row_index");
 			$entries.removeAttr("data-colspan");
-		
+
+		djSchedule = createSchedule();
+		djUpdates = [];
 		
 		return false;
 	}
 	
 	// Highlight entries to be deleted to cue user of deletion action
 	function removeEntriesHighlight() {
-		$('.entry').addClass('deleting');
+		$('.entry').parent().addClass('deleting');
 	}
 	
 	// Undo highlight
 	function removeEntriesUndoHighlight() {
-		$('.entry').removeClass('deleting');
+		$('.entry').parent().removeClass('deleting');
 	}
 	
 	// Generate a schedule from the table
@@ -250,35 +301,60 @@ $(function() {
 		return false;
 	}
 
+	function showHiddenRows() {
+		if(!$('table.schedule').hasClass('expanded')){
+			$('table.schedule tr.collapsed').css('display','table-row');
+			$('table.schedule').addClass('expanded');
+			$('.show-rows').text('Hide times');
+		} else {
+			$('table.schedule tr.collapsed').css('display','none');
+			$('table.schedule').removeClass('expanded');
+			$('.show-rows').text('Show hidden times');
+		}
+	}
+
+	function publish(event) {
+
+		if(event.handled !== true) {
+
+			//var req = {'schedule': djSchedule, 'djs': djUpdates};
+			/*req = req.toString();
+			console.time("ajax call");
+			$.ajax({
+			    url: "/admin/scheduler",
+			    data : {'schedule': djSchedule, 'djs': djUpdates},
+			    type: 'POST',          
+                dataType: 'json',
+			    success: function(result){
+			        //showResultsToUser(result);
+			        //clearTimeout(cancelMe); // don't run if it hasn't run yet
+			        //$('#loading').hide(); // hide the loading element if it's shown
+			        console.timeEnd("ajax call");
+			        alert("Size is " + req.getResponseHeader("Content-Length"));
+			        console.log("done");
+					window.location.replace('/admin/library');
+					console.log("really done");
+
+			    }
+			});*/
+		    $.post('/admin/scheduler',{'schedule': djSchedule, 'djs': djUpdates}, function() {
+		    	console.log("done");
+				window.location.replace('/admin/library');
+			});
+
+		    event.handled = true;
+	  	}
+	  return false;
+	}
+
 
 
 });
 
-function depositCode() {
-	$("th").removeClass("active");
-	$("textarea[name=code]").val($("table#schedule tbody").html());
-	sendCollection();
-	return true;
-}
 
 
 
 ;(function($) {
-	/* 
-	 * Random Child (0.1)
-	 * by Mike Branski (www.leftrightdesigns.com)
-	 * mikebranski@gmail.com
-	 *
-	 * Copyright (c) 2008 Mike Branski (www.leftrightdesigns.com)
-	 * Licensed under GPL (www.leftrightdesigns.com/library/jquery/randomchild/gpl.txt)
-	 */
-	$.fn.randomChild = function(settings) {
-		return this.each(function(){
-			var c = $(this).children().length;
-			var r = Math.ceil(Math.random() * c);
-			$(this).children().hide().parent().children(':nth-child(' + r + ')').show();
-		});
-	};
 
 	// My extensions
 	$.fn.message = function(strongText, plainText) {
@@ -290,3 +366,76 @@ function depositCode() {
 		});
 	};
 })(jQuery);
+
+function createArray(length) {
+    var arr = new Array(length || 0),
+        i = length;
+
+    if (arguments.length > 1) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        while(i--) arr[length-1 - i] = createArray.apply(this, args);
+    }
+
+    return arr;
+}
+
+function createSchedule() {
+	return [
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
+			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+		]
+}
+
+function renderSchedule () {
+	console.log('rendering schedule');
+	for (var i = 0; i <= djSchedule.length - 1; i++) {
+		for (var n = 0; n <= djSchedule[i].length - 1; n++) {
+			//traverse the array by day, then by hour
+			//figure out which cell you are in
+			//replace the contents of the cell if there are contents to replace
+			//add the right classes
+
+			var x = n + 3;
+			if (x > 24) x = x - 24;
+
+
+			$cell = $('td[data-x="'+x+'"][data-y="'+(i+1)+'"]');
+
+			var name = djSchedule[i][n].name;
+			if(name) $cell.html("<span class='entry'>"+name+"</span>").addClass("active deletable");
+
+		};
+	};
+
+}
+
+function originalDJs() {
+	var djs = [];
+	for (var i = users.length - 1; i >= 0; i--) {
+		//if(users[i]) 
+	};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,8 +4,27 @@ block content
   .container
 
     include admin-sidebar
+    #date-range.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal', aria-label='Close')
+                span(aria-hidden='true') &times;        
+              h3.modal-title Choose date range
+            .modal-body
+              a.btn(href='/admin/csv') All songs
+              hr
+              h4 Songs in range
+              form.csv-form(action='/admin/csv', method='post')
+                input(type='date', name='start')
+                | to 
+                input(type='date', name='end')
+                button.btn(type='submit') Get CSV
+            .modal-footer
+              button.btn(type='button', data-dismiss='modal') Close 
+      
     .content
-      button.btn.pull-right Download CSV
+      button.btn.pull-right(data-toggle='modal' data-target='#date-range') Download CSV
       h2 Stream
       table.table.table-striped.table-condensed.table-albums
         thead
@@ -28,6 +47,7 @@ block content
                 td #{moment(date).calendar()}
               - else
                 td #{moment(song.date).format('MMM Do')} at #{moment(song.date).format('h:mm a')}
+      include _paginate
             
     //end container
     script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')

@@ -18,7 +18,11 @@ var userSchema = new Schema({
         name         : String
     },
     showName         : String,
-    showTime         : String,
+    showTime         : {
+        startTime    : Number,
+        endTime      : Number,
+        dayOfWeek    : String
+    },
     picture          : String,
     bio              : String,
     bands            : {

@@ -18,7 +18,7 @@ block content
         | <br>
         input.input-block-level(type='text', placeholder='HR ID', name='hrID', class='hrid')
         <br>
-        button.btn(type='submit') Submit
+        button.btn.light(type='submit') Submit
 
       .bottom-bar
         form(action='/app/finish-playlist' method='post')
@@ -34,8 +34,7 @@ block content
       var local_data =!{JSON.stringify(user)}
       console.log(local_data)
     script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
-    script(src='javascripts/bootstrap.min.js')
-    script(src='/javascripts/profile.js')
+    script(src='/javascripts/bootstrap.min.js')
 
 //
   <form class="log-form" action="/musiclog-description" method="post">

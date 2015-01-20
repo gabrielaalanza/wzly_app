@@ -3,7 +3,7 @@ body {
 	background-image: url('../images/dj-background.png');
 	background-repeat: no-repeat;
     background-attachment: fixed;
-	background-color: #EDEBED;
+	background-color: #060C2B;
 	background-size: 100%;
 	font-size: 15px;
 	color: #F3EBE8;
@@ -31,6 +31,9 @@ h3 {
 	border: 1px solid #F3EBE8;
 	border-radius: 2px;
 	padding: 8px 40px;
+}
+
+.btn.light {
 	background-color: transparent;
 }
 
@@ -123,6 +126,27 @@ input.full, textarea.full {
 	font-family: "HelveticaNeue-Thin";
 	font-weight: 300;
 	font-size: 18px;
+}
+
+/* **** Pagination **** */
+.well-sm {
+	padding: 2px 0px 5px;
+}
+
+.pager li>a, .pager li>span {
+	background-color: transparent;
+}
+
+.pager li>a:hover, .pager li>span:hover {
+	background-color: rgba(243,235,232,.2);;
+	color: #F3EBE8;
+}
+
+.pager li .glyphicon {
+	font-size: 8px;
+	margin-top: 5px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 
 /* **** Table **** */

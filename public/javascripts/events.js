@@ -7,6 +7,24 @@ $( document ).ready(function() {
 	    var id = $(this).attr('data-id');
 	    var event = local_data[id];
 
+	    var date = new Date(event.start_time);
+	    date = moment(date);
+
+	    $('[name="date"]').val(date.format('YYYY-MM-DD'));
+
+	    $('[name="start_hour"]').val(date.format('h'));
+	    $('[name="start_minute"]').val(date.format('mm'));
+	    $('[name="start_ampm"]').val(date.format('A'));
+
+	    var end_date = new Date(event.end_time);
+	    end_date = moment(end_date);
+	    console.log(event.end_time);
+
+	    $('[name="end_hour"]').val(end_date.format('h'));
+	    $('[name="end_minute"]').val(end_date.format('mm'));
+	    $('[name="end_ampm"]').val(end_date.format('A'));
+
+
 	    //populate fields with information
 	    $('[name="name"]').val(event.name);
 	    $('[name="description"]').val(event.description);
@@ -15,7 +33,7 @@ $( document ).ready(function() {
 	    //populate hidden field
 	    $('[name="id"]').val(event._id);
 
-	    //date handling
+	    /*date handling
 	    var myDate, day, month, year, date;
 		myDate = new Date(event.date);
 		day = myDate.getDate();

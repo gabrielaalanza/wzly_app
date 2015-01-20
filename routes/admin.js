@@ -6,6 +6,7 @@ var Chart = require('../models/chart');
 var Event = require('../models/event');
 var Eboarder = require('../models/eboarder');
 var Song = require('../models/song');
+var Schedule = require('../models/schedule');
 
 var express = require('express');
 var router = express.Router();
@@ -13,7 +14,12 @@ var router = express.Router();
 var moment = require('moment');
 moment().format();
 
+var paginate = require('express-paginate');
+
 var autoIncrement = require('mongoose-auto-increment');
+
+var json2csv = require('json2csv');
+var fs = require('fs');
 
 // ****** Check to see if user is authenticated ****** //
 
@@ -25,6 +31,23 @@ var isAuthenticated = function (req, res, next) {
         return next();
     // if the user is not authenticated then redirect him to the login page
     res.redirect('/login');
+}
+
+// helper funtions
+function getCSV(data, res) {
+    json2csv({data: data, fields: ['album', 'artist', 'name', 'time']}, function(err, csv) {
+      if (err) console.log(err);
+      fs.writeFile('stream.csv', csv, function(err) {
+        if (err) {
+            throw err;
+        } else {
+            console.log('file saved');
+            var file = 'stream.csv';
+            res.download(file);
+        }
+      });
+
+    });
 }
 
 module.exports = function(passport){
@@ -44,6 +67,35 @@ module.exports = function(passport){
 
                         console.log({message:'Album Added'});
 
+                        Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
+
+                            if (err) return next(err);
+
+                            res.format({
+                              html: function() {
+                                    res.render('library', {
+                                        title: 'Library',
+                                        albums : albums,
+                                        hrID : count,
+                                        albumName : result.album,
+                                        albumArtist : result.artist,
+                                        pageCount: pageCount,
+                                        itemCount: itemCount,
+                                        user: req.user
+                                    });
+                              },
+                              json: function() {
+                                // inspired by Stripe's API response for list objects
+                                res.json({
+                                    object: 'list',
+                                    has_more: paginate.hasNextPages(req)(pageCount),
+                                    data: albums
+                                });
+                              }
+                            });
+
+                        }, { sortBy : { hrID : -1 }});
+                        /*
                         Album.find(function(err,albums){
                            if(err) {
                                 console.log("There was an error getting the albums: "+err);
@@ -57,14 +109,45 @@ module.exports = function(passport){
                                     albumArtist : result.artist,
                                     user : req.user // get the user out of session and pass to template
                                 });
+
                             }
                         });
+                        */
                     }
                 });
             });
         })
         .get( function(req, res) {
 
+            Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
+
+                if (err) return next(err);
+
+                res.format({
+                  html: function() {
+                        res.render('library', {
+                            title: 'Library',
+                            albums : albums,
+                            hrID : null,
+                            albumName : null,
+                            albumArtist : null,
+                            pageCount: pageCount,
+                            itemCount: itemCount,
+                            user: req.user
+                        });
+                  },
+                  json: function() {
+                    // inspired by Stripe's API response for list objects
+                    res.json({
+                        object: 'list',
+                        has_more: paginate.hasNextPages(req)(pageCount),
+                        data: albums
+                    });
+                  }
+                });
+
+            }, { sortBy : { hrID : -1 }});
+            /*
             Album.find(function(err,albums){
                if(err) {
                     console.log("There was an error getting the albums: "+err);
@@ -80,6 +163,7 @@ module.exports = function(passport){
                     });
                 }
             });
+            */
         });
 
     // ****** Get albums from database ****** //
@@ -176,20 +260,26 @@ module.exports = function(passport){
             newEvent.location = req.body.location;
             newEvent.description = req.body.description;
 
+
             //newEvent.spam = req.param("spam");
 
             // date validation
             var start_hour = req.body.start_hour;
             var start_minute = req.body.start_minute;
             var start_AMPM = req.body.start_ampm;
-            var start_time = start_hour+":"+start_minute+" "+start_AMPM;
 
             var end_hour = req.body.end_hour;
             var end_minute = req.body.end_minute;
             var end_AMPM = req.body.end_ampm;
-            var end_time = end_hour+":"+end_minute+" "+end_AMPM;
 
-            newEvent.start_time = start_time;
+            if(start_hour == '12') start_hour = 0;
+            if(end_hour == '12') end_hour = 0;
+            if(start_AMPM == 'PM') start_hour = parseInt(start_hour) + 12;
+            if(end_AMPM == 'PM') end_hour = parseInt(end_hour) + 12;
+
+            newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute);
+            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute);
+            if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
             //if event is new (id is null), save it
@@ -306,7 +396,7 @@ module.exports = function(passport){
                     console.log("there was an error loading eboarders");
                 } else {
                     res.render('eboard', {
-                        title: 'Event Manager',
+                        title: 'Eboarders',
                         eboarders : eboarders,
                         user : req.user // get the user out of session and pass to template
                     });
@@ -323,39 +413,251 @@ module.exports = function(passport){
         })
         .get(function(req, res){
 
-            Song.find().sort({id: -1}).exec(function(err,songs){
-               if(err) {
-                    console.log("there was an error loading songs");
-                } else {
-                    res.render('stream', {
-                        title: 'Radio Stream',
-                        moment: moment,
-                        songs : songs,
-                        user : req.user // get the user out of session and pass to template
+            Song.paginate({}, req.query.page, req.query.limit, function(err, pageCount, songs, itemCount) {
+
+                if (err) return next(err);
+
+                res.format({
+                  html: function() {
+                        res.render('stream', {
+                            title: 'Radio Stream',
+                            songs: songs,
+                            pageCount: pageCount,
+                            itemCount: itemCount,
+                            moment: moment,
+                            user: req.user
+                        });
+                  },
+                  json: function() {
+                    // inspired by Stripe's API response for list objects
+                    res.json({
+                        object: 'list',
+                        has_more: paginate.hasNextPages(req)(pageCount),
+                        data: songs
                     });
+                  }
+                });
+
+            }, { sortBy : { id : -1 }});
+
+        });
+    
+    router.route('/csv')
+        .post( function(req, res){
+
+            console.log('csv requested for date range'+req.body.start+' to '+req.body.end);
+
+            Song.find().lean().sort({id: -1}).exec(function(err,songs) {
+               if(err) {
+                    console.log("there was an error retrieving songs");
+                } else {
+                    var start = moment(req.body.start);
+                    var end = moment(req.body.end);
+                    for (var i = 0; i <= songs.length - 1; i++) {
+                        var date = moment(songs[i].date);
+                        if(date.isAfter(start) && date.isBefore(end)) {
+                            songs[i]['time'] = date.format('MMMM Do YYYY, hh:mm a');
+                        } else {
+                            songs.splice(i, 1);
+                            i--;
+                        }
+                    };
+
+                    var file = getCSV(songs, res);
+                    
                 }
-            });
+            }); 
+
+        })
+        .get(function(req, res){
+
+            console.log('csv requested for all dates');
+
+            Song.find().lean().sort({id: -1}).exec(function(err,songs) {
+               if(err) {
+                    console.log("there was an error retrieving songs");
+                } else {
+
+                    for (var i = songs.length - 1; i >= 0; i--) {
+                        var date = moment(songs[i].date).format('MMMM Do YYYY, hh:mm a');
+                        songs[i]['time'] = date;
+                    };
+
+                    var file = getCSV(songs, res);
+                }
+            });   
 
         });
 
     router.route('/scheduler')
         .post( function(req, res){
 
-            res.redirect('back');
+            //update the schedule
+            var query = {"name": "schedule"};
+            var update = {"schedule": req.body.schedule};
+            var options = {upsert: true};
+
+            Schedule.findOneAndUpdate(query, update, options, function(err, schedule) {
+                if (err) {
+                    console.log('error updating schedule: '+err);
+                } else {
+                  console.log('updated schedule');
+                }
+            });
+
+
+            var djs = req.body.djs;
+
+            djs.forEach(function(d) {
+
+                var name = d.username;
+                var start = parseInt(d.startTime);
+                var end = parseInt(d.endTime);
+                var day = d.dayOfWeek;
+
+                var q = {};
+                q['local.username'] = name;
+
+                var query = User.findOne(q);
+
+                query.exec(function(err, user) {
+
+                    user.showTime.startTime = start;
+                    user.showTime.endTime = end;
+                    user.showTime.dayOfWeek = day;
+
+                    //save the user
+                    user.save(function (err) {
+                        if(err) {
+                            console.log('error updating djs: '+err);
+                        }
+                    });
+
+                });
+            });
+
+            /****** Old code ******/
+            /*
+            
+            //update the users
+
+            //get list of DJs
+            var djs = req.body.djs;
+            //console.log("============= List of DJs =============");
+            //console.log(req.body.djs);
+
+            for (var i = 0, l = djs.length; i < l; i++) {
+
+                //get username of current DJ
+                var name = djs[i].username;
+                //set up query
+                var query = {};
+                query['local.username'] = name;
+
+                //store current DJ
+                var dj = djs[i];
+                console.log("============= DJ before mongoose =============");
+                console.log(dj);
+
+                //find the DJ
+                User.findOne(query, function (err, user) {
+
+                    console.log("============= DJ after mongoose =============");
+                    console.log(dj);
+
+                    //set the information
+                    user.showTime.startTime = parseInt(dj.startTime);
+                    user.showTime.endTime = parseInt(dj.endTime);
+                    user.showTime.dayOfWeek = dj.dayOfWeek;
+                    //console.log("============= User after update =============\n"+user);
+
+                    //save the user
+                    user.save(function (err) {
+                        if(err) {
+                            console.log('error updating djs: '+err);
+                        }
+                    });
+                });
+            
+
+
+                /********** Older code ***********/
+                //convert day of week to number?
+                /*
+                var update = { showTime: 
+                    {
+                        startTime: parseInt(djs[i].startTime),
+                        endTime: parseInt(djs[i].endTime),
+                        dayOfWeek: djs[i].dayOfWeek
+                    }
+                };
+                
+                console.log(JSON.stringify(update));
+                
+                User.update({username: djs[i].username}, {$set: update}, function(err, djs){
+                    if (err) {
+                        console.log('error updating djs: '+err);
+                    } else {
+                        console.log('DJ show times updated: '+djs);
+                    };
+                });
+                
+
+
+
+            };
+            
+            */
+
+            //check to see which part is giving the 500 error
+
+            Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
+
+                if (err) return next(err);
+
+                res.format({
+                  html: function() {
+                        res.render('library', {
+                            title: 'Library',
+                            albums : albums,
+                            hrID : null,
+                            albumName : null,
+                            albumArtist : null,
+                            pageCount: pageCount,
+                            itemCount: itemCount,
+                            user: req.user
+                        });
+                  },
+                  json: function() {
+                    // inspired by Stripe's API response for list objects
+                    res.json({
+                        object: 'list',
+                        has_more: paginate.hasNextPages(req)(pageCount),
+                        data: albums
+                    });
+                  }
+                });
+
+            }, { sortBy : { hrID : -1 }});
 
         })
         .get(function(req, res){
 
-            /*Song.find().sort({id: -1}).exec(function(err,songs){
-               if(err) {
-                    console.log("there was an error loading songs");
-                } else {*/
-                    res.render('scheduler', {
-                        title: 'Scheduler',
-                        user : req.user // get the user out of session and pass to template
-                    });
-                /*}
-            });*/
+            Schedule.find(function(err,schedule){
+                if(err) console.log("there was an error fetching the schedule");
+                User.find(function(err,users){
+                    if(err) {
+                        console.log("there was an error fetching users");
+                    } else {
+                        res.render('scheduler', {
+                            title: 'Scheduler',
+                            schedule: schedule,
+                            users: users,
+                            user: req.user // get the user out of session and pass to template
+                        });
+                    }
+                })
+            });
 
         });
 

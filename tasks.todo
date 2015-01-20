@@ -1,0 +1,49 @@
+Still to do:
+ ☐ Session store
+ ☐ Passing hrID information to view (if you just render, the browser wants you to resubmit the form. try using session attributes, or cookies.)
+ ☐ Implement semester clearing
+ ☐ Figure out add users problem
+ ☐ Add description and name to playlists
+ ☐ Manage eboard positions
+ ☐ Report bug/give feedback
+ ☐ Scheduler
+ ☐ Autorefresh stream with AJAX
+ ☐ Multiple DJ usernames
+ ☐ Disable drag in other columns
+ ☐ Figure out how to get moment loaded
+ ☐ Hook up to existing site (backbone?)
+ ☐ Polish interface CSS
+
+
+To explore:
+☐ AJAX?
+☐ Go live in session store?
+  
+
+Nice to have:
+☐ Cropping images
+
+
+Before Production:
+ ☐ PROTECT FROM HACKERS 
+ ☐ Read up on production software tips
+ ☐ Forever.js
+ ☐ Clean up bits of code, files, console.logs
+ ☐ Add authentication routes in
+
+
+Scheduler plan:
+
+1. User enters name, selects times
+2. Ajax call to see if the user is in the database
+3. Information about times is stored in 7x24 array, english time is stored in user object
+
+3. Information for each cell is stored in the user's model
+	-array with x and y values, whether to first or not
+	-colspan
+	-english time
+4. Figure out which entries need to be deleted from the updates array and which ones need to go to the DB to update
+
+
+res.res ( , locals, ) to send info back?
+res.end to make sure library does not get resubmitted?
