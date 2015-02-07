@@ -70,6 +70,9 @@ $(function() {
 
 		//show hidden rows
 		$('.show-rows').click(showHiddenRows);
+
+		//add a host
+		$('.add-host').click(addCoHost);
 	}
 	
 	// Show "add entry" section
@@ -109,6 +112,9 @@ $(function() {
 		
 		// We're done with input value, so empty it
 		$entry_username.val('');
+
+		//Remove other input values
+		$('.entry-username').not(':first').remove();
 		
 		// Make entries deletable
 		$schedule.find('.deletable').attr('title','Click to delete');
@@ -118,76 +124,101 @@ $(function() {
 	
 	// Add entries to table
 	function addEntries() {
-		var entryUsername = $entry_username.val();
-		entryUsername = $.trim(entryUsername);
 		
 		// Get selected table cells
 		var $selected = $('.ui-selected');
 
-		var day = [];
-		var hour = [];
+		if($selected.length == 0) {
 
-		$('.ui-selected').each( function() {
-			hour.push($(this).attr('data-x'));
-			day.push($(this).attr('data-y'));
-		});
+			$error.message("Hey!"," You didn't select any times.")
 
-		console.log("hour "+hour);
-		console.log("day "+day);
-
-		var regDJ = false;
-		for (var i = users.length - 1; i >= 0; i--) {
-			if(entryUsername == users[i].local.username) regDJ = true;
-		};
-		
-		if (!entryUsername) {
-			$error.message("Hey!", "You didn't enter a name.");
-		} else if (!regDJ) {
-			$error.message(entryUsername," is not yet in the system.")
 		} else {
-			// Add entry to each selected cell
-			var entry = '<span class="entry">' + entryUsername + '</span>';
-   			$selected.addClass('active deletable');
 
-			$selected.append(entry);
+			var day = [];
+			var hour = [];
 
-			$selected.attr("data-username",entryUsername);
-			//$selected.attr("data-col_index",$selected.index()+1);
-			//$selected.attr("data-row_index",$selected.parent('tr').index()+1);
-			//$selected.attr("data-colspan",$selected.length);
+			$('.ui-selected').each( function() {
+				hour.push($(this).attr('data-x'));
+				day.push($(this).attr('data-y'));
+			});
 
-			// Close the section
-			endAddMode();
-			
-			$info.message(entryUsername, " has been added.");
+			//go through all the usernames submitted
+			$('.entry-username').each(function() {
+				
+				//var entryUsername = $('.entry_username').val();
+				var entryUsername = $(this).val();
+				entryUsername = $.trim(entryUsername);
 
-			for (var i = 0; i <= day.length - 1; i++) {
-				if(i == 0) {
-					var info = {"name": entryUsername, "colspan": day.length};
+				//check to see if submitted username is in list of users
+				var regDJ = false;
+				for (var i = users.length - 1; i >= 0; i--) {
+					if(entryUsername == users[i].local.username) regDJ = true;
+				};
+				
+				if (!entryUsername) {
+					$error.message("Hey!", "You didn't enter a name.");
+				} else if (!regDJ) {
+					$error.message(entryUsername," is not yet in the system.")
 				} else {
-					var info = {"name": entryUsername};
+					// Add entry to each selected cell
+					var entry = '<span class="entry">' + entryUsername + '</span>';
+					if($('.entry-username').length > 1) entry += " & ";
+		   			$selected.addClass('active deletable');
+
+					$selected.append(entry);
+
+					$selected.attr("data-username",entryUsername);
+
+					// Close the section
+					endAddMode();
+					
+					$info.message(entryUsername, " has been added.");
+
+					for (var i = 0; i <= day.length - 1; i++) {
+
+						var n = day[i] - 1;
+						var m = hour[i] - 3;
+						if(m<1){
+							m = m+24;
+						}
+						
+						if(djSchedule[n][m]==" ") {
+
+							if(i == 0) {
+								var info = {"name": entryUsername, "colspan": day.length};
+							} else {
+								var info = {"name": entryUsername};
+							}
+
+							djSchedule[n][m] = info;
+
+
+						} else {
+
+							var current = djSchedule[n][m].name + " " + entryUsername;
+							djSchedule[n][m].name = current;
+						
+						}
+
+						//console.log("m: "+m);
+						//console.log("hour[i]: "+hour[i]);
+					};
+
+					var weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+					var showTime = {'username': entryUsername,
+									'startTime': parseInt(hour[0]),
+									'endTime': parseInt(hour[hour.length-1]) + 1,
+									'dayOfWeek': weekDays[(parseInt(day[0])-1)]}
+
+					djUpdates.push(showTime);
+
+					console.log(JSON.stringify(djSchedule));
+					console.log(JSON.stringify(djUpdates));
+
 				}
-				var n = day[i] - 1;
-				var m = hour[i] - 3;
-				if(m<1){
-					m = m+24;
-				}
-				console.log("m: "+m);
-				console.log("hour[i]: "+hour[i]);
-				djSchedule[n][m] = info;	
-			};
 
-			var weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-			var showTime = {'username': entryUsername,
-							'startTime': parseInt(hour[0]),
-							'endTime': parseInt(hour[hour.length-1]) + 1,
-							'dayOfWeek': weekDays[(parseInt(day[0])-1)]}
-
-			djUpdates.push(showTime);
-
-			console.log(JSON.stringify(djSchedule));
-			console.log(JSON.stringify(djUpdates));
+			});
 
 		}
 		
@@ -311,6 +342,21 @@ $(function() {
 			$('table.schedule').removeClass('expanded');
 			$('.show-rows').text('Show hidden times');
 		}
+	}
+
+	function addCoHost() {
+
+		var fields = $('.add-entry-form input[type="text"]');
+
+		var count = fields.length + 1;
+
+		var newInput = $("<input type='text'>")
+			.attr('class','entry-username')
+			.attr('name','entry-username-' + count)
+			.attr('placeholder','DJ Username')
+
+		newInput.insertAfter(fields[(fields.length -1)]);
+		newInput.focus();
 	}
 
 	function publish(event) {

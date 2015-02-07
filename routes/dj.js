@@ -9,7 +9,7 @@ var router = express.Router();
 
 var util = require("util"); 
 var fs = require("fs"); 
-var path = require('path')
+var path = require('path');
 
 var moment = require('moment');
 moment().format();
@@ -62,16 +62,30 @@ module.exports = function(passport){
                     username: req.user.local.username
                 },
                 showName: req.body.showName,
-                //picture: req.body.picture,
-                bio: optionalString(req.body.bio," "),
+                bio: req.body.bio,
                 bands: {
-                    band1: optionalString(req.body.band1, " "),
-                    band2: optionalString(req.body.band2, " "),
-                    band3: optionalString(req.body.band3, " "),
-                    band4: optionalString(req.body.band4, " "),
-                    band5: optionalString(req.body.band5, " ")
+                    band1: req.body.band1,
+                    band2: req.body.band2,
+                    band3: req.body.band3,
+                    band4: req.body.band4,
+                    band5: req.body.band5
                     }
                 }
+
+            //this might not work
+            //delete undefined properties from update
+            for (var i in update) {
+              if (update[i] === null || update[i] === undefined) {
+                delete update[i];
+              }
+            }
+
+            //delete undefined properties from bands
+            for (var i in update.bands) {
+              if (update.bands[i] === null || update.bands[i] === undefined) {
+                delete update.bands[i];
+              }
+            }
 
             var options = { overwrite: false };
 
@@ -107,8 +121,6 @@ module.exports = function(passport){
                           res.redirect('back');
                         });
 
-                    } else { 
-                        console.log("Well, there is no magic for those who don’t believe in it!"); 
                     } 
                 }); 
             } else {
@@ -207,6 +219,42 @@ module.exports = function(passport){
                     } else {
 
                         console.log(user.local.username+"'s playlist has been saved \n");
+                    }
+                });
+
+            });
+
+            res.redirect('back');
+        })
+        .get(function(req, res){
+
+            res.render('log', {
+                title: "Music Log",
+                user : req.user // get the user out of session and pass to template
+            });
+
+        });
+
+    router.route('/description')
+        .post( function(req, res){
+
+            var query = {'_id': req.user.id};
+
+            User.findOne(query, function(err, user) {
+
+                //get the playlist
+                var playlist = user.playlists[user.playlists.length-1];
+                console.log("Playlist: "+playlist+'\n');
+
+                if(req.body.name) playlist.name = req.body.name;
+                if(req.body.description) playlist.description = req.body.description;
+
+                user.save(function(err, result){
+                    if(err) {
+                        console.log('error saving ('+user.local.username+') playlist description: '+err);
+                    } else {
+
+                        console.log(user.local.username+"'s playlist name/description has been saved \n");
                     }
                 });
 

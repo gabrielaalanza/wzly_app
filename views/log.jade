@@ -1,6 +1,29 @@
 extends layout
 
 block content
+
+  .playlist-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Playlist Name/Description" aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        form.playlist-form.form-with-labels(action="/description" method="post")
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h3 Add/Edit Show Name and Description
+          .modal-body
+            .row
+              .col-sm-3
+                label.inline(for='name') Show Name 
+              .col-sm-9
+                input.full(type='text', placeholder='(optional)', name='name')
+            .row
+              .col-sm-3
+                label.inline(for='description') Description
+              .col-sm-9
+                textarea.full(rows='4', placeholder='(optional)', name='description')
+          .modal-footer
+              button.btn(type='button', data-dismiss='modal') Close
+              button.btn.primary(type='submit', name='submit') Save
+
   .pulse.active
   .container
 
@@ -20,6 +43,8 @@ block content
         <br>
         button.btn.light(type='submit') Submit
 
+      p.add-name Your playlist does not have a name or description. If you want, you can <a href="#" data-target='.playlist-modal', data-toggle='modal')>add one</a>.
+
       .bottom-bar
         form(action='/app/finish-playlist' method='post')
           button.btn.clear(type="submit") Finish playlist
@@ -33,34 +58,6 @@ block content
     script(type='text/javascript').                                   
       var local_data =!{JSON.stringify(user)}
       console.log(local_data)
-    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/javascripts/jquery.js')
     script(src='/javascripts/bootstrap.min.js')
-
-//
-  <form class="log-form" action="/musiclog-description" method="post">
-  .modal-header
-    button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-    h3 Add/Edit Show Name and Description
-  .modal-body
-    input.input-block-level(type='text', placeholder='Show Name', name='show_name')
-    textarea.input-block-level(rows='6', placeholder='Description', name='description')
-  .modal-footer
-    p
-      | You must hit "submit" at the bottom of the page for these changes to take effect.
-  
-    </form>
-  h2
-    | Playlist
-    span.smaller-header for
-    span.current-date
-      img.loading(src='img/loading.gif')
-    span.smaller-header
-      | or
-      span.change-date(data-date='1-01-2013', data-date-format='dd-mm-yyyy') change date
-    | .
-  input(type='datetime', style='display: none;', name='playlist_date')
-  a.btn.btn-small.add-show-name(href='.addname-modal', role='button', data-toggle='modal')
-    i.icon.icon-pencil
-    | Show Name/Description
-  em (optional)
-  p.lastEntered
+    script(src='/javascripts/log.js')

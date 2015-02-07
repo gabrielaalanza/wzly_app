@@ -3,6 +3,7 @@ $( document ).ready(function() {
 	//change table to reflect desired charts
 	$("select").change(function() {
 
+
 		var startIndex;
 		var endIndex;
 		var playlist;
@@ -14,11 +15,19 @@ $( document ).ready(function() {
 			$('.table-playlists').addClass('hide');
 		} else {
 
+			var now = moment();
+			var dateArr = date.split(" ");
+			var day =  dateArr[1].substring(0, dateArr[1].length - 2);
+			var selectedDate = moment().year(dateArr[2]).month(dateArr[0]).date(day);
+
 			for (var i = user.playlists.length - 1; i >= 0; i--) {
 				var d = new Date(user.playlists[i].date);
-				if(date == d){
+				d = moment(d);
+				if(selectedDate.isSame(d,'day')){
 					startIndex = user.playlists[i].startIndex;
 					endIndex = user.playlists[i].endIndex;
+					console.log(startIndex);
+					console.log(endIndex);
 					break;
 				}
 			};

@@ -85,7 +85,14 @@ tr.collapsed {
 }
 
 .sidebar input:not([type=submit]):not([type=file]) {
-	margin-bottom: 20px;
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+.sidebar a {
+	margin-bottom: 15px;
+	display: block;
+	text-align: right;
 }
 
 .sidebar button {

@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  .container
+
+    include admin-sidebar
+      
+    .content.manage
+      h2 Application Settings
+      .row
+        .col-sm-6
+          h4 Semester Clearing
+          p This will clear all albums from the music library and stream, as well as the schedule and this semester's events.
+            | Charts, Executive Board Members, and users will roll over.
+        .col-sm-6
+          h4 Year Clearing
+          p This will clear the records in preparation for the new school year. This will, in addition 
+            | to the changes to the left, remove all Executive Board Members and DJs as well as their profiles and playlists.
+      .row
+        .col-sm-6
+          button.btn Clear semester
+        .col-sm-6
+          button.btn Clear year
+            
+    //end container
+    script(src='/javascripts/jquery.js')
+    script(src='/javascripts/bootstrap.min.js')
+

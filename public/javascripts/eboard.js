@@ -1,5 +1,7 @@
 $( document ).ready(function() {
 
+	fillImages();
+
 	//check to see if event should be updated or deleted
 	$(".pic-box").click(function(event){
 
@@ -56,3 +58,17 @@ $( document ).ready(function() {
 	
 });
 
+function fillImages() {
+	var selectors = $('.pic-box');
+
+	$.each(selectors, function() {
+		for (var i = local_data.length - 1; i >= 0; i--) {
+
+			var position = $(this).data("position");
+
+	    	if(local_data[i].position == position) {
+	    		$(this).find('img').attr('src',local_data[i].picture);
+	    	}
+	    };
+	});
+}

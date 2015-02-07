@@ -174,6 +174,10 @@ table.table-striped{
 	border-right: 1px solid #ddd;
 }
 
+.table-striped tbody tr td {
+	border-top: 1px solid rgba(243,235,232,0.15);
+}
+
 table .icon {
 	width: 35px;
 	margin: 0 auto;
@@ -200,7 +204,7 @@ table a {
     -webkit-border-radius: 2px;
        -moz-border-radius: 2px;
             border-radius: 2px;
-    width: 960px;
+    width: 1060px;
     padding: 0;
 	-moz-box-shadow:    inset 0px 1px 2px 0px rgba(230,230,230,0.10);
 	box-shadow:         inset 0px 1px 2px 0px rgba(230,230,230,0.10);
@@ -508,6 +512,18 @@ body.login:before {
 	font-family: "HelveticaNeue-Thin";
 }
 
+.add-name {
+	margin: 80px auto 0;
+	text-align: center;
+	padding-left: 200px;
+	opacity: 0.7;
+}
+
+
+.add-name a {
+	color: #804D49;
+}
+
 /* **** Bottom bar **** */
 .bottom-bar {
 	height: 50px;
@@ -591,6 +607,16 @@ body.login:before {
 	padding: 0 10px;
 }
 
+.spam_view {
+	margin: 0;
+	margin-top: 15px;
+}
+
+.spam_view img {
+	max-height: 200px;
+	max-width: 300px;
+}
+
 /*****************************/
 /********** Eboard ***********/
 /*****************************/
@@ -632,253 +658,19 @@ body.login:before {
 }
 
 
+/*****************************/
+/********** Manage ***********/
+/*****************************/
 
-
-
-
-
-.logout {
-	margin-top: 18px;
-	font-size: 15px;
-	cursor: pointer;
-}
-
-.logout i {
-	margin-top: 4px;
-}
-
-
-.side-menu {
-	width: 130px;
-	float: left;
-}
-
-.side-menu ul li {
-	list-style-type: none;
-	margin-left:  -20px;
-	padding-top: 6px;
-	padding-bottom: 2px;
-	margin-bottom: 4px;
-	text-transform: uppercase;
-	font-size: 17px;
-	border-bottom: 5px solid white;
-	font-family: "Oswald", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
-	transition: .25s ease-in-out;
-	-webkit-transition: .25s ease-in-out;
-	display: block;
-}
-
-.side-menu ul li a {
-	width: 100%;
-	display: block;
-}
-
-.side-menu .musiclog:hover {
-	border-bottom-color: #F2385A;
-}
-.side-menu .viewplaylists:hover {
-	border-bottom-color: #36B1BF;
-}
-.side-menu .manageprof:hover {
-	border-bottom-color: #F5A503;
-}
-.side-menu .manager:hover {
-	border-bottom-color: #F2385A;
-}
-.side-menu .schedule:hover {
-	border-bottom-color: #36B1BF;
-}
-.side-menu .events:hover {
-	border-bottom-color: #F5A503;
-}
-.side-menu .board:hover {
-	border-bottom-color: #94F5EE;
-}
-
-.side-menu .users:hover {
-	border-bottom-color: #2ECC71;
-}
-
-.pink {
-	border-bottom-color: #F2385A;
-}
-.dkyellow {
-	border-bottom-color: #F5A503;
-}
-.green {
-	border-bottom-color: #94F5EE;
-}
-.blue {
-	border-bottom-color: #36B1BF;
-}
-
-.side-menu ul li:not(:first-child) {
-	border-top: 1px solid #e5e5e5;
-}
-
-.side-menu ul li:hover {
-	cursor: pointer;
-}
-
-.controls {
-	margin-left: 160px;
-}
-
-.controls h2 {
-	margin: 0px;
-}
-
-.log-table {
-	margin-left: -20px;
-}
-
-.log-table td {
-	padding-left: 20px;
-}
-
-.col-med {
-	width: 250px;
-}
-
-.col-long {
-	width: 350px;
-}
-
-.col-short {
-	width: 100px;
-}
-
-.loading {
-	padding-left: 45px;
-	padding-right: 45px;
-}
-
-.change-date {
-	border-bottom: 1px dotted #999;
-	cursor: pointer;
-}
-
-.control {
-	display: none;
-}
-
-.playlists table {
-	height: 600px;
-	overflow: hidden;
-}
-
-.table-striped {
-	border-top: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-}
-
-/* scheduler */
-
-.scheduler-window {
-	
-	border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15), inset 0 0 0 1px #f9f9f9;
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15), inset 0 0 0 1px #f9f9f9;
-                box-shadow: 0 1px 2px rgba(0,0,0,.15), inset 0 0 0 1px #f9f9f9;
-	-webkit-transition: opacity 400ms ease-in-out;
-	-moz-transition: opacity 400ms ease-in-out;
-	transition: opacity 400ms ease-in-out;
-	width: 90%;
-	margin: 10px auto;
-	padding: 10px 20px 13px 20px;
-	border-radius: 10px;
-	background: #fff;
-	-moz-box-shadow: 1px 1px 1px #888;
-    -webkit-box-shadow: 1px 1px 1px #888;
-    box-shadow: 1px 1px 1px #888;
-}
-
-.wrapper {
-	
-}
-
-.scheduler-footer, .add, .delete {
-	margin-top: 10px;
-}
-
-.scheduler-window h1 .icon {
-	margin-top: 10px;
-	cursor: pointer;
-}
-
-.scheduler-window h1 {
-	margin-bottom: 0px;
-	margin-top: 0px;
-}
-
-/* music manager */
-.table-albums {
-	border-left: 1px solid #ddd;
-	border-right: 1px solid #ddd;
-}
-
-.top-menu {
-	list-style-type: none;
-	margin-left: 0px;
-}
-
-.top-menu li {
-	display: inline;
-	padding-right: 4px;
-	text-transform: uppercase;
-	font-family: "Oswald", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
-	cursor: pointer;
-}
-
-.dotted {
-	border-bottom: 1px dotted #aaa;
-}
-
-.top-menu li:not(:first-child) {
-	padding-left: 6px;
-	padding-right: 6px;
-	border-left: 1px solid #333;
-}
-
-
-.smaller-header {
-	font-size: 17px;
-}
-
-.add-show-name {
-	margin-bottom: 15px;
-	margin-top: 10px;
-}
-
-.events-table i:hover {
-	cursor: pointer;
-}
-
-.short-field {
-	width: 55px;
-	padding-right: 8px;
-}
-
-.short-field input[type=text] {
-	width: 30px;
-}
-
-.edit-spam {
-	max-width: 300px;
+.manage .col-sm-6 {
+	padding-right: 30px;
+	padding-left: 30px;
 	text-align: center;
 }
 
-
-.charts-modal {
-	width: 800px;
-	left: 40%;
+.manage .col-sm-6 p {
+	margin-bottom: 20px;
 }
-
-
-
 
 
 

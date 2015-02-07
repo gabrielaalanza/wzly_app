@@ -11,6 +11,10 @@ var Schedule = require('../models/schedule');
 var express = require('express');
 var router = express.Router();
 
+var util = require("util"); 
+var fs = require("fs"); 
+var path = require('path');
+
 var moment = require('moment');
 moment().format();
 
@@ -260,9 +264,6 @@ module.exports = function(passport){
             newEvent.location = req.body.location;
             newEvent.description = req.body.description;
 
-
-            //newEvent.spam = req.param("spam");
-
             // date validation
             var start_hour = req.body.start_hour;
             var start_minute = req.body.start_minute;
@@ -282,41 +283,109 @@ module.exports = function(passport){
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
-            //if event is new (id is null), save it
-            if(id == ''){
+            //rename and move the image into the correct folder
+            if (req.files.spam) { 
+                //console.log('files: '+util.inspect(req.files));
 
-                newEvent.save(function(err, result){
-                    if(err) {
-                        console.log("This is an error: "+err);
-                    } else {
-                        console.log({message:'Event Added'});
-                        res.redirect("back");
+                if (req.files.spam.size === 0) {
+                    console.log("No file attached");
+                    newEvent.spam = null;
+                }
+
+                fs.exists(req.files.spam.path, function(exists) { 
+
+                    var name = (req.body.name).replace(/[^a-zA-Z-]/g, '').toLowerCase();
+
+                    if(exists) { 
+                        var tempPath = req.files.spam.path;
+                        
+                        var targetPath = 'public/images/spam/'+name+path.extname(req.files.spam.name).toLowerCase();
+                        
+                        fs.rename(tempPath, targetPath, function(err) {
+                            if (err) throw err;
+                            console.log("Spam upload completed!");
+                        });
+
+                        var finalPath = '/images/spam/'+name+path.extname(req.files.spam.name).toLowerCase();
+                        var url = finalPath;
+                        newEvent.spam = url;
+
+                        //if event is new (id is null), save it
+                        if(id == ''){
+
+                            newEvent.save(function(err, result){
+                                if(err) {
+                                    console.log("This is an error: "+err);
+                                } else {
+                                    console.log('Event Added');
+                                    res.redirect("back");
+                                }
+                            });
+
+                        //otherwise, find it in the database and update it
+                        } else {
+
+                            var query = {"_id": id};
+                            var update = {name: newEvent.name, 
+                                            date: newEvent.date, 
+                                            location: newEvent.location,
+                                            description: newEvent.description,
+                                            start_time: newEvent.start_time,
+                                            end_time: newEvent.end_time,
+                                            spam: newEvent.spam };
+                            var options = {new: true};
+                            Event.findOneAndUpdate(query, update, options, function(err, event) {
+                              if (err) {
+                                console.log('error updating event: '+err);
+                              }
+                              console.log('updated event: '+event);
+                              res.redirect('back');
+                            });
+                        }
+
                     }
-                });
 
-            //otherwise, find it in the database and update it
-            } else {
-                var query = {"_id": id};
-                var update = {name: newEvent.name, 
-                                date: newEvent.date, 
-                                location: newEvent.location,
-                                description: newEvent.description,
-                                start_time: newEvent.start_time,
-                                end_time: newEvent.end_time };
-                var options = {new: true};
-                Event.findOneAndUpdate(query, update, options, function(err, event) {
-                  if (err) {
-                    console.log('error updating event: '+err);
-                  }
-                  console.log('updated event: '+event);
-                  res.redirect('back');
                 });
+            } else {
+                console.log("no image attached");
+                //if event is new (id is null), save it
+                if(id){
+
+                    var query = {"_id": id};
+                    var update = {name: newEvent.name, 
+                                    date: newEvent.date, 
+                                    location: newEvent.location,
+                                    description: newEvent.description,
+                                    start_time: newEvent.start_time,
+                                    end_time: newEvent.end_time};
+                    var options = {new: true};
+                    Event.findOneAndUpdate(query, update, options, function(err, event) {
+                      if (err) {
+                        console.log('error updating event: '+err);
+                      }
+                      console.log('updated event: '+event);
+                      res.redirect('back');
+                    });
+
+                //otherwise, find it in the database and update it
+                } else {
+
+                    newEvent.save(function(err, result){
+                        if(err) {
+                            console.log("This is an error: "+err);
+                        } else {
+                            console.log('Event Added');
+                            res.redirect("back");
+                        }
+                    });
+
+                }
             }
 
         })
         .get(function(req, res){
             
-            Event.find().sort({date: 1}).exec(function(err,events) {
+            Event.find().sort({date: -1}).exec(function(err,events) {
                if(err) {
                     console.log("there was an error loading events");
                 } else {
@@ -369,14 +438,64 @@ module.exports = function(passport){
                                 };
                 var options = {upsert: true};
 
-                Eboarder.findOneAndUpdate(query, update, options, function(err, eboarder) {
-                  if (err) {
-                    console.log('error updating eboarder: '+err);
+                for (var i in update) {
+                  if (update[i] === null || update[i] === undefined) {
+                    delete update[i];
                   }
-                  console.log('updated eboarder: '+eboarder);
-                  res.redirect('back');
-                });
+                }
 
+                if (req.files.picture) { 
+
+                    if (req.files.picture.size === 0) {
+                        console.log("No file attached");
+                    }
+
+                    fs.exists(req.files.picture.path, function(exists) { 
+
+                        var name = position.replace(/\s/g, '').toLowerCase();
+
+                        if(exists) { 
+                            var tempPath = req.files.picture.path;
+                            
+                            var targetPath = 'public/images/eboard/'+name+path.extname(req.files.picture.name).toLowerCase();
+                            
+                            fs.rename(tempPath, targetPath, function(err) {
+                                if (err) throw err;
+                                console.log("Eboard picture upload completed!");
+                            });
+
+                            var finalPath = '/images/eboard/'+name+path.extname(req.files.picture.name).toLowerCase();
+
+                            var url = finalPath;
+                            update['picture'] = url;
+
+                            console.log("update");
+                            console.log(update);
+
+                            Eboarder.findOneAndUpdate(query, update, options, function(err, eboarder) {
+                                if (err) {
+                                    console.log('error updating eboarder: '+err);
+                                } else {
+                                    console.log('updated eboarder: '+eboarder);
+                                }
+                                res.redirect('back');
+                            });
+
+                        } 
+                    }); 
+                } else {
+                    console.log('no image to upload');
+                    console.log('update');
+                    console.log(update);
+
+                    Eboarder.findOneAndUpdate(query, update, options, function(err, eboarder) {
+                      if (err) {
+                        console.log('error updating eboarder: '+err);
+                      }
+                      console.log('updated eboarder: '+eboarder);
+                      res.redirect('back');
+                    });
+                }
 
             //otherwise, return an error and redirect
             } else {
@@ -532,84 +651,9 @@ module.exports = function(passport){
                             console.log('error updating djs: '+err);
                         }
                     });
-
                 });
             });
 
-            /****** Old code ******/
-            /*
-            
-            //update the users
-
-            //get list of DJs
-            var djs = req.body.djs;
-            //console.log("============= List of DJs =============");
-            //console.log(req.body.djs);
-
-            for (var i = 0, l = djs.length; i < l; i++) {
-
-                //get username of current DJ
-                var name = djs[i].username;
-                //set up query
-                var query = {};
-                query['local.username'] = name;
-
-                //store current DJ
-                var dj = djs[i];
-                console.log("============= DJ before mongoose =============");
-                console.log(dj);
-
-                //find the DJ
-                User.findOne(query, function (err, user) {
-
-                    console.log("============= DJ after mongoose =============");
-                    console.log(dj);
-
-                    //set the information
-                    user.showTime.startTime = parseInt(dj.startTime);
-                    user.showTime.endTime = parseInt(dj.endTime);
-                    user.showTime.dayOfWeek = dj.dayOfWeek;
-                    //console.log("============= User after update =============\n"+user);
-
-                    //save the user
-                    user.save(function (err) {
-                        if(err) {
-                            console.log('error updating djs: '+err);
-                        }
-                    });
-                });
-            
-
-
-                /********** Older code ***********/
-                //convert day of week to number?
-                /*
-                var update = { showTime: 
-                    {
-                        startTime: parseInt(djs[i].startTime),
-                        endTime: parseInt(djs[i].endTime),
-                        dayOfWeek: djs[i].dayOfWeek
-                    }
-                };
-                
-                console.log(JSON.stringify(update));
-                
-                User.update({username: djs[i].username}, {$set: update}, function(err, djs){
-                    if (err) {
-                        console.log('error updating djs: '+err);
-                    } else {
-                        console.log('DJ show times updated: '+djs);
-                    };
-                });
-                
-
-
-
-            };
-            
-            */
-
-            //check to see which part is giving the 500 error
 
             Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
 
@@ -657,6 +701,21 @@ module.exports = function(passport){
                         });
                     }
                 })
+            });
+
+        });
+
+    router.route('/manage')
+        .post( function(req, res){
+
+
+
+        })
+        .get(function(req, res){
+            
+            res.render('manage', {
+                title: 'Manage',
+                user: req.user // get the user out of session and pass to template
             });
 
         });

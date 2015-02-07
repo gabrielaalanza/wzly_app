@@ -253,8 +253,8 @@ html
 
             form.add-entry-form(action='#', method='get')
                 .actions
-                    input.entry-username(type='text', name='entry-username', placeholder='DJ Username')
-                    //a(href="") Add a DJ
+                    input.entry-username(type='text', name='entry-username-1', placeholder='DJ Username')
+                    a(href="#" class="add-host") Add co-host
                     button.btn.save(title='Add entries to the schedule', type="submit") Save
                     button.cancel.btn.light(title='Cancel adding', type="reset") Cancel
             .message-box
@@ -266,7 +266,7 @@ html
 
                 button.show-rows.btn.block.light Show hidden times
             
-    script(type='text/javascript', src='http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js')
+    script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js')
     script(type='text/javascript', src='http://apps.zarjay.net/scheduler/v2.1//scripts/jquery-ui-1.8rc2.custom.min.js')
     script(type='text/javascript').                                 
         var djSchedule =!{JSON.stringify(schedule)}

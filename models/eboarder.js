@@ -16,7 +16,8 @@ var eboarderSchema = new Schema({
     bands            : String,
     concert          : String,
     thoughts         : String,
-    interview         : String
+    interview        : String,
+    picture          : String
 
 });
 

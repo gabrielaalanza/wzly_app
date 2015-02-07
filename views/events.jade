@@ -7,7 +7,7 @@ block content
     .content
       .events-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Event" aria-hidden="true")
         .modal-dialog
-          form.events-form.form-with-labels(action='/admin/events', method='post')
+          form.events-form.form-with-labels(action='/admin/events', method='post', enctype="multipart/form-data")
             .modal-content
               .modal-header
                 button.close(type='button', data-dismiss='modal')
@@ -122,5 +122,5 @@ block content
       console.log(local_data)
     script(src='/javascripts/jquery.js')
     script(src='/javascripts/bootstrap.min.js')
-    script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js')
+    script(src='/javascripts/moment.min.js')
     script(src='/javascripts/events.js')
