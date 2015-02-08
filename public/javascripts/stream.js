@@ -16,7 +16,6 @@ function checkForUpdates() {
 	            console.log(msg.statusText);
 	        },
 	        success: function(json){
-
 	        	$('.table-albums tbody tr').remove();
 
 	            var trHTML = '';

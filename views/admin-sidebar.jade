@@ -1,12 +1,13 @@
 .left-nav
 	.topbar
-		h1 WZLY RADIO
+		h1 AIRWAVE
+			span.small BETA
 	img(src='/images/assets/logo.png', class="prof-pic")
 	h2 Admin
 	ul
-		li.active
+		li
 			a(href='/admin/library')
-				img(src="/images/icons/library-active.png")
+				img(src="/images/icons/library.png")
 				| Library
 		li 
 			a(href='/admin/stream')
@@ -36,3 +37,7 @@
 			a(href='/admin/manage')
 				img(src="/images/icons/manage.png")
 				| Manage
+	.logout
+		a(href="/logout")
+			img(src="/images/icons/scheduler.png")
+			| Logout

@@ -1,8 +1,8 @@
 // routes/routes.js
-
-
 var express = require('express');
 var router = express.Router();
+
+var nodemailer = require('nodemailer');
 
 var isAuthenticated = function (req, res, next) {
   // if user is authenticated in the session, call the next() to call the next request handler 
@@ -23,11 +23,29 @@ module.exports = function(passport){
   });
 
   /* Handle Login POST */
-  router.post('/login', passport.authenticate('login', {
-    successRedirect: '/app/profile',
-    failureRedirect: '/login',
-    failureFlash : true  
-  }));
+  router.post('/login', function(req, res, next) { 
+    passport.authenticate('login', function(err, user, info) {
+      if (err) { 
+        return next(err); 
+      }
+      if (!user) { 
+        return res.redirect('/login'); 
+      }
+      if(user.local.username == "admin") {
+        console.log(user);
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/admin/library');
+        });
+      } else {
+        console.log(user);
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          return res.redirect('/app/profile');
+        });
+      }
+    })(req, res, next);
+  });
 
   /* Handle Registration POST */
   router.post('/signup', passport.authenticate('signup', {
@@ -40,6 +58,37 @@ module.exports = function(passport){
   router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/login');
+  });
+
+  /* Contact form */
+  router.post('/contact', function(req, res) {
+    var mailOpts, smtpTrans;
+
+    //Setup Nodemailer transport, I chose gmail. Create an application-specific password to avoid problems.
+    smtpTrans = nodemailer.createTransport('SMTP', {
+        service: 'Gmail',
+        auth: {
+            user: "airwave.app@gmail.com",
+            pass: "ijkvzqoolyxammqj" 
+        }
+    });
+    //Mail options
+    mailOpts = {
+        from: req.body.name + ' &lt;' + req.body.email + '&gt;', //grab form data from the request body object
+        to: 'glanza@wellesley.edu',
+        subject: 'Interface Feedback from '+req.body.name+' at '+ req.body.email,
+        text: req.body.message
+    };
+
+    smtpTrans.sendMail(mailOpts, function (error, response) {
+        //Email not sent
+        if (error) {
+            console.log(error);
+            res.send(error);
+        }
+        res.end();
+        //Yay!! Email sent
+    });
   });
 
 return router;

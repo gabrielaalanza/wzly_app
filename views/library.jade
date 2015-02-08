@@ -5,31 +5,28 @@ block content
 
     include admin-sidebar
     .content
-      h2 Add Album
-      form.add-album-form.form-inline(action='/admin/library', method='post')
-        input#album(type='text', name='album', placeholder='Album Name')
-        input#artist(type='text', name='artist', placeholder='Artist Name')
-        button#add-album.btn(type='submit') Add
-      if locals.albumName
-        p.hr_response #{albumName} by #{albumArtist} is ##{hrID}.
-      h2 Current Library
+      button.btn.pull-right.show-form Add an Album
+      h2 Library
+      form.add-album-form.form-inline
+        input(type='text', name='album', placeholder='Album Name')
+        input(type='text', name='artist', placeholder='Artist Name')
+        button.btn(type='submit') Add
+      p.hr_response
       table.table.table-striped.table-condensed.table-albums
         thead
           tr
-            th
             th Album
             th Artist
             th HR ID
         tbody
           each album, i in albums
             tr
-              td #{i+1}.
               td #{album.album}
               td #{album.artist}
               td #{album.hrID}
       include _paginate
             
     //end container
-    script(src='/javascripts/jquery-1.10.2.min.js')
-    script(src='/javascripts/bootstrap.min.js')
+    include global-js
+    script(src='/javascripts/library.js')
 

@@ -29,14 +29,6 @@ var isAuthenticated = function (req, res, next) {
     res.redirect('/login');
 }
 
-function optionalString(pref, fallback) {
-    if (!pref) {
-        return fallback;
-    } else {
-        return pref;
-    }
-}
-
 function isEmpty(obj) {
     for(var key in obj) {
         if(obj.hasOwnProperty(key))
@@ -50,7 +42,7 @@ module.exports = function(passport){
 // ****** Edit DJ profile ****** //
 
     router.route('/profile')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             console.log("bio: "+req.body.bio);
 
@@ -136,7 +128,7 @@ module.exports = function(passport){
             }
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             console.log(req.user);
 
@@ -149,7 +141,7 @@ module.exports = function(passport){
         });
 
     router.route('/log')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             //first, if necessary, update the HR album count
             //then, store the song in memory
@@ -226,7 +218,7 @@ module.exports = function(passport){
 
             res.redirect('back');
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             res.render('log', {
                 title: "Music Log",
@@ -236,7 +228,7 @@ module.exports = function(passport){
         });
 
     router.route('/description')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             var query = {'_id': req.user.id};
 
@@ -262,7 +254,7 @@ module.exports = function(passport){
 
             res.redirect('back');
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             res.render('log', {
                 title: "Music Log",
@@ -272,7 +264,7 @@ module.exports = function(passport){
         });
 
     router.route('/playlists')
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             Song.find(function(err,songs){
                if(err) {
@@ -290,7 +282,7 @@ module.exports = function(passport){
         });
 
     router.route('/go-live')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             //change live status to "true"
             //create new playlist and add it to the user's list of playlists
@@ -323,7 +315,7 @@ module.exports = function(passport){
         });
 
     router.route('/finish-playlist')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             //change live status to "true"
             //create new playlist and add it to the user's list of playlists

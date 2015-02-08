@@ -7,6 +7,8 @@ module.exports = function(passport){
             passReqToCallback : true
         },
         function(req, username, password, done) { 
+            //check to see if user was the admin first
+
             // check in mongo if a user with username exists or not
             User.findOne({ 'username' :  username }, 
                 function(err, user) {
@@ -24,17 +26,17 @@ module.exports = function(passport){
                             return done(null, false, req.flash('message', 'User Not found.'));                 
                         }
                         // User exists but wrong password, log the error 
-                        if (password != '1234'){
+                        if ( password != 'electricladyland' ){
                             console.log('Invalid Password');
                             return done(null, false, req.flash('message', 'Invalid Password')); // redirect back to login page
                         }
                         // User and password both match, return user from done method
                         // which will be treated like success
                         return done(null, user);
-                    }
+                    });
+                }
             );
-
+            
         })
-    })
-    
-)}
+    )    
+}

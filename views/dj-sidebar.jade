@@ -1,15 +1,16 @@
 .left-nav
 	.topbar
-		h1 WZLY RADIO
+		h1 AIRWAVE
+			span.small BETA
 	img(src='#{user.picture}', class="prof-pic")
 	- if(user.local.name)
 		h2 #{user.local.name}
 	- else
 		h2 #{user.local.username}
 	ul
-		li.active
+		li
 			a(href='/app/log')
-				img(src="/images/icons/mic-active.png")
+				img(src="/images/icons/mic.png")
 				| Music Log
 		li 
 			a(href='/app/playlists')
@@ -19,3 +20,7 @@
 			a(href='/app/profile')
 				img(src="/images/icons/profile.png")
 				| Profile
+	.logout
+		a(href="/logout")
+			img(src="/images/icons/scheduler.png")
+			| Logout

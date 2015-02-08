@@ -1,12 +1,10 @@
 Still to do:
- ☐ Session store
- ☐ Logout 
+  Passport:
+   ☐ Session store
+   ☐ Figure out add users problem
+   ☐ Logout 
  ☐ Implement semester clearing
- ☐ Figure out add users problem
- ☐ Manage eboard positions
- ☐ Better add to library
  ☐ Better charts
- ☐ Report bug/give feedback
  ☐ Hook up to existing site (backbone?)
  ☐ Success dialogues
  ☐ Polish interface CSS
@@ -14,14 +12,15 @@ Still to do:
 
 To explore:
 ☐ Go live in session store?
-☐ Passing hrID information to view (if you just render, the browser wants you to resubmit the form. try using session attributes, or cookies.)
 ☐ Playlists with the same date do not get displayed correctly - maybe store beginning and end indeces as data attributes?
   
 
-Nice to have:
+Nice to have/To add eventually:
 ☐ Cropping images
 ☐ Facebook integration
 ☐ Deleting images
+☐ Manage eboard positions
+☐ Switch to sendgrid
 
 
 Before Production:
@@ -30,19 +29,6 @@ Before Production:
  ☐ Forever.js
  ☐ Clean up bits of code, files, console.logs
  ☐ Add authentication routes in
-
-
-Scheduler plan:
-
-1. User enters name, selects times
-2. Ajax call to see if the user is in the database
-3. Information about times is stored in 7x24 array, english time is stored in user object
-
-3. Information for each cell is stored in the user's model
-	-array with x and y values, whether to first or not
-	-colspan
-	-english time
-4. Figure out which entries need to be deleted from the updates array and which ones need to go to the DB to update
 
 
 res.res ( , locals, ) to send info back?

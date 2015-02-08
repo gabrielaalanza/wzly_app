@@ -120,7 +120,6 @@ block content
     script(type='text/javascript').                                   
       var local_data =!{JSON.stringify(events)}
       console.log(local_data)
-    script(src='/javascripts/jquery.js')
-    script(src='/javascripts/bootstrap.min.js')
+    include global-js
     script(src='/javascripts/moment.min.js')
     script(src='/javascripts/events.js')

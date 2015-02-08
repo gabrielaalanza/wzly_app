@@ -58,7 +58,7 @@ module.exports = function(passport){
 
     // ****** Save albums to database and retrieve all albums ****** //
     router.route('/library')
-        .post( function(req,res){
+        .post(isAuthenticated, function(req,res){
             var album=new Album(req.body);
             console.log(album);
 
@@ -71,6 +71,13 @@ module.exports = function(passport){
 
                         console.log({message:'Album Added'});
 
+                        var data = { hrID : count,
+                                    albumName : result.album,
+                                    albumArtist : result.artist };
+
+                        res.send(data);
+
+                        /*
                         Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
 
                             if (err) return next(err);
@@ -99,29 +106,12 @@ module.exports = function(passport){
                             });
 
                         }, { sortBy : { hrID : -1 }});
-                        /*
-                        Album.find(function(err,albums){
-                           if(err) {
-                                console.log("There was an error getting the albums: "+err);
-                            } else {
-
-                                res.render('library', {
-                                    title: 'Library',
-                                    albums : albums,
-                                    hrID : count,
-                                    albumName : result.album,
-                                    albumArtist : result.artist,
-                                    user : req.user // get the user out of session and pass to template
-                                });
-
-                            }
-                        });
                         */
                     }
                 });
             });
         })
-        .get( function(req, res) {
+        .get(isAuthenticated, function(req, res) {
 
             Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
 
@@ -172,7 +162,7 @@ module.exports = function(passport){
 
     // ****** Get albums from database ****** //
     router.route('/charts')
-        .post( function(req, res) {
+        .post(isAuthenticated, function(req, res) {
             chart = new Chart();
 
             Album.find().sort({count: 1}).exec(function(err,charts){
@@ -207,7 +197,7 @@ module.exports = function(passport){
             })
 
         })
-        .get( function(req, res) {
+        .get(isAuthenticated, function(req, res) {
 
             Album.find().sort({count: -1}).exec(function(err,charts){
                if(err) {
@@ -234,7 +224,7 @@ module.exports = function(passport){
 
     // ****** Get all users from database ****** //
     router.route('/users')
-        .get( function(req, res) {
+        .get(isAuthenticated, function(req, res) {
 
             User.find(function(err,users){
                if(err) {
@@ -250,7 +240,7 @@ module.exports = function(passport){
         });
 
     router.route('/events')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             var newEvent = new Event();
 
@@ -383,7 +373,7 @@ module.exports = function(passport){
             }
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
             
             Event.find().sort({date: -1}).exec(function(err,events) {
                if(err) {
@@ -401,7 +391,7 @@ module.exports = function(passport){
 
     //for deleting an event
     router.route('/events/:id')
-        .post(function(req, res){
+        .post(isAuthenticated, function(req, res){
             console.log('delete event');
             Event.remove({
                 _id: req.params.id
@@ -416,7 +406,7 @@ module.exports = function(passport){
         });
 
     router.route('/eboard')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             var position = req.body.position;
             console.log("Position is: "+position);
@@ -506,7 +496,7 @@ module.exports = function(passport){
             }
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             console.log(req.user);
 
@@ -525,12 +515,12 @@ module.exports = function(passport){
         });
 
     router.route('/stream')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             res.redirect('back');
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             Song.paginate({}, req.query.page, req.query.limit, function(err, pageCount, songs, itemCount) {
 
@@ -562,7 +552,7 @@ module.exports = function(passport){
         });
     
     router.route('/csv')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             console.log('csv requested for date range'+req.body.start+' to '+req.body.end);
 
@@ -588,7 +578,7 @@ module.exports = function(passport){
             }); 
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             console.log('csv requested for all dates');
 
@@ -609,7 +599,7 @@ module.exports = function(passport){
         });
 
     router.route('/scheduler')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
             //update the schedule
             var query = {"name": "schedule"};
@@ -685,7 +675,7 @@ module.exports = function(passport){
             }, { sortBy : { hrID : -1 }});
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
 
             Schedule.find(function(err,schedule){
                 if(err) console.log("there was an error fetching the schedule");
@@ -706,12 +696,12 @@ module.exports = function(passport){
         });
 
     router.route('/manage')
-        .post( function(req, res){
+        .post(isAuthenticated, function(req, res){
 
 
 
         })
-        .get(function(req, res){
+        .get(isAuthenticated, function(req, res){
             
             res.render('manage', {
                 title: 'Manage',

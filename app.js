@@ -38,6 +38,9 @@ var paginate = require('express-paginate');
 // ** JSON to CSV ** //
 var json2csv = require('json2csv');
 
+// ** Nodemailer ** //
+var nodemailer = require('nodemailer');
+
 var app = express();
 
 // pagination setup

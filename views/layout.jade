@@ -12,4 +12,36 @@ html
     link(href='/stylesheets/style.css', rel='stylesheet', media='screen', type='text/css')
 
   body
-    block content 
+    .contact-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Contact" aria-hidden="true")
+        .modal-dialog
+          form.contact-form.form-with-labels
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal')
+                  span(aria-hidden='true') ×
+                  span.sr-only Close
+                h4.modal-title Feedback
+              .modal-body
+                .row
+                    .col-sm-12
+                        p If you have found a bug, have a suggestion, or need some help, just send it along.
+                .row
+                  .col-sm-3
+                    label.inline(for='name') Name
+                  .col-sm-9
+                    input.full(type='text', placeholder='', name='name')
+                .row
+                  .col-sm-3
+                    label.inline(for='email') Your Email
+                  .col-sm-9
+                    input.full(type='text', placeholder='', name='email')
+                .row
+                  .col-sm-3
+                    label.inline(for='message') Message
+                  .col-sm-9
+                    textarea.full(rows='3', placeholder='', name='message')
+              .modal-footer
+                button.btn.primary(type='submit', name='submit') Send
+    button.btn.feedback(data-toggle='modal' data-target='.contact-modal') Feedback
+    block content
+    script(src='/javascripts/global.js')
