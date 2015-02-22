@@ -22,6 +22,10 @@ var paginate = require('express-paginate');
 
 var autoIncrement = require('mongoose-auto-increment');
 
+var async = require('async');
+var crypto = require('crypto');
+var nodemailer = require('nodemailer');
+
 var json2csv = require('json2csv');
 var fs = require('fs');
 
@@ -31,7 +35,7 @@ var isAuthenticated = function (req, res, next) {
     // if user is authenticated in the session, call the next() to call the next request handler 
     // Passport adds this method to request object. A middleware is allowed to add properties to
     // request and response objects
-    if (req.isAuthenticated())
+    if (req.isAuthenticated() && req.user.eboard.position)
         return next();
     // if the user is not authenticated then redirect him to the login page
     res.redirect('/login');
@@ -199,11 +203,46 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res) {
 
+            Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, charts, itemCount) {
+
+                if (err) return next(err);
+
+                Chart.find().sort({date: 1}).exec(function(err,pastCharts) {
+                        if(err) {
+                            console.log("there was an error loading charts");
+                        } else {
+                            res.format({
+                              html: function() {
+                                    res.render('charts', {
+                                        title: 'Current Charts',
+                                        moment: moment,
+                                        charts : charts,
+                                        pastCharts : pastCharts,
+                                        week: (pastCharts.length + 1),
+                                        pageCount: pageCount,
+                                        itemCount: itemCount,
+                                        user: req.user
+                                    });
+                              },
+                              json: function() {
+                                // inspired by Stripe's API response for list objects
+                                res.json({
+                                    object: 'list',
+                                    has_more: paginate.hasNextPages(req)(pageCount),
+                                    data: albums
+                                });
+                              }
+                            });
+                        }
+                    });
+
+            }, { sortBy : { count : -1 }});
+            /*
             Album.find().sort({count: -1}).exec(function(err,charts){
                if(err) {
                     console.log("there was an error loading charts");
                 } else {
-                    Chart.find().sort({date: -1}).exec(function(err,pastCharts) {
+                    Chart.find().sort({date: 1}).exec(function(err,pastCharts) {
                         if(err) {
                             console.log("there was an error loading charts");
                         } else {
@@ -218,23 +257,209 @@ module.exports = function(passport){
                         }
                     });
                 }
-            })
+            })*/
         });
     
 
     // ****** Get all users from database ****** //
     router.route('/users')
+        .post(isAuthenticated, function(req,res){
+            // find a user in Mongo with provided username
+            User.findOne({ 'local.username' :  req.body.username }, function(err, user) {
+                // In case of any error, return using the done method
+                if (err){
+                    console.log('Error in SignUp: '+err);
+                    return done(err);
+                }
+                // already exists
+                if (user) {
+                    console.log('User already exists with username: '+req.body.username);
+                } else {
+                    // if there is no user with that email
+                    // create the user
+                    var newUser = new User();
+
+                    // set the user's local credentials
+                    newUser.local.username = req.body.username;
+                    newUser.local.name = req.body.name;
+                    if(req.body.position) newUser.eboard.position = req.body.position;
+                    if(req.body.email) newUser.local.email = req.body.email;
+                    else newUser.local.email = req.body.username + '@wellesley.edu';
+
+
+                    console.log("This is the email: "+newUser.local.email);
+
+                    /*
+                    console.log('HEADERS');
+                    console.log(req.headers);
+                    */
+
+                    // save the user
+                    newUser.save(function(err) {
+                        if (err){
+                            console.log('Error in Saving user: '+err);
+                        } else {
+                            console.log('User Registration succesful'); 
+                        }
+                        //res.end();
+                        //res.redirect('back');
+                    });
+
+                    async.waterfall([
+                        function(done) {
+                          crypto.randomBytes(20, function(err, buf) {
+                            var token = buf.toString('hex');
+                            done(err, token);
+                          });
+                        },
+                        function(token, done) {
+                          User.findOne({ 'local.username': req.body.username }, function(err, user) {
+                            if (!user) {
+                              req.flash('error', 'No account with that username exists.');
+                              // send error message
+                              return res.redirect('/users');
+                            }
+
+                            user.local.resetPasswordToken = token;
+
+                            user.save(function(err) {
+                              done(err, token, user);
+                            });
+                          });
+                        },
+                        function(token, user, done) {
+                          var smtpTransport = nodemailer.createTransport('SMTP', {
+                            service: 'Gmail',
+                            auth: {
+                              user: 'airwave.app@gmail.com',
+                              pass: 'ijkvzqoolyxammqj'
+                            }
+                          });
+                          var mailOptions = {
+                            to: user.local.email,
+                            from: 'airwave.app@gmail.com',
+                            subject: 'Set your Airwave Password',
+                            text: 'Hello '+user.local.name+',\n\n'+
+                              'You are receiving this because you have been added as a user in Airwave by a WZLY administrator. Your next step is to create a password for your account.\n\n' +
+                              'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                              'http://'+req.headers.host+'/reset/' + token + '\n\n' +
+                              'Thanks,\n'+'Airwave'
+                          };
+                          smtpTransport.sendMail(mailOptions, function(err) {
+                            done(err, 'done');
+                            res.end();
+                          });
+                        }
+                      ], function(err) {
+                        if (err) console.log(err);
+                        //send error message
+                        res.end();
+                      });
+                }
+            })
+        })
         .get(isAuthenticated, function(req, res) {
 
-            User.find(function(err,users){
-               if(err) {
-                    console.log("there was an error loading users");
-                } else {
-                    res.render('users', {
-                        title: 'Current DJs',
-                        users : users,
-                        user : req.user // get the user out of session and pass to template
+            User.paginate({}, req.query.page, req.query.limit, function(err, pageCount, users, itemCount) {
+
+                var sort = function (prop, arr) {
+                    prop = prop.split('.');
+                    var len = prop.length;
+
+                    arr.sort(function (a, b) {
+                        var i = 0;
+                        while( i < len ) { a = a[prop[i]]; b = b[prop[i]]; i++; }
+                        if (a < b) {
+                            return -1;
+                        } else if (a > b) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
                     });
+                    return arr;
+                };
+
+                if (err) return next(err);
+
+                res.format({
+                  html: function() {
+                        res.render('users', {
+                            title: 'Current DJs',
+                            users: users,
+                            pageCount: pageCount,
+                            itemCount: itemCount,
+                            user: req.user
+                        });
+                  },
+                  json: function() {
+                    // inspired by Stripe's API response for list objects
+                    res.json({
+                        object: 'list',
+                        has_more: paginate.hasNextPages(req)(pageCount),
+                        data: users
+                    });
+                  }
+                });
+
+            }, { sortBy : { 'local.name': 1 }});
+
+        });
+
+    router.route('/user/:id')
+        .post(isAuthenticated, function(req,res){
+            console.log('delete user');
+            //if(req.user.permanent != true) {
+                User.remove({
+                    _id: req.params.id
+                }, function(err, user) {
+                    if (err) {
+                        console.log('There was an error deleting this user: '+err)
+                    } else {
+                        res.redirect('back');
+                    }
+                });
+            //}
+        });
+
+    router.route('/add-position/:id')
+        .post(isAuthenticated, function(req,res){
+            console.log('add user position');
+            User.findOne({
+                _id: req.params.id
+            }, function(err, user) {
+                if (err) {
+                    console.log('There was an error finding this user: '+err)
+                } else {
+
+                    user.eboard.position = req.body.position;
+                    user.save(function(err) {
+                        if (err) {
+                            console.log('There was an error updating the position: '+err)
+                        }
+                        res.redirect('back');
+                    })
+                }
+            });
+        });
+
+    router.route('/remove-position/:id')
+        .post(isAuthenticated, function(req,res){
+            console.log('add user position');
+            User.findOne({
+                _id: req.params.id
+            }, function(err, user) {
+                if (err) {
+                    console.log('There was an error finding this user: '+err)
+                } else {
+
+                    user.eboard.position = undefined;
+                    user.save(function(err) {
+                        if (err) {
+                            console.log('There was an error updating the position: '+err)
+                        }
+                        res.redirect('back');
+                    })
                 }
             });
         });
@@ -375,7 +600,7 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res){
             
-            Event.find().sort({date: -1}).exec(function(err,events) {
+            Event.find().sort({start_time: -1}).exec(function(err,events) {
                if(err) {
                     console.log("there was an error loading events");
                 } else {
@@ -402,114 +627,45 @@ module.exports = function(passport){
                     res.redirect('back');
                 }
             });
-
         });
 
     router.route('/eboard')
         .post(isAuthenticated, function(req, res){
 
-            var position = req.body.position;
-            console.log("Position is: "+position);
+            var position = req.user.eboard.position;
 
-            //if the user selected an eboarder
-            if( position ){
+            var query = {'local.username': req.user.local.username};
+            var update = {  'eboard.year': req.body.year,
+                            'eboard.animal': req.body.animal,
+                            'eboard.bands': req.body.bands,
+                            'eboard.concert': req.body.concert,
+                            'eboard.thoughts': req.body.thoughts,
+                            'eboard.interview': req.body.interview
+                            };
 
-                var query = {"position": position};
-                var update = { position: position,
-                                name: req.body.name,
-                                year: req.body.year,
-                                show: req.body.show,
-                                time: req.body.time,
-                                animal: req.body.animal,
-                                bands: req.body.bands,
-                                concert: req.body.concert,
-                                thoughts: req.body.thoughts,
-                                interview: req.body.interview
-                                };
-                var options = {upsert: true};
-
-                for (var i in update) {
-                  if (update[i] === null || update[i] === undefined) {
-                    delete update[i];
-                  }
-                }
-
-                if (req.files.picture) { 
-
-                    if (req.files.picture.size === 0) {
-                        console.log("No file attached");
-                    }
-
-                    fs.exists(req.files.picture.path, function(exists) { 
-
-                        var name = position.replace(/\s/g, '').toLowerCase();
-
-                        if(exists) { 
-                            var tempPath = req.files.picture.path;
-                            
-                            var targetPath = 'public/images/eboard/'+name+path.extname(req.files.picture.name).toLowerCase();
-                            
-                            fs.rename(tempPath, targetPath, function(err) {
-                                if (err) throw err;
-                                console.log("Eboard picture upload completed!");
-                            });
-
-                            var finalPath = '/images/eboard/'+name+path.extname(req.files.picture.name).toLowerCase();
-
-                            var url = finalPath;
-                            update['picture'] = url;
-
-                            console.log("update");
-                            console.log(update);
-
-                            Eboarder.findOneAndUpdate(query, update, options, function(err, eboarder) {
-                                if (err) {
-                                    console.log('error updating eboarder: '+err);
-                                } else {
-                                    console.log('updated eboarder: '+eboarder);
-                                }
-                                res.redirect('back');
-                            });
-
-                        } 
-                    }); 
-                } else {
-                    console.log('no image to upload');
-                    console.log('update');
-                    console.log(update);
-
-                    Eboarder.findOneAndUpdate(query, update, options, function(err, eboarder) {
-                      if (err) {
-                        console.log('error updating eboarder: '+err);
-                      }
-                      console.log('updated eboarder: '+eboarder);
-                      res.redirect('back');
-                    });
-                }
-
-            //otherwise, return an error and redirect
-            } else {
-
-                console.log('position was null');
-                res.redirect('back');
-                
+            for (var i in update) {
+              if (update[i] === null || update[i] === undefined) {
+                delete update[i];
+              }
             }
+
+            User.findOneAndUpdate(query, update, function(err, user) {
+                if (err) {
+                    console.log('error updating eboarder: '+err);
+                } else {
+                    console.log('updated eboarder: '+user);
+                }
+                res.redirect('back');
+            });
 
         })
         .get(isAuthenticated, function(req, res){
 
             console.log(req.user);
 
-            Eboarder.find(function(err,eboarders){
-               if(err) {
-                    console.log("there was an error loading eboarders");
-                } else {
-                    res.render('eboard', {
-                        title: 'Eboarders',
-                        eboarders : eboarders,
-                        user : req.user // get the user out of session and pass to template
-                    });
-                }
+            res.render('eboard', {
+                title: 'Eboard Profile',
+                user : req.user // get the user out of session and pass to template
             });
 
         });
@@ -702,7 +858,6 @@ module.exports = function(passport){
 
         })
         .get(isAuthenticated, function(req, res){
-            
             res.render('manage', {
                 title: 'Manage',
                 user: req.user // get the user out of session and pass to template

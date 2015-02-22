@@ -4,44 +4,48 @@ block content
   .container
 
     include admin-sidebar
-    .content
-      form(action='/admin/charts', method='post')
-        button.btn.pull-right(type="submit") Start New Week
-      h2 Week #{week} Charts
-      table.table.table-striped.table-condensed.table-albums
-        thead
-          tr
-            th
-            th Album
-            th Artist
-            th Count
-        tbody
-          each album, i in charts
+    .content.charts
+      .current-week
+        form(action='/admin/charts', method='post')
+          button.btn.pull-right(type="submit") Start New Week
+        h2 Week #{week} Charts
+          a.see-charts(href='#') See past weeks
+        table.table.table-striped.table-condensed.table-albums
+          thead
             tr
-              td #{i+1}.
-              td #{album.album}
-              td #{album.artist}
-              td #{album.count}
-      .charts_select.pull-right
-        | Charts for: 
-        select
-          option Choose date
-          each item in pastCharts
-            option(data-date='#{item.date}') #{moment(item.date).format("MMMM Do YYYY")}
-      h2 Past Charts
-      p.emp.zero-state Select a date to see charts
-      table.table.table-striped.table-condensed.table-albums.table-pastCharts.hide
-        thead
-          tr
-            th
-            th Album
-            th Artist
-            th Count
-        tbody
+              th
+              th Album
+              th Artist
+              th Count
+          tbody
+            each album, i in charts
+              tr
+                td #{i+1}.
+                td #{album.album}
+                td #{album.artist}
+                td #{album.count}
+        include _paginate-charts
+      .past-weeks.hidden
+        .charts_select.pull-right
+          | Charts for: 
+          select
+            option Choose date
+            each item, i in pastCharts
+              option(data-date='#{item.date}') Week #{(i+1)}: #{moment(item.date).format("MMMM Do YYYY")}
+        h2 Past Charts
+          a.see-charts(href='#') See current week
+        p.emp.zero-state Select a date to see charts
+        table.table.table-striped.table-condensed.table-albums.table-pastCharts.hide
+          thead
+            tr
+              th
+              th Album
+              th Artist
+              th Count
+          tbody
     //end container
     script(type='text/javascript').                                   
       var local_data =!{JSON.stringify(pastCharts)}
-      console.log(local_data)
     include global-js
     script(src='/javascripts/charts.js')
 

@@ -1,5 +1,10 @@
 $( document ).ready(function() {
 
+	$('.see-charts').click(function() {
+		$('.current-week').toggleClass('hidden');
+		$('.past-weeks').toggleClass('hidden');
+	});
+
 	//change table to reflect desired charts
 	$("select").change(function() {
 
@@ -8,7 +13,8 @@ $( document ).ready(function() {
 		var date = $("select option:selected").attr('data-date');
 		//date = new Date(date);
 
-		if(date=="Choose date"){
+
+		if(!date){
 			$('.zero-state').removeClass('hide');
 			$('.table-pastCharts').addClass('hide');
 		} else {

@@ -32,6 +32,10 @@ $( document ).ready(function() {
 				}
 			};
 
+
+					startIndex = 45;
+					endIndex = 53;
+
 			$('.table-playlists tbody tr').remove();
 			
 			var n = endIndex - startIndex + 1;

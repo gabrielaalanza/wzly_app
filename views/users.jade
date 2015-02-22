@@ -2,33 +2,78 @@ extends layout
 
 
 block content
+  .modal.fade.position-modal(tabindex="-1", role="dialog", aria-labelledby="Position Modal" aria-hidden="true")
+    .modal-dialog.modal-sm
+      .modal-content
+        .modal-body
+          button.close(type='button', data-dismiss='modal')
+            span(aria-hidden='true') ×
+            span.sr-only Close
+          h4 Add a Position for 
+            span.name 
+          input(type="text", name="position-name", class="position-name")
+        .modal-footer
+          button.btn.position-save Save
   .container
 
     include admin-sidebar
-    .content
+    .content.users
+      button.btn.pull-right.show-form Add a User
       h2 Users
-      form.user-form.form-inline(action='/../signup', method='post')
-        input(type='text', name='name', placeholder='DJ Name')
-        input(type='text', name='username', placeholder='DJ Username')
-        button.btn(type='submit') Add DJ
+      form.user-form.form-inline
+        span.sub Users with eboard positions will have admin access.
+        input(type='text', name='dj-name', placeholder='DJ name')
+        input(type='text', name='username', placeholder='DJ username')
+        input(type='text', name='position', placeholder='Position (optional)')
+        input(type='text', name='dj-email', placeholder='Email address')
+        button.btn(type='submit') Add DJ     
+        p
+          input(type='checkbox',name='email-check', checked) 
+          | DJ's primary email is @wellesley.edu.
+          span.error User is already in the system.
       table.table.table-striped.table-condensed.table-users
         thead
           tr
             th
             th DJ
             th Username
-            th Delete
+            th Position
+            th Actions
         tbody
           each user, i in users
-            tr
-              td #{i+1}
+            tr(data-id='#{user._id}')
+              td #{i+1}.
               td #{user.local.name}
               td #{user.local.username}
+              if (user.eboard.position) 
+                td #{user.eboard.position}
+              else
+                td
               td 
-                  form(method='post', action='/admin/events/#{user.local._id}')
-                    button.clear(type='submit', role='button')
-                      img(src="/images/icons/trash.png").icon
+                if(user.permanent != true)
+                  .dropdown
+                    button.btn.dropdown-toggle.clear(type="button",id="actions",data-toggle="dropdown",aria-expanded="true")
+                      img(src="/images/icons/gear.png").icon
+                      span.caret
+                    ul.dropdown-menu(role="menu",aria-labelledby="actions")
+                      if (user.position)
+                        li(role="presentation") 
+                          a(role="menuitem", tabindex="-1", href="#", class="remove-position")
+                            img(src="/images/icons/minus.png").icon
+                            | Remove position
+                      else
+                        li(role="presentation") 
+                          a(role="menuitem", tabindex="-1", href="#", class="add-position", data-toggle="modal" data-target=".position-modal", data-name="#{user.local.name}")
+                            img(src="/images/icons/plus.png").icon
+                            | Add a position
+                      li(role="presentation") 
+                        form(method='post', action='/admin/user/#{user._id}')
+                          button.clear(role="menuitem", tabindex="-1", type='submit')
+                            img(src="/images/icons/trash.png").icon
+                            | Delete user 
+      include _paginate-users
     //end container
+    script(type='text/javascript').                                   
+      var local_data =!{JSON.stringify(users)}
     include global-js
-    script(src='javascripts/bootstrap-datepicker.js')
-
+    script(src='/javascripts/users.js')

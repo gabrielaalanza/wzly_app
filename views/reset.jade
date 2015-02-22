@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    // Reset form 
+    form.form-signin.line-form.form-inline(method='post')
+        h1.form-signin-heading Set password
+        input.input-block-level(type='password', placeholder='Password', name='password', autofocus, autocomplete="off")
+        button.btn(type='submit') Submit
+        p.loginerror #{error}
+    // Javascript files 
+    include global-js
+    script(src='/javascripts/login.js')

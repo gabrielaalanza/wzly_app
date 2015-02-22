@@ -2,6 +2,8 @@
 var express = require('express');
 var router = express.Router();
 
+var User = require('../models/user');
+
 var nodemailer = require('nodemailer');
 
 var isAuthenticated = function (req, res, next) {
@@ -48,10 +50,15 @@ module.exports = function(passport){
   });
 
   /* Handle Registration POST */
+  router.get('/signup', function(req, res) {
+    res.redirect('back');
+  });
+
+  /* Handle Registration POST */
   router.post('/signup', passport.authenticate('signup', {
-    //successRedirect: '/admin/users',
-    //failureRedirect: '/admin/library',
-    //failureFlash : true  
+    successRedirect: '/admin/users',
+    failureRedirect: '/admin/library',
+    failureFlash : true  
   }));
 
   /* Handle Logout */
@@ -91,5 +98,51 @@ module.exports = function(passport){
     });
   });
 
+/* Handle Password reset */
+
+router.route('/reset/:token')
+  .post(function(req, res){
+
+      User.findOne({ 'local.resetPasswordToken': req.params.token}, function(err, user) {
+          if (!user) {
+              req.flash('error', 'Password reset token is invalid or has expired.');
+              return res.redirect('back');
+          }
+
+          user.local.password = req.body.password;
+          user.local.resetPasswordToken = undefined;
+
+          user.save(function(err) {
+            if (err) { return next(err); }
+            req.logIn(user, function(err) {
+              if (err) { return next(err); }
+              return res.redirect('/app/profile');
+            });
+          });
+      });
+
+  })
+  .get(function(req, res){
+      User.findOne({ 'local.resetPasswordToken': req.params.token }, function(err, user) {
+          if (!user) {
+              req.flash('error', 'Password reset token is invalid or has expired.');
+              return res.redirect('/login');
+          }
+          res.render('reset', {
+              title: 'Set your password',
+              user: req.user
+          });
+      });
+
+  });
+/*
+router.route('/reset/:token')
+  .get(function(req, res){
+    res.render('reset', {
+        title: 'Set your password',
+        user: req.user
+    });
+  });
+*/
 return router;
 }

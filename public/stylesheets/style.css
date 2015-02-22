@@ -36,6 +36,8 @@ h3 {
 	border: 1px solid rgba(243,235,232,.3);
 	border-radius: 2px;
 	padding: 8px 20px;
+	-webkit-transition: background-color 0.15s ease-in-out;
+	transition: background-color 0.15s ease-in-out;
 }
 
 .btn.primary {
@@ -63,6 +65,8 @@ a {
 
 a:hover {
 	color: #804D49;
+	-webkit-transition: color 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out;
 }
 
 .hide {
@@ -196,14 +200,49 @@ table .icon {
 	padding: 0px 10px;
 }
 
+table .icon.add {
+	padding: 0px 20px 0px 0px;
+}
+
 table a {
 	width: 45px;
 	display: block;
 }
 
-.table-users {
-	width: 420px;
+/* **** Dropdowns **** */
+.dropdown button {
+	padding: 2px 4px;
 }
+
+.dropdown-menu {
+	background-color: #333;
+}
+
+.dropdown-menu li {
+	display: block;
+}
+
+.dropdown-menu li a, .users .dropdown-menu li button {
+	color: #F3EBE8;
+	width: 100%;
+	padding: 10px 20px;
+}
+
+.dropdown-menu li button {
+	padding-left: 0;
+	margin-left: -3px;
+}
+
+.dropdown-menu li img {
+	padding: 0;
+	padding-right: 10px;
+	width: 24px;
+}
+
+.dropdown-menu li a:hover, .users .dropdown-menu li button:hover {
+	background-color: rgba(215,215,215,0.10);
+}
+
 
 /* **** Container **** */
 .container {
@@ -254,12 +293,16 @@ table a {
 
 .topbar h1 {
 	margin: 0 auto;
-	padding-top: 20px;
+	padding-top: 15px;
 	font-size: 14px;
 	text-align: center;
 	letter-spacing: 1.5px;
 	color: #804D49;
 	font-family: "Helvetica Neue";
+}
+
+.topbar h1 img {
+	width: 80px;
 }
 
 .topbar .small {
@@ -269,19 +312,57 @@ table a {
 	letter-spacing: 0.5;
 }
 
+.mask {
+  display: block;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
 .left-nav img.prof-pic {
-	width: 100px;
-	height: 100px;
-	border-radius: 50px;
+	max-height: 100%;
+	margin-left: -25%;
+}
+
+.left-nav img.prof-pic.admin {
 	display: block;
 	margin: 0 auto;
+	width: 100px;
+	height: 100px;
+}
+
+.left-nav button {
+	margin: 20px auto 30px;
+	display: block;
 }
 
 .left-nav h2 {
 	font-size: 18px;
-	margin: 20px auto 30px;
 	text-align: center;
+	margin: 20px auto 30px;
 	font-family: "HelveticaNeue-Thin";
+}
+
+.left-nav .dropdown h2 {
+	font-size: 18px;
+	text-align: center;
+	display: inline-block;
+	margin: 0;
+	font-family: "HelveticaNeue-Thin";
+}
+
+.left-nav .caret {
+	margin-left: 7px;
+}
+
+.left-nav .dropdown-menu {
+	margin-left: 64px;
+}
+
+.left-nav .dropdown li {
+	text-transform: none;
 }
 
 .left-nav ul {
@@ -295,14 +376,14 @@ table a {
 }
 
 .left-nav ul li {
-	list-style-type: none;}
+	list-style-type: none;
+}
 
 .left-nav ul li a {
 	display: block;
 	margin: 2px 0;
 	padding: 11px 20px;
 }
-
 
 .left-nav ul li a:hover {
 	text-decoration: none;
@@ -334,9 +415,14 @@ table a {
 	font-family: "Helvetica Neue";
 }
 
+.logout a:hover {
+	text-decoration: none;
+}
+
 .logout img {
 	width: 16px;
 	margin-right: 10px;
+	margin-bottom: 3px;
 }
 
 /* **** Modal **** */
@@ -404,6 +490,10 @@ body.login:before {
     left: 0;
     bottom: 0;
     background: linear-gradient(rgba(0,0,0,0) 40%,rgba(0,0,0,0.8) 100%);
+}
+
+.form-signin-heading img {
+	width: 230px;
 }
 
 .form-signin.form-inline {
@@ -566,14 +656,13 @@ body.login:before {
 	opacity: 0.7;
 }
 
-
 .add-name a {
 	color: #804D49;
 }
 
 /* **** Bottom bar **** */
 .bottom-bar {
-	height: 50px;
+	height: 46px;
 	background-color: rgba(215,215,215,0.2);
 	bottom: 0;
 	position: absolute;
@@ -581,7 +670,11 @@ body.login:before {
 	margin-left: 200px;
 	border-bottom-right-radius: 2px;
 	text-align: center;
-	padding-top: 15px;
+	padding-top: 6px;
+}
+
+.bottom-bar button:hover {
+	background-color: transparent;
 }
 
 .btn-main {
@@ -613,6 +706,10 @@ body.login:before {
 	font-size: 12px;
 }
 
+.profile-form .band {
+	display: block;
+}
+
 .profile-form textarea {
 	margin-top: 30px;
 	width: 270px
@@ -623,7 +720,8 @@ body.login:before {
 }
 
 .profile-form button {
-	margin: 40px 0;
+	margin: 0 0 40px;
+	width: 140px;
 }
 
 
@@ -652,6 +750,16 @@ body.login:before {
 
 .hr_response {
 	display: none;
+}
+
+/*****************************/
+/********** Charts ***********/
+/*****************************/
+
+.charts h2 a {
+	font-size: 13px;
+	color: #337ab7;
+	padding-left: 10px;
 }
 
 /*****************************/
@@ -712,6 +820,56 @@ body.login:before {
 	background-color: rgba(215,215,215,0.20);
 }
 
+/*****************************/
+/*********** Users ***********/
+/*****************************/
+
+.table-users thead tr th:last-child {
+	width: 40px;
+}
+
+.user-form {
+	display: none;
+}
+
+.user-form p {
+	margin-top: 10px;
+}
+
+.user-form .sub {
+	font-size: 12px;
+	opacity: 0.6;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.user-form input[name='dj-email'] {
+	display: none;
+}
+
+.users .error {
+	color: #EB7A71;
+	display: none;
+	font-size: 14px;
+	margin-left: 20px;
+	opacity: 1;
+}
+
+.position-modal .modal-content {
+	width: 340px;
+}
+
+.position-modal .modal-body, .position-modal .modal-footer {
+	padding: 15px 30px;
+}
+
+.position-modal h4 {
+	margin-bottom: 20px;
+}
+
+.position-modal input:not([type=submit]):not([type=file]){
+	width: 100%;
+}
 
 /*****************************/
 /********** Manage ***********/

@@ -1,26 +1,41 @@
 .left-nav
-	.topbar
-		h1 AIRWAVE
-			span.small BETA
-	img(src='#{user.picture}', class="prof-pic")
-	- if(user.local.name)
-		h2 #{user.local.name}
-	- else
-		h2 #{user.local.username}
-	ul
-		li
-			a(href='/app/log')
-				img(src="/images/icons/mic.png")
-				| Music Log
-		li 
-			a(href='/app/playlists')
-				img(src="/images/icons/playlists.png")
-				| Playlists
-		li 
-			a(href='/app/profile')
-				img(src="/images/icons/profile.png")
-				| Profile
-	.logout
-		a(href="/logout")
-			img(src="/images/icons/scheduler.png")
-			| Logout
+    .topbar
+        h1 
+            img(src='/images/assets/airwave-logo.png')
+            span.small BETA
+    .mask
+        img(src='#{user.picture}', class="prof-pic")
+    - if (user.eboard.position)
+        if(user.permanent != true)
+        .dropdown
+            button.dropdown-toggle.clear(type="button",id="actions",data-toggle="dropdown",aria-expanded="true")
+                - if(user.local.name)
+                    h2 #{user.local.name}
+                - else
+                    h2 #{user.local.username}
+                span.caret
+            ul.dropdown-menu(role="menu",aria-labelledby="actions")
+                li(role="presentation") 
+                    a(href='/admin/library') Switch to admin
+    - else
+        - if(user.local.name)
+            h2 #{user.local.name}
+        - else
+            h2 #{user.local.username}
+    ul
+        li
+            a(href='/app/log')
+                img(src="/images/icons/mic.png")
+                | Music Log
+        li 
+            a(href='/app/playlists')
+                img(src="/images/icons/playlists.png")
+                | Playlists
+        li 
+            a(href='/app/profile')
+                img(src="/images/icons/profile.png")
+                | Profile
+    .logout
+        a(href="/logout")
+            img(src="/images/icons/logout.png")
+            | Logout

@@ -22,7 +22,15 @@ var flash    = require('connect-flash');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
-var configDB = require('./config/database.js');
+//var configDB = require('./config/database.js');
+//provide a sensible default for local development
+var db_name = 'wzly_db';
+var mongodb_connection_string = 'localhost:27017/'+db_name;
+//take advantage of openshift env vars when available:
+if(process.env.OPENSHIFT_MONGODB_DB_URL){
+  mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
+}
+
 
 // ** Moment ** //
 var moment = require('moment');
@@ -41,18 +49,21 @@ var json2csv = require('json2csv');
 // ** Nodemailer ** //
 var nodemailer = require('nodemailer');
 
+// ** For password reset ** //
+var bcrypt = require('bcrypt-nodejs');
+var async = require('async');
+var crypto = require('crypto');
+
 var app = express();
 
 // pagination setup
 app.use(paginate.middleware(10, 50));
 
 // db configuration ==========================================================
-mongoose.connect(configDB.url); // connect to our database
+mongoose.connect(mongodb_connection_string); // connect to our database
 mongoose.connection.on('error', console.log);
 
 autoIncrement.initialize(mongoose.connection);
-
-/****** JUST ADDED ******/
 
 // Initialize Passport
 var initPassport = require('./passport/init');
@@ -62,13 +73,6 @@ initPassport(passport);
 //app.use('/', routes);
 
 /***********************/
-
-
-/*app.use(function(req,res,next){
-    res.locals.session = req.session;
-    next();
-});
-*/
 
 // require routes
 var routes = require('./routes/routes')(passport);
@@ -97,10 +101,13 @@ var methodOverride = require('method-override')
 app.use(methodOverride('X-HTTP-Method-Override'))
 
 // required for passport
-app.use(session({cookie: { path: '/', httpOnly: true, maxAge: null}, secret: 'eLecTr!cL@d!Ez' })); // session secret
+var MongoStore = require('connect-mongo')(session);
+app.use(session({cookie: { path: '/', httpOnly: true, maxAge: null}, secret: 'eLecTr!cL@d!Ez',
+    store: new MongoStore({ mongooseConnection: mongoose.connection }) })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+
 
 /*app.get('*', function(req, res, next) {
   // put user into res.locals for easy access from templates

@@ -3,7 +3,8 @@ extends layout
 block content
     // Sign-in form 
     form.form-signin.line-form.form-inline(method='post', action='/login')
-        h1.form-signin-heading Airwave
+        h1.form-signin-heading 
+            img(src="/images/assets/airwave-logo-white.png")
         input.input-block-level(type='text', placeholder='Username', name='username', autofocus, autocomplete="off")
         input.input-block-level(type='password', placeholder='Password', name='password', autocomplete="off")
         button.btn(type='submit') Sign in

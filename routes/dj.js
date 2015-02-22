@@ -304,7 +304,6 @@ module.exports = function(passport){
                     if(err) {
                         console.log('error setting user ('+user+') to live: '+err);
                     } else {
-
                         console.log(user+' is now live');
                     }
                 });
