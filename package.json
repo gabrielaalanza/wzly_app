@@ -33,6 +33,7 @@
     "passport-facebook": "~1.0.2",
     "passport-local": "~0.1.6",
     "path": "^0.4.9",
+    "pkginfo": "^0.3.0",
     "serve-favicon": "~2.0.1"
   },
   "description": "An interface for WZLY 91.5fm.",
