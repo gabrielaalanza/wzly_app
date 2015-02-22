@@ -31,6 +31,14 @@ h3 {
 	color: rgba(235,122,113, 0.6);
 }
 
+.caps {
+	font-family: "Lato";
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-weight: 400;
+}
+
 .btn {
 	background-color: rgba(243,235,232,.1);
 	border: 1px solid rgba(243,235,232,.3);
@@ -138,9 +146,11 @@ input.full, textarea.full {
 }
 
 .form-with-labels label {
-	font-family: "HelveticaNeue-Thin";
-	font-weight: 300;
-	font-size: 18px;
+	font-family: "Lato";
+	text-transform: uppercase;
+	font-size: 13px;
+	letter-spacing: 0.1em;
+	font-weight: 400;
 }
 
 /* **** Pagination **** */
@@ -307,9 +317,10 @@ table a {
 
 .topbar .small {
 	color: #804D49;
-	font-family: "Helvetica Neue";
+	font-family: "Lato";
 	padding-left: 5px;
-	letter-spacing: 0.5;
+	letter-spacing: 0.1em;
+	font-weight: 400;
 }
 
 .mask {
@@ -363,6 +374,9 @@ table a {
 
 .left-nav .dropdown li {
 	text-transform: none;
+	font-family: "HelveticaNeue";
+	letter-spacing: 1px;
+	padding: 0;
 }
 
 .left-nav ul {
@@ -372,7 +386,7 @@ table a {
 	margin: 0;
 	margin-bottom: 20px;
 	padding: 0;
-	font-family: "Helvetica Neue";
+	font-family: "Lato";
 }
 
 .left-nav ul li {
@@ -382,7 +396,7 @@ table a {
 .left-nav ul li a {
 	display: block;
 	margin: 2px 0;
-	padding: 11px 20px;
+	padding: 10px 20px;
 }
 
 .left-nav ul li a:hover {
@@ -410,9 +424,9 @@ table a {
 	padding: 10px 20px 15px;
 	background-color: rgba(243,235,232,0.05);
 	text-transform: uppercase;
-	letter-spacing: 1.5px;
+	letter-spacing: 0.1em;
 	font-size: 13px;
-	font-family: "Helvetica Neue";
+	font-family: "Lato";
 }
 
 .logout a:hover {
