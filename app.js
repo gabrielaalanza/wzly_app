@@ -102,7 +102,7 @@ app.use(methodOverride('X-HTTP-Method-Override'))
 
 // required for passport
 var MongoStore = require('connect-mongo')(session);
-app.use(session({cookie: { path: '/', httpOnly: true, maxAge: null}, secret: 'eLecTr!cL@d!Ez',
+app.use(session({cookie: { path: '/', httpOnly: true, maxAge: null}, secret: 'eLecTr!cL@d!Ez', saveUninitialized: true, resave: true,
     store: new MongoStore({ mongooseConnection: mongoose.connection }) })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
