@@ -81,36 +81,6 @@ module.exports = function(passport){
 
                         res.send(data);
 
-                        /*
-                        Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
-
-                            if (err) return next(err);
-
-                            res.format({
-                              html: function() {
-                                    res.render('library', {
-                                        title: 'Library',
-                                        albums : albums,
-                                        hrID : count,
-                                        albumName : result.album,
-                                        albumArtist : result.artist,
-                                        pageCount: pageCount,
-                                        itemCount: itemCount,
-                                        user: req.user
-                                    });
-                              },
-                              json: function() {
-                                // inspired by Stripe's API response for list objects
-                                res.json({
-                                    object: 'list',
-                                    has_more: paginate.hasNextPages(req)(pageCount),
-                                    data: albums
-                                });
-                              }
-                            });
-
-                        }, { sortBy : { hrID : -1 }});
-                        */
                     }
                 });
             });
@@ -145,23 +115,7 @@ module.exports = function(passport){
                 });
 
             }, { sortBy : { hrID : -1 }});
-            /*
-            Album.find(function(err,albums){
-               if(err) {
-                    console.log("There was an error getting the albums: "+err);
-                } else {
-                    
-                    res.render('library', {
-                        title: 'Library',
-                        albums : albums,
-                        hrID : null,
-                        albumName : null,
-                        albumArtist : null,
-                        user : req.user // get the user out of session and pass to template
-                    });
-                }
-            });
-            */
+
         });
 
     // ****** Get albums from database ****** //
@@ -237,27 +191,7 @@ module.exports = function(passport){
                     });
 
             }, { sortBy : { count : -1 }});
-            /*
-            Album.find().sort({count: -1}).exec(function(err,charts){
-               if(err) {
-                    console.log("there was an error loading charts");
-                } else {
-                    Chart.find().sort({date: 1}).exec(function(err,pastCharts) {
-                        if(err) {
-                            console.log("there was an error loading charts");
-                        } else {
-                            res.render('charts', {
-                                title: 'Current Charts',
-                                moment: moment,
-                                charts : charts,
-                                pastCharts : pastCharts,
-                                week: (pastCharts.length + 1),
-                                user : req.user // get the user out of session and pass to template
-                            });
-                        }
-                    });
-                }
-            })*/
+
         });
     
 
@@ -289,11 +223,6 @@ module.exports = function(passport){
 
                     console.log("This is the email: "+newUser.local.email);
 
-                    /*
-                    console.log('HEADERS');
-                    console.log(req.headers);
-                    */
-
                     // save the user
                     newUser.save(function(err) {
                         if (err){
@@ -301,8 +230,6 @@ module.exports = function(passport){
                         } else {
                             console.log('User Registration succesful'); 
                         }
-                        //res.end();
-                        //res.redirect('back');
                     });
 
                     async.waterfall([

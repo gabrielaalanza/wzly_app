@@ -4,7 +4,7 @@ block content
   .container
 
     include admin-sidebar
-    .content
+    .content.events
       .events-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Event" aria-hidden="true")
         .modal-dialog
           form.events-form.form-with-labels(action='/admin/events', method='post', enctype="multipart/form-data")
@@ -13,14 +13,14 @@ block content
                 button.close(type='button', data-dismiss='modal')
                   span(aria-hidden='true') ×
                   span.sr-only Close
-                h4.modal-title Add/Edit Event
+                h3.modal-title Add/Edit Event
               .modal-body
                 input(name='id', type='text', style='display: none;')
                 .row
                   .col-sm-3
                     label.inline(for='name') Event Name
                   .col-sm-9
-                    input.full(type='text', placeholder='', name='name')
+                    input.med(type='text', placeholder='', name='name')
                 .row
                   .col-sm-3
                     label.inline(for='date') Date
@@ -73,7 +73,7 @@ block content
                   .col-sm-3
                     label.inline(for='location') Location 
                   .col-sm-9
-                    input.full(type='text', placeholder='', name='location')
+                    input.med(type='text', placeholder='', name='location')
                 .row
                   .col-sm-3
                     label.inline(for='description') Description
@@ -88,9 +88,8 @@ block content
               .modal-footer
                 button.btn(type='button', data-dismiss='modal') Close
                 button.btn.primary(type='submit', name='submit') Save changes
-      button.btn.primary.pull-right(data-target='.events-modal', role='button', data-toggle='modal')
-        span.glyphicon.glyphicon-plus
-        | Add Event
+      button.btn.pull-right(data-target='.events-modal', role='button', data-toggle='modal')
+        | Add an event
       h2 WZLY Events
 
       table.table.table-striped.events-table
@@ -100,8 +99,7 @@ block content
             th Date
             th Time
             th Location
-            th Edit
-            th Delete
+            th Actions
         tbody
           each event, i in events
             tr
@@ -109,12 +107,21 @@ block content
               td #{moment(event.start_time).format('MMM Do YYYY')}
               td #{moment(event.start_time).format('h:mm a')} - #{moment(event.end_time).format('h:mm a')}
               td #{event.location}
-              td(class='edit-event',data-id='#{i}', data-target='.events-modal', role='button', data-toggle='modal')
-                img(src="/images/icons/edit.png").icon
               td 
-                form(method='post', action='/admin/events/#{event._id}')
-                  button.clear(type='submit', role='button')
-                    img(src="/images/icons/trash.png").icon
+                .dropdown
+                    button.btn.dropdown-toggle.clear(type="button",id="actions",data-toggle="dropdown",aria-expanded="true")
+                      img(src="/images/icons/gear.png").icon
+                      span.caret
+                    ul.dropdown-menu(role="menu",aria-labelledby="actions")
+                      li(role="presentation") 
+                        a(role="menuitem", tabindex="-1", href="#", class="edit-event", data-toggle='modal', class='edit-event',data-id='#{i}', data-target='.events-modal')
+                          img(src="/images/icons/edit.png").icon
+                          | Edit event
+                      li(role="presentation") 
+                        form(method='post', action='/admin/events/#{event._id}')
+                          button.clear(type='submit', role='button')
+                            img(src="/images/icons/trash.png").icon
+                            | Delete Event
     
     //end container
     script(type='text/javascript').                                   

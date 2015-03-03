@@ -9,7 +9,7 @@ block content
           button.close(type='button', data-dismiss='modal')
             span(aria-hidden='true') ×
             span.sr-only Close
-          h4 Add a Position for 
+          h3 Add position for 
             span.name 
           input(type="text", name="position-name", class="position-name")
         .modal-footer
@@ -18,7 +18,7 @@ block content
 
     include admin-sidebar
     .content.users
-      button.btn.pull-right.show-form Add a User
+      button.btn.pull-right.show-form Add a user
       h2 Users
       form.user-form.form-inline
         span.sub Users with eboard positions will have admin access.
@@ -56,7 +56,7 @@ block content
                       img(src="/images/icons/gear.png").icon
                       span.caret
                     ul.dropdown-menu(role="menu",aria-labelledby="actions")
-                      if (user.position)
+                      if (user.eboard.position)
                         li(role="presentation") 
                           a(role="menuitem", tabindex="-1", href="#", class="remove-position")
                             img(src="/images/icons/minus.png").icon

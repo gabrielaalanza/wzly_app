@@ -17,6 +17,7 @@
     "express": "~4.8.6",
     "express-paginate": "0.0.5",
     "express-session": "^1.0.4",
+    "fs": "0.0.2",
     "jade": "~1.5.0",
     "json2csv": "2.2.1",
     "later": "1.1.6",
@@ -34,7 +35,8 @@
     "passport-local": "~0.1.6",
     "path": "^0.4.9",
     "pkginfo": "^0.3.0",
-    "serve-favicon": "~2.0.1"
+    "serve-favicon": "~2.0.1",
+    "util": "^0.10.3"
   },
   "description": "An interface for WZLY 91.5fm.",
   "main": "app.js",

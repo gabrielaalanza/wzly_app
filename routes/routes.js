@@ -135,14 +135,6 @@ router.route('/reset/:token')
       });
 
   });
-/*
-router.route('/reset/:token')
-  .get(function(req, res){
-    res.render('reset', {
-        title: 'Set your password',
-        user: req.user
-    });
-  });
-*/
+
 return router;
 }

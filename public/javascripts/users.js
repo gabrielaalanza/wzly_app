@@ -94,6 +94,8 @@ $( document ).ready(function() {
 
 				        $.each(json, function (i, item) {
 
+				        	console.log(item);
+
 				            trHTML += '<tr data-id="'+item._id+'"><td>'+(i+1)+'.</td><td>' 
 				            			+ item.local.name + '</td><td>' 
 				            			+ item.local.username + '</td>';
