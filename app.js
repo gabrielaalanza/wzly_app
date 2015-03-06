@@ -24,13 +24,7 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 //var configDB = require('./config/database.js');
 //provide a sensible default for local development
-var db_name = 'wzly_db';
-var mongodb_connection_string = 'localhost:27017/'+db_name;
-//take advantage of openshift env vars when available:
-if(process.env.OPENSHIFT_MONGODB_DB_URL){
-  mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
-}
-
+var mongodb_connection_string = 'mongodb://admin:electricladyland@ds051831.mongolab.com:51831/heroku_app34231' || 'localhost:27017/wzly_db';
 
 // ** Moment ** //
 var moment = require('moment');
