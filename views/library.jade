@@ -12,7 +12,7 @@ block content
         input(type='text', name='artist', placeholder='Artist Name')
         button.btn(type='submit') Add
       p.hr_response
-      - if(!albums)
+      - if(!albums[0])
         p.emp.zero-state You don't have HR albums in your library yet.
       - else
         table.table.table-striped.table-condensed.table-albums

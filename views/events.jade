@@ -91,7 +91,7 @@ block content
       button.btn.pull-right(data-target='.events-modal', role='button', data-toggle='modal')
         | Add an event
       h2 WZLY Events
-      - if (!events)
+      - if (!events[0])
         p.emp.zero-state You don't have any events yet.
       - else
         table.table.table-striped.events-table

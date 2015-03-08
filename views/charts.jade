@@ -10,7 +10,7 @@ block content
           button.btn.pull-right(type="submit") Start new week
         h2 Week #{week} Charts
           a.see-charts(href='#') See past weeks
-        - if(!charts)
+        - if(!charts[0])
           p.emp.zero-state You don't have any charts yet.
         - else 
           table.table.table-striped.table-condensed.table-albums
