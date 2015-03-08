@@ -380,7 +380,7 @@ module.exports = function(passport){
                     console.log('There was an error finding this user: '+err)
                 } else {
 
-                    user.eboard.position = undefined;
+                    user.eboard = undefined;
                     user.save(function(err) {
                         if (err) {
                             console.log('There was an error updating the position: '+err)

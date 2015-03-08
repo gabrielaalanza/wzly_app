@@ -99,7 +99,7 @@ $( document ).ready(function() {
 				            trHTML += '<tr data-id="'+item._id+'"><td>'+(i+1)+'.</td><td>' 
 				            			+ item.local.name + '</td><td>' 
 				            			+ item.local.username + '</td>';
-				            if(item.eboard.position) {
+				            if(item.eboard) {
 				            	trHTML += '<td>'+item.eboard.position + '</td>'
 				            } else {
 				            	trHTML += '<td></td>'
@@ -108,7 +108,7 @@ $( document ).ready(function() {
 				            if (item.permanent != true) {
 				            	trHTML += '<td><div class="dropdown"><button class="btn dropdown-toggle clear" type="button" id="actions" data-toggle="dropdown" aria-expanded="false"><img src="/images/icons/gear.png" class="icon"><span class="caret"></button>'
 				            	           +'<ul class="dropdown-menu" role="menu" aria-labelledby="actions">';
-	                     		if (item.eboard.position) {
+	                     		if (item.eboard) {
 		                        	trHTML += '<li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="remove-position"><img src="/images/icons/minus.png" class="icon"> Remove Position</a></li>';
 		                        } else {
 		                        	trHTML += '<li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="add-position" data-toggle="modal" data-target=".position-modal" data-name="'+item.local.name+'"><img src="/images/icons/plus.png" class="icon"> Add a Position</a></li>';

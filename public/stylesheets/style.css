@@ -117,6 +117,17 @@ select {
 	border: 1px solid rgba(243,235,232,1);
 	border-radius: 2px;
 	padding: 8px 8px 7px 8px;
+	-webkit-appearance: none;
+}
+
+select:after {
+    content: ' ';
+      height: 0;
+      position: absolute;
+      z-index: 9999;
+      width: 0;
+      border: 10px solid transparent;
+      border-left-color: #fff;
 }
 
 input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
@@ -641,11 +652,6 @@ body.login:before {
 
 .line-form .btn {
 	margin-top: 30px;
-}
-
-select {
-	border-radius: 2px;
-	-webkit-appearance: none;
 }
 
 

@@ -5,6 +5,9 @@ $(function() {
 	if(current_playlist.name) $(".playlist-form input[name='name']").val(current_playlist.name);
 	if(current_playlist.description) $(".playlist-form textarea[name='description']").val(current_playlist.description);
 
+	$('.go-live').submit(function() {
+		$('this').find('button').prop("disabled",true);
+	})
 
 	$( ".playlist-form" ).submit(function( event ) {
 	  event.preventDefault();
