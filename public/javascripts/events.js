@@ -39,9 +39,12 @@ $( document ).ready(function() {
 	});
 
 	$('.events-modal').on('hidden.bs.modal', function (e) {
-		console.log('hidden');
 	  	$('.events-form')[0].reset();
 	  	$('p.spam_view').text('There is no spam for this event uploaded yet.');
+	})
+
+	$('.events-modal').on('shown.bs.modal', function (e) {
+		$('input[name="name"]').focus();
 	})
 	
 });

@@ -426,6 +426,7 @@ module.exports = function(passport){
             newEvent.end_time = end_time;
 
             //rename and move the image into the correct folder
+            console.log(req.files.spam);
             if (req.files.spam) { 
                 //console.log('files: '+util.inspect(req.files));
 
@@ -453,7 +454,7 @@ module.exports = function(passport){
                         newEvent.spam = url;
 
                         //if event is new (id is null), save it
-                        if(id == ''){
+                        if(!id){
 
                             newEvent.save(function(err, result){
                                 if(err) {

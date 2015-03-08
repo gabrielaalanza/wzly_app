@@ -24,7 +24,8 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 //var configDB = require('./config/database.js');
 //provide a sensible default for local development
-var mongodb_connection_string = 'mongodb://admin:electricladyland@ds051831.mongolab.com:51831/heroku_app34231140' || 'localhost:27017/wzly_db';
+//var mongodb_connection_string = 'mongodb://admin:electricladyland@ds051831.mongolab.com:51831/heroku_app34231140';
+var mongodb_connection_string = 'localhost:27017/wzly_db';
 
 // ** Moment ** //
 var moment = require('moment');
