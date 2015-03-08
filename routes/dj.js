@@ -44,15 +44,9 @@ module.exports = function(passport){
     router.route('/profile')
         .post(isAuthenticated, function(req, res){
 
-            console.log("bio: "+req.body.bio);
-
             var query = {'_id': req.user._id};
 
             var update = {
-                local: {
-                    name: req.body.name,
-                    username: req.user.local.username
-                },
                 showName: req.body.showName,
                 bio: req.body.bio,
                 bands: {
@@ -105,7 +99,7 @@ module.exports = function(passport){
                         var url = finalPath;
                         update['picture'] = url;
 
-                        User.update(query, update, options, function(err, user) {
+                        User.findOneAndUpdate(query, update, function(err, user) {
                           if (err) {
                             console.log('error updating user: '+err);
                           }
@@ -116,9 +110,10 @@ module.exports = function(passport){
                     } 
                 }); 
             } else {
-                console.log("update: "+update);
+                console.log("update");
+                console.log(update);
 
-                User.update(query, update, options, function(err, user) {
+                User.findOneAndUpdate(query, update, function(err, user) {
                   if (err) {
                     console.log('error updating user: '+err);
                   }
