@@ -118,9 +118,9 @@ select {
 	padding: 8px 8px 7px 8px;
 }
 
-input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 500px #957C85 inset;
-    color: rgba(243,235,232,1);
+input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
+    -webkit-box-shadow: 0 0 0 500px #3F3C3F inset;
+    -webkit-text-fill-color: rgba(243,235,232,1);
 }
 
 label.inline {

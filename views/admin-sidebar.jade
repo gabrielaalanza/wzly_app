@@ -40,10 +40,11 @@
             a(href='/admin/events')
                 img(src="/images/icons/events.png")
                 | Events
-        li 
-            a(href='/admin/eboard')
-                img(src="/images/icons/eboard.png")
-                | Eboard
+        if(user.permanent != true)
+            li 
+                a(href='/admin/eboard')
+                    img(src="/images/icons/eboard.png")
+                    | Eboard
         li 
             a(href='/admin/manage')
                 img(src="/images/icons/manage.png")
