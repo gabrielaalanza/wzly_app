@@ -29,7 +29,7 @@ node_modules
 # MongoDB 
 data
 
-#Image folders
-public/images/spam
-public/images/dj
-public/images/uploads
+# Image folders
+public/images/spam/
+public/images/dj/
+public/images/uploads/
