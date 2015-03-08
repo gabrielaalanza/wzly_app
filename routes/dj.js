@@ -127,8 +127,11 @@ module.exports = function(passport){
 
             console.log(req.user);
 
+            if(req.user.local.name) title = req.user.local.name;
+            else title = req.user.local.username;
+
             res.render('profile', {
-                title: req.user.local.username + "'s Profile",
+                title: title + "'s Profile",
                 user : req.user // get the user out of session and pass to template
             });
 
