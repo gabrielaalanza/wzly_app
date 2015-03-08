@@ -12,21 +12,23 @@ block content
         input(type='text', name='artist', placeholder='Artist Name')
         button.btn(type='submit') Add
       p.hr_response
-      table.table.table-striped.table-condensed.table-albums
-        thead
-          tr
-            th Album
-            th Artist
-            th HR ID
-        tbody
-          each album, i in albums
+      - if(!albums)
+        p.emp.zero-state You don't have HR albums in your library yet.
+      - else
+        table.table.table-striped.table-condensed.table-albums
+          thead
             tr
-              td #{album.album}
-              td #{album.artist}
-              td #{album.hrID}
+              th Album
+              th Artist
+              th HR ID
+          tbody
+            each album, i in albums
+              tr
+                td #{album.album}
+                td #{album.artist}
+                td #{album.hrID}
       include _paginate
             
     //end container
     include global-js
     script(src='/javascripts/library.js')
-
