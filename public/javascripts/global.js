@@ -2,6 +2,11 @@ $( document ).ready(function() {
 
 	activeNav();
 
+    if(user.live) {
+        $('.pulse').show();
+    }
+    
+
 	//check to see if event should be updated or deleted
 	$(".contact-form button[type='submit']").click(function() {
 

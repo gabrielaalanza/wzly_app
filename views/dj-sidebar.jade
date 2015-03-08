@@ -3,8 +3,15 @@
         h1 
             img(src='/images/assets/airwave-logo.png')
             span.small BETA
-    .mask
-        img(src='#{user.picture}', class="prof-pic")
+    - if(user.picture)
+        .mask
+            img(src='#{user.picture}', class="prof-pic")
+    - else if(user.local.name)
+        .mask
+            p #{user.local.name.charAt(0)}
+    - else
+        .mask
+            p #{user.local.username.charAt(0)}
     - if (user.eboard.position)
         if(user.permanent != true)
         .dropdown

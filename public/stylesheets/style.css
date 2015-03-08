@@ -7,7 +7,8 @@ body {
 	background-size: cover;
 	font-size: 15px;
 	color: #F3EBE8;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, sans-serif;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, "Montserrat", sans-serif;
+	font-weight: 300;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -341,6 +342,16 @@ thead th {
   overflow: hidden;
 }
 
+.mask p {
+	width: 100px;
+	height: 100px;
+	background-color: #313033;
+	text-align: center;
+	padding-top: 25%;
+	font-size: 35px;
+	font-family: "HelveticaNeue-Thin"
+}
+
 .left-nav img.prof-pic {
 	max-height: 100%;
 }
@@ -568,6 +579,7 @@ body.login:before {
 
 /* **** Pulse **** */
 .pulse {
+	display: none;
 	position: absolute;
 	height: 7px;
 	width: 100%;
@@ -620,7 +632,7 @@ body.login:before {
 	  -webkit-box-shadow: none !important;
 	  -moz-box-shadow: none !important;
 	  box-shadow: none !important;
-	 border-bottom: 2px solid #F3EBE8 !important;
+	 border-bottom: 2px solid #EB7A71 !important;
 }
 
 .line-form input:not([type=submit]):not([type=file]):hover {

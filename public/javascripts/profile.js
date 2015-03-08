@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 
-	var profile = local_data;
+	var profile = user;
 
 	//populate fields with information
     $('[name="showName"]').val(profile.showName);
