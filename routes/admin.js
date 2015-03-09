@@ -4,7 +4,6 @@ var Album = require('../models/album');
 var User = require('../models/user');
 var Chart = require('../models/chart');
 var Event = require('../models/event');
-var Eboarder = require('../models/eboarder');
 var Song = require('../models/song');
 var Schedule = require('../models/schedule');
 
@@ -337,6 +336,27 @@ module.exports = function(passport){
         .post(isAuthenticated, function(req,res){
             console.log('delete user');
             //if(req.user.permanent != true) {
+                //delete user from schedule
+                User.findOne({_id: req.params.id}, function(err,user){
+                    var name = user.local.username;
+                    console.log(name);
+                    Schedule.find(function(err,schedule){
+                        if(err) console.log("there was an error fetching the schedule");
+                        console.log(schedule);
+                        schedule = schedule[0];
+                        for (var i = schedule.length - 1; i >= 0; i--) {
+                            for (var n = schedule[i].length - 1; n >= 0; n--) {
+                                if(schedule[i][n].name == name) {
+                                    console.log("match");
+                                    //what about co-hosts?
+                                    schedule[i][n] = " ";
+                                }
+                            };
+                        };
+                    });
+                });
+
+                //delete user from db
                 User.remove({
                     _id: req.params.id
                 }, function(err, user) {
@@ -685,20 +705,6 @@ module.exports = function(passport){
     router.route('/scheduler')
         .post(isAuthenticated, function(req, res){
 
-            //update the schedule
-            var query = {"name": "schedule"};
-            var update = {"schedule": req.body.schedule};
-            var options = {upsert: true};
-
-            Schedule.findOneAndUpdate(query, update, options, function(err, schedule) {
-                if (err) {
-                    console.log('error updating schedule: '+err);
-                } else {
-                  console.log('updated schedule');
-                }
-            });
-
-
             var djs = req.body.djs;
 
             djs.forEach(function(d) {
@@ -775,6 +781,94 @@ module.exports = function(passport){
                         });
                     }
                 })
+            });
+
+        });
+
+    router.route('/add-schedule')
+        .post(isAuthenticated, function(req, res){
+
+            var user = req.body.data.username;
+
+            var query = {"local.username": user};
+            var update = {showTime: 
+                            {y: req.body.data.y, 
+                             x: req.body.data.x }
+                         };
+            User.findOne(query, function(err, user) {
+
+                if (err) {
+                    console.log('error finding user: '+err);
+                }
+
+                user.show.push(update);
+
+                user.save(function(err,result){
+                    if(err) {
+                        console.log("This is an error: "+err);
+                    } else {
+                        console.log('User show added');
+                        console.log(result);
+                    }
+                    res.end();
+                });
+
+            });
+
+        });
+
+    router.route('/delete-schedule')
+        .post(isAuthenticated, function(req, res){
+
+            var user = req.body.data.username;
+
+            var query = {"local.username": user};
+            var update = {showTime: 
+                            {y: req.body.data.y, 
+                             x: req.body.data.x }
+                         };
+
+            User.findOne(query, function(err, user) {
+
+                if (err) {
+                    console.log('error finding user: '+err);
+                }
+
+                //loop through all possible shows
+                for (var i = user.show.length - 1; i >= 0; i--) {
+                    //if the day is right, find the hour to delete it
+                    if(req.body.data.y == user.show[i].showTime.y) {
+                        for (var n = user.show[i].showTime.x.length - 1; n >= 0; n--) {
+                            user.show[i].showTime.x[n] = parseInt(user.show[i].showTime.x[n]);
+                            //if the x's match
+                            if(req.body.data.x == user.show[i].showTime.x[n]) {
+                                //if that's the only entry, delete it
+                                if(user.show[i].showTime.x.length == 1) {
+                                    user.show.splice(i, 1);
+                                }
+                                //if it's in the middle of the array, split into two shows
+                                else if (user.show[i].showTime.x.indexOf(req.body.data.x)>0 && user.show[i].showTime.x.indexOf(req.body.data.x)>user.show[i].showTime.x.length) {
+                                    console.log("in the middle need to fix")
+                                }
+                                //otherwise just delete it
+                                else {
+                                    user.show[i].showTime.x.splice(n,1);
+                                }
+                            }
+                        }
+                    }
+                };
+
+                user.save(function(err,result){
+                    if(err) {
+                        console.log("This is an error: "+err);
+                    } else {
+                        console.log('User show added');
+                        console.log(result);
+                    }
+                    res.end();
+                });
+
             });
 
         });

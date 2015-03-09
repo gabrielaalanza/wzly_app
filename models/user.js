@@ -23,12 +23,13 @@ var userSchema = new Schema({
         email        : String,
         name         : String
     },
-    showName         : String,
-    showTime         : {
-        startTime    : Number,
-        endTime      : Number,
-        dayOfWeek    : String
-    },
+    show             : [{
+        showName     : String,
+        showTime     : {
+            y        : Number,
+            x        : Array
+        }
+    }],
     picture          : String,
     bio              : String,
     bands            : {

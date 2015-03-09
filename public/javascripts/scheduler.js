@@ -8,22 +8,9 @@ $(function() {
 		$schedule = $('.schedule'),
 		$clone = $('#clone'),
 		$generate = $('#generate');
-	
-	djSchedule = djSchedule[0];
 
-	if(typeof(djSchedule) === 'undefined') {
-		//djSchedule = createArray(7,24);
-		djSchedule = createSchedule();
-	} else {
-		djSchedule = djSchedule.schedule;
-		//put the DJs into their correct slots
-		renderSchedule();
-		//create a list of current DJs and their slots to check deletes against
-		//var originalDJs = originalDJs();
-	}
+	renderSchedule();
 	
-	var djUpdates = [];
-
 	//see if items are being selected
 
 	// Start the setup
@@ -138,8 +125,8 @@ $(function() {
 			var hour = [];
 
 			$('.ui-selected').each( function() {
-				hour.push($(this).attr('data-x'));
-				day.push($(this).attr('data-y'));
+				hour.push(parseInt($(this).attr('data-x')));
+				day.push(parseInt($(this).attr('data-y')));
 			});
 
 			//go through all the usernames submitted
@@ -174,47 +161,12 @@ $(function() {
 					
 					$info.message(entryUsername, " has been added.");
 
-					for (var i = 0; i <= day.length - 1; i++) {
-
-						var n = day[i] - 1;
-						var m = hour[i] - 3;
-						if(m<1){
-							m = m+24;
-						}
-						
-						if(djSchedule[n][m]==" ") {
-
-							if(i == 0) {
-								var info = {"name": entryUsername, "colspan": day.length};
-							} else {
-								var info = {"name": entryUsername};
-							}
-
-							djSchedule[n][m] = info;
-
-
-						} else {
-
-							var current = djSchedule[n][m].name + " " + entryUsername;
-							djSchedule[n][m].name = current;
-						
-						}
-
-						//console.log("m: "+m);
-						//console.log("hour[i]: "+hour[i]);
-					};
-
-					var weekDays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
+					//Add user's show to the database
 					var showTime = {'username': entryUsername,
-									'startTime': parseInt(hour[0]),
-									'endTime': parseInt(hour[hour.length-1]) + 1,
-									'dayOfWeek': weekDays[(parseInt(day[0])-1)]}
+									'y': day[0],
+									'x': hour}
 
-					djUpdates.push(showTime);
-
-					console.log(JSON.stringify(djSchedule));
-					console.log(JSON.stringify(djUpdates));
+					addToSchedule(showTime);
 
 				}
 
@@ -227,8 +179,9 @@ $(function() {
 	
 	// Delete entry from the table
 	function removeEntry() {
-		var name = $(this).attr("data-username");
-		var hour = $(this).attr("data-x");
+		var name = $(this).closest("td").find(".entry").html().split(" &amp; ");
+		var hour = parseInt($(this).attr("data-x"));
+		var day = parseInt($(this).attr("data-y"));
 
 		var id = $(this).attr("data-id");
 			$(this).html("");
@@ -238,15 +191,7 @@ $(function() {
 			$(this).removeAttr("data-username");
 
 		//delete user from arrays
-		
-		for (var i = djSchedule.length - 1; i >= 0; i--) {
-			for (var n = djSchedule[i].length - 1; n >= 0; n--) {
-				if(djSchedule[i][n].name == name) {
-					djSchedule[i][n] = " ";
-				}
-			};
-		};
-	
+		/*
 		for (var i = djUpdates.length - 1; i >= 0; i--) {
 			if(djUpdates[i].username===name) {
 				//check to see where in the span this cell falls
@@ -270,8 +215,13 @@ $(function() {
 				}
 			}
 		};
-
-		console.log(JSON.stringify(djUpdates));
+		*/
+		for (var i = name.length - 1; i >= 0; i--) {
+			var showTime = {'username': name[i],
+									'y': day,
+									'x': hour}
+			deleteFromSchedule(showTime);
+		};
 
 		return false;
 	}
@@ -294,8 +244,7 @@ $(function() {
 			$entries.removeAttr("data-row_index");
 			$entries.removeAttr("data-colspan");
 
-		djSchedule = createSchedule();
-		djUpdates = [];
+		deleteAll();
 		
 		return false;
 	}
@@ -308,28 +257,6 @@ $(function() {
 	// Undo highlight
 	function removeEntriesUndoHighlight() {
 		$('.entry').parent().removeClass('deleting');
-	}
-	
-	// Generate a schedule from the table
-	function generateSchedule() {
-		// Clone the table
-		$clone.empty()
-		$schedule.clone().removeAttr('id').removeClass('ui-selectable').addClass('cloned').appendTo($clone);
-		
-		// Remove input fields
-		// Prevent entries from deletion
-		// Display random entry for each cell
-		$clone
-			.find('input').each(function(index) {
-				var text = $(this).val();
-				$(this).replaceWith('<div>' + text + '</div>');
-			}).end()
-			.find('.deletable').removeClass('deletable').removeAttr('title').end()
-			.find('.ui-selectee').removeClass('ui-selectee').end()
-			.find('.ui-selected').removeClass('ui-selected').end()
-			.find('.cloned tbody td').randomChild();
-			
-		return false;
 	}
 
 	function showHiddenRows() {
@@ -425,53 +352,39 @@ function createArray(length) {
     return arr;
 }
 
-function createSchedule() {
-	return [
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '],
-			[' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
-		]
-}
-
 function renderSchedule () {
 	console.log('rendering schedule');
-	for (var i = 0; i <= djSchedule.length - 1; i++) {
-		for (var n = 0; n <= djSchedule[i].length - 1; n++) {
-			//traverse the array by day, then by hour
-			//figure out which cell you are in
-			//replace the contents of the cell if there are contents to replace
-			//add the right classes
-
-			var x = n + 3;
-			if (x > 24) x = x - 24;
-
-
-			$cell = $('td[data-x="'+x+'"][data-y="'+(i+1)+'"]');
-
-			var name = djSchedule[i][n].name;
-			if(name) $cell.html("<span class='entry'>"+name+"</span>").addClass("active deletable");
-
+	for (var i = users.length - 1; i >= 0; i--) {
+		for (var n = users[i].show.length - 1; n >= 0; n--) {
+			for (var m = users[i].show[n].showTime.x.length - 1; m >= 0; m--) {
+				var $cell = $('td[data-y="'+users[i].show[n].showTime.y+'"][data-x="'+users[i].show[n].showTime.x[m]+'"]');
+				if($cell.find('.entry').length){
+					$cell.find('.entry').append(' & '+users[i].local.username);
+				} else {
+					$cell.html("<span class='entry'>"+users[i].local.username+"</span>").addClass("active deletable");	
+				}
+			};
 		};
 	};
-
 }
 
-function originalDJs() {
-	var djs = [];
-	for (var i = users.length - 1; i >= 0; i--) {
-		//if(users[i]) 
-	};
+function addToSchedule(showTime) {
+	$.post('/admin/add-schedule',{'data': showTime}, function() {
+    	console.log("done");
+	});
 }
 
+function deleteFromSchedule(showTime) {
+	$.post('/admin/delete-schedule',{'data': showTime}, function() {
+    	console.log("done");
+	});
+}
 
-
-
-
-
+function deleteAll() {
+	$.post('/admin/add-schedule',{'data': showTime}, function() {
+    	console.log("done");
+	});
+}
 
 
 
