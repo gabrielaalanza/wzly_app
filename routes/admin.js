@@ -863,11 +863,34 @@ module.exports = function(passport){
                     if(err) {
                         console.log("This is an error: "+err);
                     } else {
-                        console.log('User show added');
+                        console.log('User show deleted');
                         console.log(result);
                     }
                     res.end();
                 });
+
+            });
+
+        });
+
+    router.route('/clear-schedule')
+        .post(isAuthenticated, function(req, res){
+
+            User.find(function(err, users) {
+
+                users.forEach(function(user) {
+
+                    user.show = [];
+
+                    //save the user
+                    user.save(function (err) {
+                        if(err) {
+                            console.log('error updating user'+user.local.username+': '+err);
+                        }
+                    });
+                });
+
+                res.end();
 
             });
 

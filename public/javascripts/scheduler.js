@@ -43,9 +43,6 @@ $(function() {
 				return false;
 			});
 
-		//submit information and return to rest of interface
-		$('.publish').click(publish);
-
 		//highlight td and th on hover
 		$("td").mouseover(function(){
 			$(this).closest('table').find('th').eq($(this).index()).addClass("current");
@@ -190,32 +187,6 @@ $(function() {
 			$(this).removeAttr("title");
 			$(this).removeAttr("data-username");
 
-		//delete user from arrays
-		/*
-		for (var i = djUpdates.length - 1; i >= 0; i--) {
-			if(djUpdates[i].username===name) {
-				//check to see where in the span this cell falls
-				if(hour == djUpdates[i].startTime ) {
-					//if the hour is the first hour of the range
-					//move the start time up an hour
-					djUpdates[i].startTime = (parseInt(djUpdates[i].startTime)+1);
-				} else if (hour == (parseInt(djUpdates[i].endTime)-1)) {
-					//if the hour is the last hour of the range
-					//move the end time down an hour
-					djUpdates[i].endTime = (parseInt(djUpdates[i].endTime)-1);
-				} else if (parseInt(djUpdates[i].endTime) == (parseInt(djUpdates[i].startTime) +1)) {
-					//if the dj's show is only an hour
-					//remove it from the array
-					djUpdates.splice(i, 1);
-				} else if (djUpdates[i].startTime < hour < (parseInt(djUpdates[i].endTime)-1)) {
-					//if the show is in the middle of the range, not the start or end hours
-					//disregard it
-					djUpdates[i].disregard = hour;
-					//this needs fix for if someone goes and takes away another the first or last time
-				}
-			}
-		};
-		*/
 		for (var i = name.length - 1; i >= 0; i--) {
 			var showTime = {'username': name[i],
 									'y': day,
@@ -286,42 +257,6 @@ $(function() {
 		newInput.focus();
 	}
 
-	function publish(event) {
-
-		if(event.handled !== true) {
-
-			//var req = {'schedule': djSchedule, 'djs': djUpdates};
-			/*req = req.toString();
-			console.time("ajax call");
-			$.ajax({
-			    url: "/admin/scheduler",
-			    data : {'schedule': djSchedule, 'djs': djUpdates},
-			    type: 'POST',          
-                dataType: 'json',
-			    success: function(result){
-			        //showResultsToUser(result);
-			        //clearTimeout(cancelMe); // don't run if it hasn't run yet
-			        //$('#loading').hide(); // hide the loading element if it's shown
-			        console.timeEnd("ajax call");
-			        alert("Size is " + req.getResponseHeader("Content-Length"));
-			        console.log("done");
-					window.location.replace('/admin/library');
-					console.log("really done");
-
-			    }
-			});*/
-		    $.post('/admin/scheduler',{'schedule': djSchedule, 'djs': djUpdates}, function() {
-		    	console.log("done");
-				window.location.replace('/admin/library');
-			});
-
-		    event.handled = true;
-	  	}
-	  return false;
-	}
-
-
-
 });
 
 
@@ -381,7 +316,7 @@ function deleteFromSchedule(showTime) {
 }
 
 function deleteAll() {
-	$.post('/admin/add-schedule',{'data': showTime}, function() {
+	$.post('/admin/clear-schedule', function() {
     	console.log("done");
 	});
 }
