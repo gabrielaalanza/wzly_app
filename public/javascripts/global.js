@@ -5,7 +5,6 @@ $( document ).ready(function() {
     if(user.live) {
         $('.pulse').show();
     }
-    
 
 	//check to see if event should be updated or deleted
 	$(".contact-form button[type='submit']").click(function() {
@@ -16,7 +15,7 @@ $( document ).ready(function() {
 
 		var name = $('input[name="name"]').val();
 		var email = $('input[name="email"]').val();
-		var message = $('input[name="message"]').val();
+		var message = $('textarea[name="message"]').val();
 
 	    $.post('/contact', { name: name, email: email, message: message }, function(data) {
 	    	$('.contact-form')[0].reset();
