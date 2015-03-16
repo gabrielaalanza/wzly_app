@@ -336,26 +336,6 @@ module.exports = function(passport){
         .post(isAuthenticated, function(req,res){
             console.log('delete user');
             //if(req.user.permanent != true) {
-                //delete user from schedule
-                User.findOne({_id: req.params.id}, function(err,user){
-                    var name = user.local.username;
-                    console.log(name);
-                    Schedule.find(function(err,schedule){
-                        if(err) console.log("there was an error fetching the schedule");
-                        console.log(schedule);
-                        schedule = schedule[0];
-                        for (var i = schedule.length - 1; i >= 0; i--) {
-                            for (var n = schedule[i].length - 1; n >= 0; n--) {
-                                if(schedule[i][n].name == name) {
-                                    console.log("match");
-                                    //what about co-hosts?
-                                    schedule[i][n] = " ";
-                                }
-                            };
-                        };
-                    });
-                });
-
                 //delete user from db
                 User.remove({
                     _id: req.params.id
@@ -703,84 +683,18 @@ module.exports = function(passport){
         });
 
     router.route('/scheduler')
-        .post(isAuthenticated, function(req, res){
-
-            var djs = req.body.djs;
-
-            djs.forEach(function(d) {
-
-                var name = d.username;
-                var start = parseInt(d.startTime);
-                var end = parseInt(d.endTime);
-                var day = d.dayOfWeek;
-
-                var q = {};
-                q['local.username'] = name;
-
-                var query = User.findOne(q);
-
-                query.exec(function(err, user) {
-
-                    user.showTime.startTime = start;
-                    user.showTime.endTime = end;
-                    user.showTime.dayOfWeek = day;
-
-                    //save the user
-                    user.save(function (err) {
-                        if(err) {
-                            console.log('error updating djs: '+err);
-                        }
-                    });
-                });
-            });
-
-
-            Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
-
-                if (err) return next(err);
-
-                res.format({
-                  html: function() {
-                        res.render('library', {
-                            title: 'Library',
-                            albums : albums,
-                            hrID : null,
-                            albumName : null,
-                            albumArtist : null,
-                            pageCount: pageCount,
-                            itemCount: itemCount,
-                            user: req.user
-                        });
-                  },
-                  json: function() {
-                    // inspired by Stripe's API response for list objects
-                    res.json({
-                        object: 'list',
-                        has_more: paginate.hasNextPages(req)(pageCount),
-                        data: albums
-                    });
-                  }
-                });
-
-            }, { sortBy : { hrID : -1 }});
-
-        })
         .get(isAuthenticated, function(req, res){
 
-            Schedule.find(function(err,schedule){
-                if(err) console.log("there was an error fetching the schedule");
-                User.find(function(err,users){
-                    if(err) {
-                        console.log("there was an error fetching users");
-                    } else {
-                        res.render('scheduler', {
-                            title: 'Scheduler',
-                            schedule: schedule,
-                            users: users,
-                            user: req.user // get the user out of session and pass to template
-                        });
-                    }
-                })
+            User.find(function(err,users){
+                if(err) {
+                    console.log("there was an error fetching users");
+                } else {
+                    res.render('scheduler', {
+                        title: 'Scheduler',
+                        users: users,
+                        user: req.user // get the user out of session and pass to template
+                    });
+                }
             });
 
         });

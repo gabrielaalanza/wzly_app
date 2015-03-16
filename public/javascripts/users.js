@@ -123,8 +123,15 @@ $( document ).ready(function() {
 
 				        $('.table-users').append(trHTML);
 
-
 					    $('.dropdown-toggle').dropdown();
+
+					    if($('input[name="dj-email"]').width() > 0) {
+				            $('input[name="dj-email"]').animate({width:'toggle'},350);
+				            $('input:checkbox').prop('checked', true);
+				        }
+
+						$('input[name="dj-name"]').focus();
+						
 			        }
 			    });
 				

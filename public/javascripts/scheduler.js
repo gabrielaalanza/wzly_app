@@ -23,7 +23,7 @@ $(function() {
 		$info.hide();
 		
 		// Activate buttons
-		$entry_username.change(addEntryMode);
+		$entry_username.focus(addEntryMode);
 		$('.add-entry-form').submit(addEntries);
 		$('.remove-entries')
 			.click(removeEntries)
@@ -293,7 +293,7 @@ function renderSchedule () {
 		for (var n = users[i].show.length - 1; n >= 0; n--) {
 			for (var m = users[i].show[n].showTime.x.length - 1; m >= 0; m--) {
 				var $cell = $('td[data-y="'+users[i].show[n].showTime.y+'"][data-x="'+users[i].show[n].showTime.x[m]+'"]');
-				if($cell.find('.entry').length){
+				if($cell.find('.entry').length > 0){
 					$cell.find('.entry').append(' & '+users[i].local.username);
 				} else {
 					$cell.html("<span class='entry'>"+users[i].local.username+"</span>").addClass("active deletable");	
