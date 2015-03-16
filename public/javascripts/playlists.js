@@ -1,5 +1,9 @@
 $( document ).ready(function() {
 
+    if(user.live) {
+        $('.pulse').show();
+    }
+
 	//change table to reflect desired charts
 	$("select").change(function() {
 

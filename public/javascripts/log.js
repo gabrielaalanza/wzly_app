@@ -1,5 +1,9 @@
 $(function() {
 
+    if(user.live) {
+        $('.pulse').show();
+    }
+
 	var current_playlist = user.playlists[user.playlists.length-1];
 
 	if(current_playlist.name) $(".playlist-form input[name='name']").val(current_playlist.name);

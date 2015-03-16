@@ -1,5 +1,9 @@
 $( document ).ready(function() {
 
+    if(user.live) {
+        $('.pulse').show();
+    }
+
 	var profile = user;
 
 	//populate fields with information
