@@ -104,26 +104,27 @@ block content
               th Actions
           tbody
             each event, i in events
-              tr
-                td #{event.name}
-                td #{moment(event.start_time).format('MMM Do YYYY')}
-                td #{moment(event.start_time).format('h:mm a')} - #{moment(event.end_time).format('h:mm a')}
-                td #{event.location}
-                td 
-                  .dropdown
-                      button.btn.dropdown-toggle.clear(type="button",id="actions",data-toggle="dropdown",aria-expanded="true")
-                        img(src="/images/icons/gear.png").icon
-                        span.caret
-                      ul.dropdown-menu(role="menu",aria-labelledby="actions")
-                        li(role="presentation") 
-                          a(role="menuitem", tabindex="-1", href="#", class="edit-event", data-toggle='modal', class='edit-event',data-id='#{i}', data-target='.events-modal')
-                            img(src="/images/icons/edit.png").icon
-                            | Edit event
-                        li(role="presentation") 
-                          form(method='post', action='/admin/events/#{event._id}')
-                            button.clear(type='submit', role='button')
-                              img(src="/images/icons/trash.png").icon
-                              | Delete Event
+              - if(!moment().isAfter(event.end_time))
+                tr
+                  td #{event.name}
+                  td #{moment(event.start_time).format('MMM Do YYYY')}
+                  td #{moment(event.start_time).format('h:mm a')} - #{moment(event.end_time).format('h:mm a')}
+                  td #{event.location}
+                  td 
+                    .dropdown
+                        button.btn.dropdown-toggle.clear(type="button",id="actions",data-toggle="dropdown",aria-expanded="true")
+                          img(src="/images/icons/gear.png").icon
+                          span.caret
+                        ul.dropdown-menu(role="menu",aria-labelledby="actions")
+                          li(role="presentation") 
+                            a(role="menuitem", tabindex="-1", href="#", class="edit-event", data-toggle='modal', class='edit-event',data-id='#{i}', data-target='.events-modal')
+                              img(src="/images/icons/edit.png").icon
+                              | Edit event
+                          li(role="presentation") 
+                            form(method='post', action='/admin/events/#{event._id}')
+                              button.clear(type='submit', role='button')
+                                img(src="/images/icons/trash.png").icon
+                                | Delete Event
     //end container
     script(type='text/javascript').                                   
       var local_data =!{JSON.stringify(events)}
