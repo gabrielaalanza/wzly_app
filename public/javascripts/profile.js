@@ -29,7 +29,7 @@ function s3_upload(){
     var preview_elem = $('.prof-pic');
     var s3upload = new S3Upload({
         file_dom_selector: 'files',
-        s3_sign_put_url: '/sign_s3',
+        s3_sign_put_url: '/app/sign_s3',
         onProgress: function(percent, message) {
             status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message;
         },
