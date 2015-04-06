@@ -157,10 +157,9 @@ module.exports = function(passport){
                 console.log(err);
             }
             else{
-                console.log("extension name: "+path.extname(req.query.s3_object_name).toLowerCase());
                 var return_data = {
                     signed_request: data,
-                    url: 'https://'+S3_BUCKET+'.s3.amazonaws.com/'+req.query.s3_object_name
+                    url: 'https://'+S3_BUCKET+'.s3.amazonaws.com/'+req.user.id+path.extname(req.query.s3_object_name).toLowerCase()
                 };
                 res.write(JSON.stringify(return_data));
                 res.end();
