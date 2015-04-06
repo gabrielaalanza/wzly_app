@@ -147,7 +147,7 @@ module.exports = function(passport){
         var s3 = new aws.S3();
         var s3_params = {
             Bucket: S3_BUCKET,
-            Key: req.user.id+path.extname(req.query.s3_object_name).toLowerCase(),
+            Key: 'djs/'+req.user.id+path.extname(req.query.s3_object_name).toLowerCase(),
             Expires: 60,
             ContentType: req.query.s3_object_type,
             ACL: 'public-read'
