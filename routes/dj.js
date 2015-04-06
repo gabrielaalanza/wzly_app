@@ -146,7 +146,7 @@ module.exports = function(passport){
         aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
         var s3 = new aws.S3();
         var s3_params = {
-            Bucket: S3_BUCKET,
+            Bucket: S3_BUCKET_NAME,
             Key: req.query.s3_object_name,
             Expires: 60,
             ContentType: req.query.s3_object_type,
