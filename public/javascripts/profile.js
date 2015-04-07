@@ -32,17 +32,17 @@ function s3_upload(){
         s3_sign_put_url: '/app/sign_s3',
         onProgress: function(percent, message) {
             console.log('uploading')
-            $status_elem.html('Upload progress: ' + percent + '% ' + message);
+            $('.status').html('Upload progress: ' + percent + '% ' + message);
         },
         onFinishS3Put: function(public_url) {
             console.log('finished uploading');
-            $status_elem.html('Upload completed.');
-            $url_elem.val(public_url);
-            $preview_elem.attr('src', public_url);
+            $('.status').html('Upload completed.');
+            $('#avatar_url').val(public_url);
+            $('.prof-pic').attr('src', public_url);
         },
         onError: function(status) {
             console.log('error');
-            $status_elem.html('Upload error: ' + status);
+            $('.status').html('Upload error: ' + status);
         }
     });
 }
