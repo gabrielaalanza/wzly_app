@@ -429,104 +429,39 @@ module.exports = function(passport){
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
-            //rename and move the image into the correct folder
-            console.log(req.files.spam);
-            if (req.files.spam) { 
-                //console.log('files: '+util.inspect(req.files));
+            newEvent.spam = req.body.spam;
 
-                if (req.files.spam.size === 0) {
-                    console.log("No file attached");
-                    newEvent.spam = null;
-                }
+            ///if event is new (id is null), save it
+            if(!id){
 
-                fs.exists(req.files.spam.path, function(exists) { 
-
-                    var name = (req.body.name).replace(/[^a-zA-Z-]/g, '').toLowerCase();
-
-                    if(exists) { 
-                        var tempPath = req.files.spam.path;
-                        
-                        var targetPath = 'public/images/spam/'+name+path.extname(req.files.spam.name).toLowerCase();
-                        
-                        fs.rename(tempPath, targetPath, function(err) {
-                            if (err) throw err;
-                            console.log("Spam upload completed!");
-                        });
-
-                        var finalPath = '/images/spam/'+name+path.extname(req.files.spam.name).toLowerCase();
-                        var url = finalPath;
-                        newEvent.spam = url;
-
-                        //if event is new (id is null), save it
-                        if(!id){
-
-                            newEvent.save(function(err, result){
-                                if(err) {
-                                    console.log("This is an error: "+err);
-                                } else {
-                                    console.log('Event Added');
-                                    res.redirect("back");
-                                }
-                            });
-
-                        //otherwise, find it in the database and update it
-                        } else {
-
-                            var query = {"_id": id};
-                            var update = {name: newEvent.name, 
-                                            date: newEvent.date, 
-                                            location: newEvent.location,
-                                            description: newEvent.description,
-                                            start_time: newEvent.start_time,
-                                            end_time: newEvent.end_time,
-                                            spam: newEvent.spam };
-                            var options = {new: true};
-                            Event.findOneAndUpdate(query, update, options, function(err, event) {
-                              if (err) {
-                                console.log('error updating event: '+err);
-                              }
-                              console.log('updated event: '+event);
-                              res.redirect('back');
-                            });
-                        }
-
+                newEvent.save(function(err, result){
+                    if(err) {
+                        console.log("This is an error: "+err);
+                    } else {
+                        console.log('Event Added');
+                        res.redirect("back");
                     }
-
                 });
+
+            //otherwise, find it in the database and update it
             } else {
-                console.log("no image attached");
-                //if event is new (id is null), save it
-                if(id){
 
-                    var query = {"_id": id};
-                    var update = {name: newEvent.name, 
-                                    date: newEvent.date, 
-                                    location: newEvent.location,
-                                    description: newEvent.description,
-                                    start_time: newEvent.start_time,
-                                    end_time: newEvent.end_time};
-                    var options = {new: true};
-                    Event.findOneAndUpdate(query, update, options, function(err, event) {
-                      if (err) {
-                        console.log('error updating event: '+err);
-                      }
-                      console.log('updated event: '+event);
-                      res.redirect('back');
-                    });
-
-                //otherwise, find it in the database and update it
-                } else {
-
-                    newEvent.save(function(err, result){
-                        if(err) {
-                            console.log("This is an error: "+err);
-                        } else {
-                            console.log('Event Added');
-                            res.redirect("back");
-                        }
-                    });
-
-                }
+                var query = {"_id": id};
+                var update = {name: newEvent.name, 
+                                date: newEvent.date, 
+                                location: newEvent.location,
+                                description: newEvent.description,
+                                start_time: newEvent.start_time,
+                                end_time: newEvent.end_time,
+                                spam: newEvent.spam };
+                var options = {new: true};
+                Event.findOneAndUpdate(query, update, options, function(err, event) {
+                  if (err) {
+                    console.log('error updating event: '+err);
+                  }
+                  console.log('updated event: '+event);
+                  res.redirect('back');
+                });
             }
 
         })

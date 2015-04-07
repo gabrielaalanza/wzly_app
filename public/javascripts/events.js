@@ -75,7 +75,6 @@ function s3_upload(){
             console.log('finished uploading');
             $('.status').html('Upload completed. Please save your changes.');
             $('#avatar_url').val(public_url);
-            $('p.spam_view').html('<img src="'+event.spam+'">').show();
         },
         onError: function(status) {
             console.log('error');
