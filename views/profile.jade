@@ -6,34 +6,35 @@ block content
 
     include dj-sidebar
 
-    form.profile-form.line-form(action='/app/profile', method='post', enctype="multipart/form-data")
-      .row
-        h3.caps The Basics
-        input.input-block-level(type='text', name='name', placeholder='Name', value="#{user.local.name}")
-        input.input-block-level(type='text', name='showName', placeholder='Show Name')
+    .profile-content
       .row
         h3.caps A profile picture
         input(type='file', id='files', name='picture', accept="image/*")
         p.status Please select an image
-      .row
-        h3.caps A short bio
-        textarea.input-block-level(rows='5', name='bio')
-      .row
-        h3.caps Favorite bands
-        label 1.
-        input.input-block-level.band(type='text', name='band1')
-        label 2. 
-        input.input-block-level.band(type='text', name='band2')
-        label 3.
-        input.input-block-level.band(type='text', name='band3')
-        br
-        label 4. 
-        input.input-block-level.band(type='text', name='band4')
-        label 5.
-        input.input-block-level.band(type='text', name='band5')
-      .row
-        input(type="hidden" id="avatar_url" name="avatar_url" value="")
-        button.btn(type='submit') Save
+      form.profile-form.line-form(action='/app/profile', method='post', enctype="multipart/form-data")
+        .row
+          h3.caps The Basics
+          input.input-block-level(type='text', name='name', placeholder='Name', value="#{user.local.name}")
+          input.input-block-level(type='text', name='showName', placeholder='Show Name')
+        .row
+          h3.caps A short bio
+          textarea.input-block-level(rows='5', name='bio')
+        .row
+          h3.caps Favorite bands
+          label 1.
+          input.input-block-level.band(type='text', name='band1')
+          label 2. 
+          input.input-block-level.band(type='text', name='band2')
+          label 3.
+          input.input-block-level.band(type='text', name='band3')
+          br
+          label 4. 
+          input.input-block-level.band(type='text', name='band4')
+          label 5.
+          input.input-block-level.band(type='text', name='band5')
+        .row
+          input(type="hidden" id="avatar_url" name="avatar_url" value="")
+          button.btn(type='submit') Save
     //end container
     script(type='text/javascript').                                   
       var user =!{JSON.stringify(user)}

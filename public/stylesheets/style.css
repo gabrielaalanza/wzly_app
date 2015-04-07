@@ -734,7 +734,7 @@ body.login:before {
 /****** Profile page ******/
 /**************************/
 
-.profile-form {
+.profile-content {
 	margin-left: 260px;
 	margin-top: 20px;
 }

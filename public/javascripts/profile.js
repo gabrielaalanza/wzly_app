@@ -31,15 +31,18 @@ function s3_upload(){
         file_dom_selector: 'files',
         s3_sign_put_url: '/app/sign_s3',
         onProgress: function(percent, message) {
-            status_elem.innerHTML = 'Upload progress: ' + percent + '% ' + message;
+            console.log('uploading')
+            $status_elem.html('Upload progress: ' + percent + '% ' + message);
         },
         onFinishS3Put: function(public_url) {
-            status_elem.innerHTML = 'Upload completed. Uploaded to: '+ public_url;
-            url_elem.value = public_url;
-            preview_elem.innerHTML = '<img src="'+public_url+'">';
+            console.log('finished uploading');
+            $status_elem.html('Upload completed.');
+            $url_elem.val(public_url);
+            $preview_elem.attr('src', public_url);
         },
         onError: function(status) {
-            status_elem.innerHTML = 'Upload error: ' + status;
+            console.log('error');
+            $status_elem.html('Upload error: ' + status);
         }
     });
 }
