@@ -430,6 +430,8 @@ module.exports = function(passport){
             newEvent.end_time = end_time;
 
             newEvent.spam = req.body.spam;
+            console.log(spam);
+            console.log(req.body.spam);
 
             ///if event is new (id is null), save it
             if(!id){
