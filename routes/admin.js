@@ -13,6 +13,10 @@ var router = express.Router();
 var util = require("util"); 
 var fs = require("fs"); 
 var path = require('path');
+var aws = require('aws-sdk');
+var AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
+var AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
+var S3_BUCKET = process.env.S3_BUCKET_NAME;
 
 var moment = require('moment');
 moment().format();
