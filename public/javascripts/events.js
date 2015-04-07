@@ -40,17 +40,44 @@ $( document ).ready(function() {
 	    $('[name="id"]').val(event._id);
 
 	    //populate spam
-	    if(event.spam) $('p.spam_view').html('<img src="'+event.spam+'">');
+	    if(event.spam) $('p.spam_view').html('<img src="'+event.spam+'">').show();
 
 	});
 
 	$('.events-modal').on('hidden.bs.modal', function (e) {
 	  	$('.events-form')[0].reset();
-	  	$('p.spam_view').text('There is no spam for this event uploaded yet.');
+	  	$('p.spam_view').hide();
 	})
 
 	$('.events-modal').on('shown.bs.modal', function (e) {
 		$('input[name="name"]').focus();
 	})
 	
+ var input_element = $('.spam-input');
+    $(input_element).change(function() {
+        s3_upload();
+    });
 });
+
+function s3_upload(){
+    var status_elem = $('.status');
+    var url_elem = $('#avatar_url');
+    var s3upload = new S3Upload({
+        file_dom_selector: 'files',
+        s3_sign_put_url: '/admin/sign_s3',
+        onProgress: function(percent, message) {
+            console.log('uploading')
+            $('.status').html('Upload progress: ' + percent + '% ' + message);
+        },
+        onFinishS3Put: function(public_url) {
+            console.log('finished uploading');
+            $('.status').html('Upload completed. Please save your changes.');
+            $('#avatar_url').val(public_url);
+            $('p.spam_view').html('<img src="'+event.spam+'">').show();
+        },
+        onError: function(status) {
+            console.log('error');
+            $('.status').html('Upload error: ' + status);
+        }
+    });
+}

@@ -824,6 +824,7 @@ body.login:before {
 .spam_view {
 	margin: 0;
 	margin-top: 15px;
+	display: none;
 }
 
 .spam_view img {

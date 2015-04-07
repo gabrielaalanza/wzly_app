@@ -36,7 +36,7 @@ function s3_upload(){
         },
         onFinishS3Put: function(public_url) {
             console.log('finished uploading');
-            $('.status').html('Upload completed.');
+            $('.status').html('Upload completed. Please save your changes.');
             $('#avatar_url').val(public_url);
             $('.prof-pic').attr('src', public_url);
         },

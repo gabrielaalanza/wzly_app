@@ -83,8 +83,10 @@ block content
                   .col-sm-3
                     label.inline Spam
                   .col-sm-9
-                    input(type='file', name='spam')
-                    p.spam_view There is no spam for this event uploaded yet.
+                    input(type='file', class='spam-input')
+                    p.status Please select an image.
+                    p.spam_view
+                    input(type="hidden", id="spam_url" name="spam" value="")
               .modal-footer
                 button.btn(type='button', data-dismiss='modal') Close
                 button.btn.primary(type='submit', name='submit') Save changes
