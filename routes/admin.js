@@ -557,6 +557,7 @@ module.exports = function(passport){
                 console.log(err);
             }
             else{
+                console.log(req.query.event_id+path.extname(req.query.s3_object_name).toLowerCase());
                 var return_data = {
                     signed_request: data,
                     url: 'https://'+S3_BUCKET+'.s3.amazonaws.com/spam/'+req.query.event_id+path.extname(req.query.s3_object_name).toLowerCase()
