@@ -53,6 +53,7 @@ module.exports = function(passport){
             var update = {
                 showName: req.body.showName,
                 bio: req.body.bio,
+                picture: req.body.avatar_url,
                 bands: {
                     band1: req.body.band1,
                     band2: req.body.band2,
@@ -79,52 +80,13 @@ module.exports = function(passport){
 
             var options = { overwrite: false };
 
-            if (!isEmpty(req.files)) { 
-                //console.log('files: '+util.inspect(req.files));
-
-                if (req.files.picture.size === 0) {
-                    console.log("No file attached");
-                }
-
-                fs.exists(req.files.picture.path, function(exists) { 
-
-                    if(exists) { 
-                        var tempPath = req.files.picture.path;
-                        
-                        var targetPath = 'public/images/dj/'+req.user.local.username+path.extname(req.files.picture.name).toLowerCase();
-                        
-                        fs.rename(tempPath, targetPath, function(err) {
-                            if (err) throw err;
-                            console.log("Profile picture upload completed!");
-                        });
-
-                        var finalPath = '/images/dj/'+req.user.local.username+path.extname(req.files.picture.name).toLowerCase();
-
-                        var url = finalPath;
-                        update['picture'] = url;
-
-                        User.findOneAndUpdate(query, update, function(err, user) {
-                          if (err) {
-                            console.log('error updating user: '+err);
-                          }
-                          console.log('updated user: '+user);
-                          res.redirect('back');
-                        });
-
-                    } 
-                }); 
-            } else {
-                console.log("update");
-                console.log(update);
-
-                User.findOneAndUpdate(query, update, function(err, user) {
-                  if (err) {
-                    console.log('error updating user: '+err);
-                  }
-                  console.log('updated user: '+user);
-                  res.redirect('back');
-                });
-            }
+            User.findOneAndUpdate(query, update, function(err, user) {
+              if (err) {
+                console.log('error updating user: '+err);
+              }
+              console.log('updated user: '+user);
+              res.redirect('back');
+            });
 
         })
         .get(isAuthenticated, function(req, res){
