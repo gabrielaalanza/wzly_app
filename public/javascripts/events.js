@@ -62,9 +62,11 @@ $( document ).ready(function() {
 function s3_upload(){
     var status_elem = $('.status');
     var url_elem = $('#avatar_url');
+    var id = $('[name="id"]').val();
     var s3upload = new S3Upload({
         file_dom_selector: 'files',
         s3_sign_put_url: '/admin/sign_s3',
+        event_id: id,
         onProgress: function(percent, message) {
             console.log('uploading')
             $('.status').html('Upload progress: ' + percent + '% ' + message);
