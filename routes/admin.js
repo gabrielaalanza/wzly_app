@@ -424,14 +424,19 @@ module.exports = function(passport){
             if(start_AMPM == 'PM') start_hour = parseInt(start_hour) + 12;
             if(end_AMPM == 'PM') end_hour = parseInt(end_hour) + 12;
 
-            newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute).utcOffset(-4);
-            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute).utcOffset(-4);
+            newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute);
+            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute));
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
             newEvent.spam = req.body.spam;
-            console.log("spam");
-            console.log(req.body.spam);
+
+            //delete undefined properties from update
+            for (var i in newEvent) {
+              if (newEvent[i] === null || newEvent[i] === undefined) {
+                delete newEvent[i];
+              }
+            }
 
             ///if event is new (id is null), save it
             if(!id){

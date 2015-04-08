@@ -13,13 +13,7 @@ $( document ).ready(function() {
 	    var id = $(this).attr('data-id');
 	    var event = local_data[id];
 
-	    console.log(event.start_time);
-
-
-	    var date = new Date(event.start_time);
-
-	    console.log(date);
-	    date = moment(date);
+	    var date = moment(event.start_time);
 
 	    $('[name="date"]').val(date.format('YYYY-MM-DD'));
 
@@ -27,8 +21,7 @@ $( document ).ready(function() {
 	    $('[name="start_minute"]').val(date.format('mm'));
 	    $('[name="start_ampm"]').val(date.format('A'));
 
-	    var end_date = new Date(event.end_time);
-	    end_date = moment(end_date);
+	    var end_date = moment(event.end_time);
 
 	    $('[name="end_hour"]').val(end_date.format('h'));
 	    $('[name="end_minute"]').val(end_date.format('mm'));
