@@ -424,8 +424,8 @@ module.exports = function(passport){
             if(start_AMPM == 'PM') start_hour = parseInt(start_hour) + 12;
             if(end_AMPM == 'PM') end_hour = parseInt(end_hour) + 12;
 
-            newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute);
-            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute);
+            newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute).utcOffset(-4);
+            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute).utcOffset(-4);
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
