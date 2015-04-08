@@ -425,16 +425,16 @@ module.exports = function(passport){
             if(end_AMPM == 'PM') end_hour = parseInt(end_hour) + 12;
 
             newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute);
-            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute));
+            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute);
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
             newEvent.spam = req.body.spam;
 
             //delete undefined properties from update
-            for (var i in newEvent) {
-              if (newEvent[i] === null || newEvent[i] === undefined) {
-                delete newEvent[i];
+            for (var i in update) {
+              if (update[i] === null || update[i] === undefined) {
+                delete update[i];
               }
             }
 
