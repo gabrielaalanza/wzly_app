@@ -407,8 +407,12 @@ module.exports = function(passport){
             //get data from form inputs
             newEvent.name = req.body.name;
             newEvent.date = req.body.date;
-            newEvent.location = req.body.location;
-            newEvent.description = req.body.description;
+
+            if(req.body.location) newEvent.location = req.body.location;
+            else newEvent.location = "";
+
+            if(req.body.description) newEvent.description = req.body.description;
+            else newEvent.description = "";
 
             // date validation
             var start_hour = req.body.start_hour;
@@ -429,14 +433,8 @@ module.exports = function(passport){
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
-            newEvent.spam = req.body.spam;
-
-            //delete undefined properties from update
-            for (var i in update) {
-              if (update[i] === null || update[i] === undefined) {
-                delete update[i];
-              }
-            }
+            if(req.body.spam) newEvent.spam = req.body.spam;
+            else newEvent.spam = "";
 
             ///if event is new (id is null), save it
             if(!id){
@@ -461,6 +459,13 @@ module.exports = function(passport){
                                 start_time: newEvent.start_time,
                                 end_time: newEvent.end_time,
                                 spam: newEvent.spam };
+
+                for (var i in update) {
+                  if (update[i] === null || update[i] === undefined) {
+                    delete update[i];
+                  }
+                }
+
                 var options = {new: true};
                 Event.findOneAndUpdate(query, update, options, function(err, event) {
                   if (err) {
