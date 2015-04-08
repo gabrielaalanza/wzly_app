@@ -74,7 +74,7 @@ function s3_upload(){
         onFinishS3Put: function(public_url) {
             console.log('finished uploading');
             $('.status').html('Upload completed. Please save your changes.');
-            $('#avatar_url').val(public_url);
+            $('#spam_url').val(public_url);
         },
         onError: function(status) {
             console.log('error');
