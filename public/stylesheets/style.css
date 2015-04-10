@@ -574,6 +574,18 @@ body.login:before {
    color: #F3EBE8;  
 }
 
+.form-signin a {
+	display: block;
+	margin-left: 318px;
+	margin-top: 8px;
+	opacity: 0.6;
+	font-weight: 300;
+	font-size: 13px;
+}
+
+.loginerror {
+	margin-top: 10px;
+}
 
 /****************************/
 /****************************/

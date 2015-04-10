@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    // Reset form 
+    form.form-signin.line-form.form-inline(method='post')
+        h1.form-signin-heading Forgot your password?
+        input.input-block-level(type='text', placeholder='Username', name='username', autofocus, autocomplete="off")
+        button.btn(type='submit') Submit
+        p.loginerror #{message}
+    // Javascript files 
+    include global-js
+    script(src='/javascripts/forgot.js')
+ 

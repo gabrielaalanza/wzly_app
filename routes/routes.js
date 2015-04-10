@@ -4,6 +4,8 @@ var router = express.Router();
 
 var User = require('../models/user');
 
+var async = require('async');
+var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 
 var isAuthenticated = function (req, res, next) {
@@ -135,6 +137,71 @@ router.route('/reset/:token')
               user: req.user
           });
       });
+
+  });
+
+  router.route('/forgot-password')
+    .post(function(req, res){
+
+      async.waterfall([
+        function(done) {
+          crypto.randomBytes(20, function(err, buf) {
+            var token = buf.toString('hex');
+            done(err, token);
+          });
+        },
+        function(token, done) {
+          User.findOne({ 'local.username': req.body.username }, function(err, user) {
+            if (!user) {
+              res.send('No account with that username exists.');
+              // send error message
+            }
+
+            user.local.resetPasswordToken = token;
+
+            user.save(function(err) {
+              done(err, token, user);
+            });
+          });
+        },
+        function(token, user, done) {
+          var smtpTransport = nodemailer.createTransport('SMTP', {
+            service: 'Gmail',
+            auth: {
+              user: 'airwave.app@gmail.com',
+              pass: 'ijkvzqoolyxammqj'
+            }
+          });
+          var mailOptions = {
+            to: user.local.email,
+            from: 'airwave.app@gmail.com',
+            subject: 'Reset your Airwave Password',
+            text: 'Hello '+user.local.name+',\n\n'+
+              "Don't worry to much about your password. Mistakes happen.\n\n" +
+              'Please click on the following link, or paste this into your browser to reset it:\n\n' +
+              'http://'+req.headers.host+'/reset/' + token + '\n\n' +
+              'Thanks,\n'+'Airwave'
+          };
+          smtpTransport.sendMail(mailOptions, function(err) {
+            done(err, 'done');
+            res.end();
+          });
+        }
+      ], function(err) {
+        if (err) {
+          console.log(err);
+          //send error message
+          res.send('There was an error resetting your password.');
+        } 
+        res.end();
+      });
+
+  })
+  .get(function(req, res){
+
+    res.render('forgot', {
+        title: 'Forgot your password?'
+    });
 
   });
 

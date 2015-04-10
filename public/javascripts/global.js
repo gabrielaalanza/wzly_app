@@ -2,7 +2,6 @@ $( document ).ready(function() {
 
 	activeNav();
 
-	//check to see if event should be updated or deleted
 	$(".contact-form button[type='submit']").click(function() {
 
 		event.preventDefault();
