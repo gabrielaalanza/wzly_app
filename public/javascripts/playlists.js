@@ -8,8 +8,8 @@ $( document ).ready(function() {
 	$("select").change(function() {
 
 
-		var startIndex;
-		var endIndex;
+		var startIndex = $("select option:selected").attr("data-start");
+		var endIndex = $("select option:selected").attr("data-end");
 		var playlist;
 
 		var date = $("select option:selected").text();
@@ -18,23 +18,6 @@ $( document ).ready(function() {
 			$('.zero-state').removeClass('hide');
 			$('.table-playlists').addClass('hide');
 		} else {
-
-			var now = moment();
-			var dateArr = date.split(" ");
-			var day =  dateArr[1].substring(0, dateArr[1].length - 2);
-			var selectedDate = moment().year(dateArr[2]).month(dateArr[0]).date(day);
-
-			for (var i = user.playlists.length - 1; i >= 0; i--) {
-				var d = new Date(user.playlists[i].date);
-				d = moment(d);
-				if(selectedDate.isSame(d,'day')){
-					startIndex = user.playlists[i].startIndex;
-					endIndex = user.playlists[i].endIndex;
-					console.log(startIndex);
-					console.log(endIndex);
-					break;
-				}
-			};
 
 			$('.table-playlists tbody tr').remove();
 			

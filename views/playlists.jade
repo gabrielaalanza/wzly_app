@@ -11,7 +11,8 @@ block content
         select
           option Choose date
           each item in user.playlists
-            option(data-date='#{item.date}') #{moment(item.date).format("MMMM Do YYYY")}
+            if (item.startIndex && item.endIndex)
+              option(data-start='#{item.startIndex}', data-end='#{item.endIndex}',) #{moment(item.date).format("MMMM Do YYYY")}
       h2 Playlists
       - if(user.playlists.length > 0)
         p.emp.zero-state Select a date to see playlist
