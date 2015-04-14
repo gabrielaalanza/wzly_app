@@ -72,7 +72,7 @@ $( document ).ready(function() {
 				$('.user-form')[0].reset();
 			}, 4000);
 
-		} else if(name=="" && username=="") {
+		} else if (username=="") {
 
 			$('input[name="username"]').css('border-color','#EB7A71');
 			$('.error').text("You must enter a username.").fadeIn();

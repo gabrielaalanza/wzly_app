@@ -51,7 +51,9 @@ module.exports = function(passport){
             var query = {'_id': req.user._id};
 
             var update = {
-                showName: req.body.showName,
+                show: {
+                    showName: req.body.showName
+                },
                 bio: req.body.bio,
                 picture: req.body.avatar_url,
                 bands: {
