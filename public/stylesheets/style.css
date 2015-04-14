@@ -92,6 +92,7 @@ a:hover {
 	border: 0;
 }
 
+
 /* **** Inputs **** */
 
 input:not([type=submit]):not([type=file]), textarea {
@@ -265,9 +266,6 @@ thead th {
 .dropdown-menu li a:hover, .dropdown-menu li button:hover {
 	background-color: rgba(215,215,215,0.10);
 }
-
-
-
 
 /* **** Container **** */
 .container {
@@ -503,6 +501,12 @@ thead th {
 	padding-top: 7px;
 }
 
+.validation {
+	display: none;
+	color: #EB7A71;
+	margin-top: 20px;
+}
+
 /* **** Better placeholder text **** */
 .form-signin ::-webkit-input-placeholder {
    color: #F3EBE8;
@@ -709,13 +713,12 @@ body.login:before {
 
 .add-name {
 	margin: 80px auto 0;
-	text-align: center;
-	padding-left: 200px;
+	padding-left: 260px;
 	opacity: 0.7;
 }
 
 .add-name a {
-	color: #804D49;
+	text-decoration: underline;
 }
 
 /* **** Bottom bar **** */

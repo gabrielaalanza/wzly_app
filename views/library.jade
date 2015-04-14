@@ -7,10 +7,11 @@ block content
     .content
       button.btn.pull-right.show-form Add an album
       h2 Library
-      form.add-album-form.form-inline
+      form.add-album-form.form-inline(onsubmit='return validate()')
         input(type='text', name='album', placeholder='Album Name')
         input(type='text', name='artist', placeholder='Artist Name')
         button.btn(type='submit') Add
+        .validation
       p.hr_response
       - if(!albums[0])
         p.emp.zero-state You don't have HR albums in your library yet.

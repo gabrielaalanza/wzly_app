@@ -31,7 +31,7 @@ block content
 
     if (user.live == true || typeof(username) !== 'undefined')
 
-      form.log-form.line-form(action='/app/log', method='post')
+      form.log-form.line-form(action='/app/log', method='post', onsubmit="return validate()")
         
         input.input-block-level(type='text', placeholder='Song', name='name', class='song')
         | by <br>
@@ -42,8 +42,9 @@ block content
         input.input-block-level(type='text', placeholder='HR ID', name='hrID', class='hrid')
         <br>
         button.btn.light(type='submit') Submit
+        .validation 
 
-      p.add-name Your playlist does not have a name or description. If you want, you can <a href="#" data-target='.playlist-modal', data-toggle='modal')>add one</a>.
+      p.add-name <a href="#" data-target='.playlist-modal', data-toggle='modal')>Add or edit</a> your playlist's name or description.
 
       .bottom-bar
         form(action='/app/finish-playlist' method='post')

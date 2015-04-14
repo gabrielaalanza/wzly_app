@@ -57,8 +57,6 @@ $( document ).ready(function() {
 		var position = $('input[name="position"]').val();
 		var email = $('input[name="dj-email"]').val();
 
-		console.log(email);
-
 		//check to see if submitted username is already a user
 		var regDJ = false;
 		for (var i = users.length - 1; i >= 0; i--) {
@@ -67,13 +65,22 @@ $( document ).ready(function() {
 
 		if(regDJ) {
 			//give error message
-			$('.error').fadeIn();
-			$('input[name="username"]').css('border-color','#EB7A71');
+			$('.error').text("User is already in the system.").fadeIn();
 			setTimeout(function(){
 				$('.error').fadeOut();
 				$('input[name="username"]').css('border-color','rgba(243,235,232,1)');
 				$('.user-form')[0].reset();
 			}, 4000);
+
+		} else if(name=="" && username=="") {
+
+			$('input[name="username"]').css('border-color','#EB7A71');
+			$('.error').text("You must enter a username.").fadeIn();
+
+		} else if (name=="") {
+
+			$('input[name="name"]').css('border-color','#EB7A71');
+			$('.error').text("You must enter a name.").fadeIn();
 
 		} else {
 
