@@ -24,8 +24,8 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 //var configDB = require('./config/database.js');
 //provide a sensible default for local development
-//var mongodb_connection_string = 'localhost:27017/wzly_db';
-var mongodb_connection_string = 'mongodb://admin:electricladyland@ds051831.mongolab.com:51831/heroku_app34231140';
+var mongodb_connection_string = 'localhost:27017/wzly_db';
+//var mongodb_connection_string = 'mongodb://admin:electricladyland@ds051831.mongolab.com:51831/heroku_app34231140';
 
 // ** Moment ** //
 var moment = require('moment');
@@ -80,6 +80,7 @@ initPassport(passport);
 var routes = require('./routes/routes')(passport);
 var admin = require('./routes/admin')(passport);
 var dj = require('./routes/dj')(passport);
+var automation = require('./routes/automation');
 
 //var pass = require('./config/passport'); // pass passport for configuration
 
@@ -113,6 +114,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use('/', routes);
 app.use('/admin', admin);
 app.use('/app', dj);
+app.use('/auto', automation);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
