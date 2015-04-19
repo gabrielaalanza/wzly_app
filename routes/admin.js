@@ -178,6 +178,8 @@ module.exports = function(passport){
                                         week: (pastCharts.length + 1),
                                         pageCount: pageCount,
                                         itemCount: itemCount,
+                                        page: parseInt(req.query.page),
+                                        limit: parseInt(req.query.limit),
                                         user: req.user
                                     });
                               },
@@ -319,6 +321,8 @@ module.exports = function(passport){
                             users: users,
                             pageCount: pageCount,
                             itemCount: itemCount,
+                            page: parseInt(req.query.page),
+                            limit: parseInt(req.query.limit),
                             user: req.user
                         });
                   },
