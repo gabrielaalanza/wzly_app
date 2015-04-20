@@ -172,43 +172,45 @@ module.exports = function(passport){
                         console.log('Song Added');
                     }
                 });
-                console.log("Song position is: "+count+'\n');
                 position = count;
-            });
 
-            //then, update user profile to claim this song in playlist
-            var query = {'_id': req.user.id};
+                //then, update user profile to claim this song in playlist
+                var query = {'_id': req.user.id};
 
-            User.findOne(query, function(err, user) {
+                User.findOne(query, function(err, user) {
 
-                //get the playlist
+                    //get the playlist
 
-                var playlist = user.playlists[user.playlists.length-1];
-                console.log("Playlist: "+playlist+'\n');
+                    var playlist = user.playlists[user.playlists.length-1];
+                    console.log("Playlist: "+playlist+'\n');
 
-                //check to see if this is the first song in the playlists
-                if(typeof playlist.startIndex == 'undefined') {
-                    //if so, update the start and end index
-                    playlist.startIndex = position;
-                    playlist.endIndex = position;
+                    //check to see if this is the first song in the playlists
+                    if(typeof playlist.startIndex == 'undefined') {
+                        //if so, update the start and end index
+                        playlist.startIndex = position;
+                        playlist.endIndex = position;
 
-                } else {
-                    //if not, update the end index
-                    playlist.endIndex = position;
-                }
-
-                user.save(function(err, result){
-                    if(err) {
-                        console.log('error saving ('+user.local.username+') playlist index: '+err);
                     } else {
-
-                        console.log(user.local.username+"'s playlist has been saved \n");
+                        //if not, update the end index
+                        console.log("Song position is: "+position+'\n');
+                        playlist.endIndex = position;
                     }
+
+                    user.save(function(err, result){
+                        if(err) {
+                            console.log('error saving ('+user.local.username+') playlist index: '+err);
+                        } else {
+
+                            console.log(user.local.username+"'s playlist has been saved \n");
+                        }
+                    });
+
                 });
 
+                res.redirect('back');
             });
 
-            res.redirect('back');
+            
         })
         .get(isAuthenticated, function(req, res){
 
@@ -294,9 +296,9 @@ module.exports = function(passport){
 
                 user.save(function(err, result){
                     if(err) {
-                        console.log('error setting user ('+user+') to live: '+err);
+                        console.log('error setting user ('+user.local.username+') to live: '+err);
                     } else {
-                        console.log(user+' is now live');
+                        console.log(user.local.username+' is now live');
                     }
                 });
 
