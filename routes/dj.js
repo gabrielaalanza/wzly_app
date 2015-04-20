@@ -188,8 +188,9 @@ module.exports = function(passport){
 
                 //check to see if this is the first song in the playlists
                 if(typeof playlist.startIndex == 'undefined') {
-                    //if so, update the start index
+                    //if so, update the start and end index
                     playlist.startIndex = position;
+                    playlist.endIndex = position;
 
                 } else {
                     //if not, update the end index
@@ -307,8 +308,7 @@ module.exports = function(passport){
     router.route('/finish-playlist')
         .post(isAuthenticated, function(req, res){
 
-            //change live status to "true"
-            //create new playlist and add it to the user's list of playlists
+            //change live status to "false"
 
             var query = {'_id': req.user.id};
 
@@ -318,7 +318,7 @@ module.exports = function(passport){
 
                 user.save(function(err, result){
                     if(err) {
-                        console.log('error setting finishing playlist for '+user+': '+err);
+                        console.log('error finishing playlist for '+user+': '+err);
                     } else {
 
                         console.log(user+' is no longer live');

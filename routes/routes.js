@@ -65,6 +65,27 @@ module.exports = function(passport){
 
   /* Handle Logout */
   router.get('/logout', function(req, res) {
+
+    var query = {'_id': req.user.id};
+
+    User.findOne(query, function(err, user) {
+
+      if(user.live) {
+
+        user.live = false;
+
+        user.save(function(err, result){
+            if(err) {
+                console.log('error setting user ('+user+') to not live: '+err);
+            } else {
+                console.log(user+' is now no longer live');
+            }
+        });
+
+      }
+
+    });
+
     req.logout();
     res.redirect('/login');
   });
