@@ -6,7 +6,7 @@ var Song = require('../models/song');
 
 module.exports = function(){
 
-  router.post('/log-automated', function(req, res){
+  router.post('/log-automated/:data', function(req, res){
 
     console.log(req);
     
