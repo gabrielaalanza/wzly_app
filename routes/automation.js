@@ -6,12 +6,23 @@ var Song = require('../models/song');
 
 module.exports = function(){
 
-  router.route('/log-automated/:data')
+  router.get('/log-automated/:data', function(req, res) {
+    console.log(req.params);
+    res.end();
+  });
+
+  router.post('/log-automated/:data', function(req, res) {
+    console.log(req.params);
+    res.end();
+  });
+
+/*
+  router.route('/log-automated')
     .post(function(req, res){
 
-        console.log(req.params.data);
+        console.log("inside");
         
-        //save the song
+        /*save the song
         var song = new Song();
         song.name = req.body.name;
         song.artist = req.body.artist;
@@ -66,7 +77,12 @@ module.exports = function(){
 
         });
 
-  })
 
+  }).get(function(req, res){
+
+        console.log("inside");
+    });
+
+*/
 return router;
 }

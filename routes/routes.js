@@ -225,6 +225,15 @@ router.route('/reset/:token')
     });
 
   });
+/*
+  router.get('/log-automated/:data', function(req, res) {
+    console.log(req.params);
+  });
+
+  router.post('/log-automated', function(req, res) {
+    console.log("here post")
+  });
+*/
 
 return router;
 }
