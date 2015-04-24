@@ -690,13 +690,23 @@ module.exports = function(passport){
                             {y: req.body.data.y, 
                              x: req.body.data.x }
                          };
+
+            console.log("update");             
+            console.log(update);
             User.findOne(query, function(err, user) {
 
                 if (err) {
                     console.log('error finding user: '+err);
                 }
 
+                console.log("user.show before");
+                console.log(user.show);
+
                 user.show.push(update);
+
+
+                console.log("user.show after");
+                console.log(user.show);
 
                 user.save(function(err,result){
                     if(err) {
