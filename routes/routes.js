@@ -36,13 +36,13 @@ module.exports = function(passport){
         return res.redirect('/login'); 
       }
       if(user.local.username == "admin") {
-        console.log(user);
+        console.log("logging in: "+user.local.username);
         req.logIn(user, function(err) {
           if (err) { return next(err); }
           return res.redirect('/admin/library');
         });
       } else {
-        console.log(user);
+        console.log("logging in: "+user.local.username);
         req.logIn(user, function(err) {
           if (err) { return next(err); }
           return res.redirect('/app/profile');
