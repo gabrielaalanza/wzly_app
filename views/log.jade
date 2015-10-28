@@ -21,7 +21,7 @@ block content
                 a.btn(href="#")
                   span(class="glyphicon glyphicon-plus",aria-hidden="true")
                   | Add another
-            if (user.show)
+            if (user.show.length>0)
               if (user.show.length > 1)
                 .row
                   .col-sm-12
