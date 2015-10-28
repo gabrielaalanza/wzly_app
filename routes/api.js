@@ -12,7 +12,6 @@ module.exports = function(){
             console.log("there was an error loading events");
         } else {
             res.send({
-                moment: moment,
                 events : events
             });
         }
