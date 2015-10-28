@@ -26,7 +26,7 @@
     "method-override": "~1.0.0",
     "moment": "^2.8.4",
     "mongodb": "*",
-    "mongoose": "~3.8.1",
+    "mongoose": "~3.8.23",
     "mongoose-auto-increment": "3.2.0",
     "mongoose-paginate": "*",
     "morgan": "~1.2.3",
