@@ -44,7 +44,12 @@ var userSchema = new Schema({
         description  : String,
         startIndex   : Number,
         endIndex     : Number,
-        date         : { type: Date, default: Date.now }
+        date         : { type: Date, default: Date.now },
+        showName     : String,
+        collabs      : [{
+            name     : String,
+            username : String
+        }]
     }],
     live             : {type: Boolean, default: false },
     permanent        : {type: Boolean, default: false },

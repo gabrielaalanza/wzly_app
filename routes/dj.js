@@ -51,9 +51,6 @@ module.exports = function(passport){
             var query = {'_id': req.user._id};
 
             var update = {
-                show: {
-                    showName: req.body.showName
-                },
                 bio: req.body.bio,
                 picture: req.body.avatar_url,
                 bands: {
@@ -64,6 +61,16 @@ module.exports = function(passport){
                     band5: req.body.band5
                     }
                 }
+
+            var nameArr = [];
+            for (var i in req.body) {
+                if(i.indexOf('showName')>=0) {
+                    var index = i.split('-');
+                    index = index[1];
+                    nameArr.push({'name':req.body[i], 'index': index});
+                }
+            }
+            console.log(nameArr);
 
             //this might not work
             //delete undefined properties from update
@@ -83,17 +90,29 @@ module.exports = function(passport){
             var options = { overwrite: false };
 
             User.findOneAndUpdate(query, update, function(err, user) {
+                console.log('USER!');
+                console.log(user);
               if (err) {
                 console.log('error updating user: '+err);
+              } else {
+                  console.log('updated user');
+                  for(i in nameArr) {
+                    user.show[nameArr[i].index].showName = nameArr[i].name;
+                    user.save(function(err, result){
+                        if(err) {
+                            console.log('error saving ('+user.local.username+') show name: '+err);
+                        } else {
+
+                            console.log(user.local.username+"'s show name has been saved \n");
+                        }
+                    });
+                  }
               }
-              console.log('updated user: '+user);
               res.redirect('back');
             });
 
         })
         .get(isAuthenticated, function(req, res){
-
-            console.log(req.user);
 
             if(req.user.local.name) title = req.user.local.name;
             else title = req.user.local.username;
@@ -257,6 +276,46 @@ module.exports = function(passport){
 
         });
 
+    router.route('/edit-description/:id')
+        .post(isAuthenticated, function(req, res){
+
+            var query = {'_id': req.user.id};
+
+            User.findOne(query, function(err, user) {
+
+                var id = req.params.id;
+
+                for (var i = user.playlists.length - 1; i >= 0; i--) {
+                    if(id == user.playlists[i]._id) {
+                        var playlist = user.playlists[i];
+                    }
+                };
+
+                if(req.body.name) { 
+                    playlist.name = req.body.name;
+                } else {
+                    playlist.name = null;
+                }
+                if(req.body.description){
+                    playlist.description = req.body.description;
+                } else { 
+                    playlist.description = null;
+                }
+
+                user.save(function(err, result){
+                    if(err) {
+                        console.log('error saving ('+user.local.username+') playlist description: '+err);
+                    } else {
+
+                        console.log(user.local.username+"'s playlist name/description has been saved \n");
+                    }
+                });
+
+            });
+
+            res.redirect('back');
+        })
+
     router.route('/playlists')
         .get(isAuthenticated, function(req, res){
 
@@ -282,6 +341,9 @@ module.exports = function(passport){
             //create new playlist and add it to the user's list of playlists
 
             var query = {'_id': req.user.id};
+            var show = req.body.show;
+            console.log("show");
+            console.log(show);
 
             User.findOne(query, function(err, user) {
 
@@ -289,7 +351,8 @@ module.exports = function(passport){
 
                 var currentDate = new Date;
                 var playlist = {
-                    date: currentDate 
+                    date: currentDate,
+                    showName: show
                 }
 
                 user.playlists.push(playlist);

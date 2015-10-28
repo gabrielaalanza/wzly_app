@@ -6,22 +6,41 @@ block content
     include admin-sidebar
       
     .content.manage
+      .clear-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Clear Data" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+            form.clear-form.form-with-labels(action="/admin/clear" method="post")
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                h3 Clear Data
+              .modal-body
+                .row
+                  .col-sm-12
+                    p To clear this data, please enter the Admin password.
+                .row
+                  .col-sm-4
+                    label.inline(for='name') Password 
+                  .col-sm-6
+                    input.full(type='text', name='password')
+              .modal-footer
+                  button.btn(type='button', data-dismiss='modal') Cancel
+                  button.btn.primary(type='submit', name='submit') Clear data
       h2 Application Settings
       .row
-        .col-sm-6
+        .col-sm-9
           h4 Semester Clearing
           p This will clear all albums from the music library and stream, as well as the schedule and this semester's events.
             | Charts, Executive Board Members, and users will roll over.
-        .col-sm-6
+        .col-sm-3
+          button.btn.clear-button.clear-semester Clear semester
+      .row
+        .col-sm-9
           h4 Year Clearing
           p This will clear the records in preparation for the new school year. This will, in addition 
-            | to the changes to the left, remove all Executive Board Members and DJs as well as their profiles and playlists.
-      .row
-        .col-sm-6
-          button.btn Clear semester
-        .col-sm-6
-          button.btn Clear year
+            | to the changes above, remove all Executive Board Members and DJs as well as their profiles and playlists.
+        .col-sm-3
+          button.btn.clear-button.clear-year Clear year
             
     //end container
     include global-js
-
+    script(src='/javascripts/manage.js')

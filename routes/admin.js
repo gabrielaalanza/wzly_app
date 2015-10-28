@@ -61,6 +61,18 @@ function getCSV(data, res) {
     });
 }
 
+function clearSemester() {
+
+    Events.remove({}, function(err) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.end('success');
+        }
+    });
+
+}
+
 module.exports = function(passport){
 
     // ****** Save albums to database and retrieve all albums ****** //
@@ -802,17 +814,35 @@ module.exports = function(passport){
         });
 
     router.route('/manage')
-        .post(isAuthenticated, function(req, res){
-
-
-
-        })
         .get(isAuthenticated, function(req, res){
             res.render('manage', {
                 title: 'Manage',
                 user: req.user // get the user out of session and pass to template
             });
+        });
 
+    // Delete library, stream, schedule, and events
+    router.route('/clear-semester')
+        .post(isAuthenticated, function(req, res){
+
+            var password = req.body.password;
+
+            if (password == 'wellesleyzly') {
+                clearSemester();
+            }
+        });
+
+    // Call clear-semester
+    // Also delete users, eboard, and charts
+    // Don't delete admin user
+    router.route('/clear-year')
+        .post(isAuthenticated, function(req, res){
+
+            var password = req.body.password;
+
+            if (password == 'wellesleyzly') {
+                
+            }
         });
 
     return router;

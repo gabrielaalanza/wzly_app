@@ -2,6 +2,40 @@ extends layout
 
 block content
 
+  .options-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Playlist options" aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        form.go-live-form.form-with-labels(action="/app/go-live" method="post")
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h3 Playlist options
+          .modal-body
+            //.row
+              .col-sm-12
+                h4.caps Add co-collaborators (optional)
+                p If you would like your playlist to show any co-collaborators, add them here. If they are also DJs, this 
+                  | playlist will also appear on their profile.
+                br
+                input(name="collab-name", placeholder="Name")
+                input(name="collab-username", placeholder="Username (if a DJ)") 
+                a.btn(href="#")
+                  span(class="glyphicon glyphicon-plus",aria-hidden="true")
+                  | Add another
+            if (user.show.length > 1)
+              .row
+                .col-sm-12
+                  label Show name
+                  br
+                  select(name="show")
+                    option Select show name
+                    each item in user.show
+                      option(data-name='#{item.showName}') #{item.showName}
+            else
+              input(type="hidden", value="#{user.show[0].showName}")
+          .modal-footer
+              button.btn(type='button', data-dismiss='modal') Cancel
+              button.btn.primary(type='submit', name='submit') Go live
+
   .playlist-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Playlist Name/Description" aria-hidden="true")
     .modal-dialog
       .modal-content
@@ -25,7 +59,7 @@ block content
               button.btn.primary(type='submit', name='submit') Save
 
   .pulse.active
-  .container
+  .container.log
 
     include dj-sidebar
 
@@ -53,8 +87,7 @@ block content
 
     else
 
-      form(action='/app/go-live' method='post').go-live
-        button.btn.btn-main(type="submit") Go Live
+      a.btn.btn-main(href="#" data-target='.options-modal', data-toggle='modal') Go Live
 
     script(type='text/javascript').                                   
       var user =!{JSON.stringify(user)}

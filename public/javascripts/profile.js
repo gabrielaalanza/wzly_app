@@ -8,16 +8,6 @@ $( document ).ready(function() {
 
     console.log(profile);
 
-	//populate fields with information
-    $('[name="showName"]').val(profile.show[0].showName);
-
-    //deal with users that have more than one show
-    if(profile.show.length > 1) {
-        console.log('big');
-    } else {
-        console.log('small');
-    }
-
     $('[name="bio"]').val(profile.bio);
     if(profile.bands) {
         if(profile.bands.band1) $('[name="band1"]').val(profile.bands.band1);

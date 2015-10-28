@@ -8,36 +8,66 @@ block content
 
     .profile-content
       .row
-        h3.caps A profile picture
-        input(type='file', id='files', name='picture', accept="image/*")
-        p.status Please select an image
+        .col-xs-12
+          h3.caps A profile picture
+          input(type='file', id='files', name='picture', accept="image/*")
+          p.status Please select an image
       form.profile-form.line-form(action='/app/profile', method='post', enctype="multipart/form-data")
         .row
-          h3.caps The Basics
-          input.input-block-level(type='text', name='name', placeholder='Name', value="#{user.local.name}")
-          input.input-block-level(type='text', name='showName', placeholder='Show Name')
+          .col-xs-4
+            h3.caps The Basics
+            input.input-block-level(type='text', name='name', placeholder='Name', value="#{user.local.name}")
+          .col-xs-8
+            h3.caps Your Show
+            if (user.show)
+              - var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+              each show, i in user.show
+                - var day = days[show.showTime.y]
+                - var startTime = show.showTime.x[0]
+                - if(startTime == 24) startTime = "12 AM"
+                - else if(startTime > 12) startTime = startTime%12 + " PM"
+                - else if(startTime == 12) startTime += " PM"
+                - else startTime += " AM"
+                - var length = show.showTime.x.length-1
+                - var endTime = parseInt(show.showTime.x[length])+1
+                - if(endTime == 24) endTime = "12 AM"
+                - else if(endTime > 12) endTime = endTime%12 + " PM"
+                - else if(endTime == 12) endTime += " PM"
+                - else endTime += " AM"
+                div
+                  span.show-day #{day} #{startTime} - #{endTime}:
+                  - var showName = 'showName-'+i
+                  - if(show.showName)
+                    input.input-block-level(type='text', name='#{showName}', placeholder='Show Name', value = '#{show.showName}')
+                  - else 
+                    input.input-block-level(type='text', name='#{showName}', placeholder='Show Name')
+            else
+              p You are not on the schedule.
         .row
-          h3.caps A short bio
-          textarea.input-block-level(rows='5', name='bio')
+          .col-xs-12
+            h3.caps A short bio
+            textarea.input-block-level(rows='5', name='bio')
         .row
-          h3.caps Favorite bands
-          label 1.
-          input.input-block-level.band(type='text', name='band1')
-          label 2. 
-          input.input-block-level.band(type='text', name='band2')
-          label 3.
-          input.input-block-level.band(type='text', name='band3')
-          br
-          label 4. 
-          input.input-block-level.band(type='text', name='band4')
-          label 5.
-          input.input-block-level.band(type='text', name='band5')
+          .col-xs-12
+            h3.caps Favorite bands
+            label 1.
+            input.input-block-level.band(type='text', name='band1')
+            label 2. 
+            input.input-block-level.band(type='text', name='band2')
+            label 3.
+            input.input-block-level.band(type='text', name='band3')
+            br
+            label 4. 
+            input.input-block-level.band(type='text', name='band4')
+            label 5.
+            input.input-block-level.band(type='text', name='band5')
         .row
-          input(type="hidden" id="avatar_url" name="avatar_url" value="")
-          button.btn(type='submit') Save
+          .col-xs-12
+            input(type="hidden" id="avatar_url" name="avatar_url" value="")
+            button.btn(type='submit') Save
     //end container
     script(type='text/javascript').                                   
       var user =!{JSON.stringify(user)}
     include global-js
-    script(src="/javascripts/s3upload.js")
+    script(src='/javascripts/s3upload.js')
     script(src='/javascripts/profile.js')

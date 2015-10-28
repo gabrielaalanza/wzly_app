@@ -1,33 +1,32 @@
 extends layout
 
 block content
-
-  .playlist-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Playlist Name/Description" aria-hidden="true")
-  .modal-dialog
-    .modal-content
-      form.playlist-form.form-with-labels(action="/description" method="post")
-        .modal-header
-          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-          h3 Add/Edit Show Name and Description
-        .modal-body
-          .row
-            .col-sm-3
-              label.inline(for='name') Show Name 
-            .col-sm-9
-              input.full(type='text', placeholder='(optional)', name='name')
-          .row
-            .col-sm-3
-              label.inline(for='description') Description
-            .col-sm-9
-              textarea.full(rows='4', placeholder='(optional)', name='description')
-        .modal-footer
-            button.btn(type='button', data-dismiss='modal') Close
-            button.btn.primary(type='submit', name='submit') Save
               
   .container
 
     include dj-sidebar
     .content
+      .playlist-modal.modal.fade(tabindex="-1" role="dialog" aria-labelledby="Add or Edit Playlist Name/Description" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+            form.playlist-form.form-with-labels(action="/app/edit-description" method="post")
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                h3 Add/Edit Show Name and Description
+              .modal-body
+                .row
+                  .col-sm-3
+                    label.inline(for='name') Show Name 
+                  .col-sm-9
+                    input.full(type='text', placeholder='(optional)', name='name')
+                .row
+                  .col-sm-3
+                    label.inline(for='description') Description
+                  .col-sm-9
+                    textarea.full(rows='4', placeholder='(optional)', name='description')
+              .modal-footer
+                  button.btn(type='button', data-dismiss='modal') Close
+                  button.btn.primary(type='submit', name='submit') Save
       .charts_select.pull-right
         | Playlist on: 
         select
@@ -42,6 +41,10 @@ block content
         p.emp.zero-state You don't have any playlists yet. 
       h3.hide.playlist-name
       p.hide.playlist-description
+      p.hide.add-name-description
+        a.blue(href="#" data-target=".playlist-modal", data-toggle="modal") Add playlist name or description
+      label.caps.hide.show-name-label Show:
+      span.hide.show-name
       table.table.table-striped.table-condensed.table-albums.table-playlists.hide
         thead
           tr

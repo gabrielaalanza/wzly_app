@@ -37,6 +37,11 @@ h3 .icon {
 	width: 15px;
 }
 
+p .icon {
+	margin-left: 5px;
+	width: 12px;
+}
+
 .caps {
 	font-family: "Montserrat", "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 14px;
@@ -83,6 +88,10 @@ a:hover {
 	transition: color 0.15s ease-in-out;
 }
 
+.blue {
+	color: #337ab7;
+}
+
 .hide {
 	display: none;
 }
@@ -95,6 +104,10 @@ a:hover {
 .clear {
 	background-color: transparent;
 	border: 0;
+}
+
+.close, .close:hover {
+	color: #fff;
 }
 
 
@@ -726,6 +739,10 @@ body.login:before {
 	text-decoration: underline;
 }
 
+.log .btn {
+	display: inline-block;
+}
+
 /* **** Bottom bar **** */
 .bottom-bar {
 	height: 46px;
@@ -749,7 +766,6 @@ body.login:before {
 	display: block;
 }
 
-
 /**************************/
 /****** Profile page ******/
 /**************************/
@@ -766,6 +782,10 @@ body.login:before {
 .profile-form.line-form input:not([type=submit]):not([type=file]) {
 	font-size: 18px;
 	margin: 10px 10px 10px 0px;
+}
+
+.profile-form .show-day {
+	margin-right: 20px;
 }
 
 .profile-form input.band {
@@ -795,7 +815,9 @@ body.login:before {
 	width: 140px;
 }
 
-
+.show-name-label {
+	margin-right: 10px
+}
 
 /*****************************/
 /*****************************/
@@ -968,14 +990,12 @@ input.med {
 /********** Manage ***********/
 /*****************************/
 
-.manage .col-sm-6 {
-	padding-right: 30px;
-	padding-left: 30px;
-	text-align: center;
+.manage .col-sm-9  {
+	margin-top: 20px;
 }
 
-.manage .col-sm-6 p {
-	margin-bottom: 20px;
+.manage .clear-button {
+	margin-top: 37%;
 }
 
 

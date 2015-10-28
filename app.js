@@ -76,11 +76,21 @@ initPassport(passport);
 
 /***********************/
 
+// CORS
+
+app.all('*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 // require routes
 var routes = require('./routes/routes')(passport);
 var admin = require('./routes/admin')(passport);
 var dj = require('./routes/dj')(passport);
 var automation = require('./routes/automation')(passport);
+var api = require('./routes/api')(passport);
 
 //var pass = require('./config/passport'); // pass passport for configuration
 
@@ -115,6 +125,7 @@ app.use('/', routes);
 app.use('/admin', admin);
 app.use('/app', dj);
 app.use('/auto', automation);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
