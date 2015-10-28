@@ -21,17 +21,18 @@ block content
                 a.btn(href="#")
                   span(class="glyphicon glyphicon-plus",aria-hidden="true")
                   | Add another
-            if (user.show.length > 1)
-              .row
-                .col-sm-12
-                  label Show name
-                  br
-                  select(name="show")
-                    option Select show name
-                    each item in user.show
-                      option(data-name='#{item.showName}') #{item.showName}
-            else
-              input(type="hidden", value="#{user.show[0].showName}")
+            if (user.show)
+              if (user.show.length > 1)
+                .row
+                  .col-sm-12
+                    label Show name
+                    br
+                    select(name="show")
+                      option Select show name
+                      each item in user.show
+                        option(data-name='#{item.showName}') #{item.showName}
+              else
+                input(type="hidden", value="#{user.show[0].showName}")
           .modal-footer
               button.btn(type='button', data-dismiss='modal') Cancel
               button.btn.primary(type='submit', name='submit') Go live

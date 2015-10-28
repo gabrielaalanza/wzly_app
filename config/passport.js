@@ -99,7 +99,7 @@ function(req, username, password, done) { // callback with username and password
         // if there are any errors, return the error before anything else
 
         console.log("supplied username: "+username);
-        console.log("user?: "+user);
+        console.log("user?: "+user.local.username);
         if (err)
             return done(err);
 
