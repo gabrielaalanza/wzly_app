@@ -167,7 +167,6 @@ module.exports = function(passport){
                     if (err) {
                         console.log('error updating album play count: '+err);
                     }
-                    console.log('updated play count of album: '+album.name+'\n');
                 })
             }
 
@@ -177,8 +176,6 @@ module.exports = function(passport){
             song.artist = req.body.artist;
             song.album = req.body.album;
 
-            console.log("Saving song: "+song+'\n');
-
             var position;
 
             Song.nextCount(function(err, count) {
@@ -186,11 +183,9 @@ module.exports = function(passport){
                 song.save(function(err, result){
                     if(err) {
                         console.log("There was an error adding this song: "+err);
-                    } else {
-
-                        console.log('Song Added');
                     }
                 });
+
                 position = count;
 
                 //then, update user profile to claim this song in playlist
@@ -201,7 +196,6 @@ module.exports = function(passport){
                     //get the playlist
 
                     var playlist = user.playlists[user.playlists.length-1];
-                    console.log("Playlist: "+playlist+'\n');
 
                     //check to see if this is the first song in the playlists
                     if(typeof playlist.startIndex == 'undefined') {
@@ -211,16 +205,12 @@ module.exports = function(passport){
 
                     } else {
                         //if not, update the end index
-                        console.log("Song position is: "+position+'\n');
                         playlist.endIndex = position;
                     }
 
                     user.save(function(err, result){
                         if(err) {
                             console.log('error saving ('+user.local.username+') playlist index: '+err);
-                        } else {
-
-                            console.log(user.local.username+"'s playlist has been saved \n");
                         }
                     });
 
@@ -386,7 +376,7 @@ module.exports = function(passport){
                         console.log('error finishing playlist for '+user+': '+err);
                     } else {
 
-                        console.log(user+' is no longer live');
+                        console.log(user.local.username+' is no longer live');
                     }
                 });
 
