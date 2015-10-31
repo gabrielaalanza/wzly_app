@@ -102,7 +102,19 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res) {
 
-            Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
+            /*Album.find().sort({hrID: -1}).exec(function(err,albums) {
+               if(err) {
+                    console.log("there was an error loading albums");
+                } else {
+                    res.render('library', {
+                        title: 'Library',
+                        albums : albums,
+                        user : req.user
+                    });
+                }
+            });*/
+
+            /*Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
 
                 if (err) return next(err);
 
@@ -128,8 +140,39 @@ module.exports = function(passport){
                     });
                   }
                 });
+            }, { sortBy : { hrID : -1 }});*/
 
-            }, { sortBy : { hrID : -1 }});
+            Album.paginate({}, {page: req.query.page, limit: req.query.limit, sortBy: {hrID: -1}}).spread(function(albums, pageCount, itemCount) {
+
+                console.log(albums);
+
+                //if (err) return next(err);
+
+                res.format({
+                  html: function() {
+                        res.render('library', {
+                            title: 'Library',
+                            albums : albums,
+                            hrID : null,
+                            albumName : null,
+                            albumArtist : null,
+                            pageCount: pageCount,
+                            itemCount: itemCount,
+                            user: req.user
+                        });
+                  },
+                  json: function() {
+                    // inspired by Stripe's API response for list objects
+                    res.json({
+                        object: 'list',
+                        has_more: paginate.hasNextPages(req)(pageCount),
+                        data: albums
+                    });
+                  }
+                });
+            }).catch(function(err) {
+                return next(err);
+            });
 
         });
 

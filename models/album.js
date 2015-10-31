@@ -18,8 +18,8 @@ var albumSchema = mongoose.Schema({
 });
 
 // methods ======================
-albumSchema.plugin(autoIncrement.plugin, { model: 'Album', field: 'hrID', startAt: 1 });
 albumSchema.plugin(mongoosePaginate);
+albumSchema.plugin(autoIncrement.plugin, { model: 'Album', field: 'hrID', startAt: 1 });
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('Album', albumSchema);
