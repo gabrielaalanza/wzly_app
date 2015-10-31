@@ -59,7 +59,7 @@ module.exports = function(){
   });
 
   router.get('/songs', function(req, res) {
-    User.find(function(err,users) {
+    Song.find(function(err,songs) {
        if(err) {
             console.log("there was an error loading songs");
         } else {
