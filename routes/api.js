@@ -8,7 +8,7 @@ var Chart = require('../models/chart');
 var User = require('../models/user');
 var Song = require('../models/song');
 
-function sortUsers(_callback){
+function sortUsers(users, _callback){
   for (var i = users.length - 1; i >= 0; i--) {
     delete users[i].local.password;
     delete users[i].local.resetPasswordToken;
@@ -66,8 +66,8 @@ module.exports = function(){
             console.log("there was an error loading users");
         } else {
 
-          function sendUsers(){
-            sortUsers(function() {
+          function sendUsers(users){
+            sortUsers(users, function() {
               res.send({ users : users });
             });    
           }
