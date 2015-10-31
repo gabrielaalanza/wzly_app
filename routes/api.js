@@ -46,14 +46,27 @@ module.exports = function(){
     });
   });
 
-  router.get('/users', function(req, res) {
+  router.get('/users-schedule', function(req, res) {
     User.find(function(err,users) {
        if(err) {
             console.log("there was an error loading users");
         } else {
-            res.send({
-                users : users
-            });
+
+          for (var i = users.length - 1; i >= 0; i--) {
+            delete users[i].local.password;
+            delete users[i].local.resetPasswordToken;
+            delete users[i].facebook;
+            delete users[i].picture;
+            delete users[i].bio;
+            delete users[i].bands;
+            delete users[i].playlists;
+            delete users[i].permanent;
+          };
+
+          res.send({
+              users : users
+          });
+
         }
     });
   });
