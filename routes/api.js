@@ -15,9 +15,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading events");
         } else {
-            res.send({
-                events : events
-            });
+            res.send({events});
         }
     });
   });
@@ -27,9 +25,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading albums");
         } else {
-            res.send({
-                albums : albums
-            });
+            res.send({albums});
         }
     });
   });
@@ -39,9 +35,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading charts");
         } else {
-            res.send({
-                charts : charts
-            });
+            res.send({charts});
         }
     });
   });
@@ -65,22 +59,18 @@ module.exports = function(){
           };
           */
 
-          res.send({
-              users
-          });
+          res.send({users});
 
         }
     });
   });
 
   router.get('/songs', function(req, res) {
-    Song.find(function(err,songs) {
+    Song.find().sort({id: -1}).exec(function(err,songs) {
        if(err) {
             console.log("there was an error loading songs");
         } else {
-            res.send({
-                songs : songs
-            });
+            res.send({songs});
         }
     });
   });
