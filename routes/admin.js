@@ -102,51 +102,7 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res) {
 
-            /*Album.find().sort({hrID: -1}).exec(function(err,albums) {
-               if(err) {
-                    console.log("there was an error loading albums");
-                } else {
-                    res.render('library', {
-                        title: 'Library',
-                        albums : albums,
-                        user : req.user
-                    });
-                }
-            });*/
-
-            /*Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, albums, itemCount) {
-
-                if (err) return next(err);
-
-                res.format({
-                  html: function() {
-                        res.render('library', {
-                            title: 'Library',
-                            albums : albums,
-                            hrID : null,
-                            albumName : null,
-                            albumArtist : null,
-                            pageCount: pageCount,
-                            itemCount: itemCount,
-                            user: req.user
-                        });
-                  },
-                  json: function() {
-                    // inspired by Stripe's API response for list objects
-                    res.json({
-                        object: 'list',
-                        has_more: paginate.hasNextPages(req)(pageCount),
-                        data: albums
-                    });
-                  }
-                });
-            }, { sortBy : { hrID : -1 }});*/
-
             Album.paginate({}, {page: req.query.page, limit: req.query.limit, sortBy: {hrID: -1}}).spread(function(albums, pageCount, itemCount) {
-
-                console.log(albums);
-
-                //if (err) return next(err);
 
                 res.format({
                   html: function() {
@@ -215,42 +171,42 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res) {
 
-            Album.paginate({}, req.query.page, req.query.limit, function(err, pageCount, charts, itemCount) {
-
-                if (err) return next(err);
+            Album.paginate({}, {page: req.query.page, limit: req.query.limit, sortBy: {count: -1}}).spread(function(charts, pageCount, itemCount) {
 
                 Chart.find().sort({date: 1}).exec(function(err,pastCharts) {
-                        if(err) {
-                            console.log("there was an error loading charts");
-                        } else {
-                            res.format({
-                              html: function() {
-                                    res.render('charts', {
-                                        title: 'Current Charts',
-                                        moment: moment,
-                                        charts : charts,
-                                        pastCharts : pastCharts,
-                                        week: (pastCharts.length + 1),
-                                        pageCount: pageCount,
-                                        itemCount: itemCount,
-                                        page: parseInt(req.query.page),
-                                        limit: parseInt(req.query.limit),
-                                        user: req.user
-                                    });
-                              },
-                              json: function() {
-                                // inspired by Stripe's API response for list objects
-                                res.json({
-                                    object: 'list',
-                                    has_more: paginate.hasNextPages(req)(pageCount),
-                                    data: albums
+                    if(err) {
+                        console.log("there was an error loading charts");
+                    } else {
+                        res.format({
+                          html: function() {
+                                res.render('charts', {
+                                    title: 'Current Charts',
+                                    moment: moment,
+                                    charts : charts,
+                                    pastCharts : pastCharts,
+                                    week: (pastCharts.length + 1),
+                                    pageCount: pageCount,
+                                    itemCount: itemCount,
+                                    page: parseInt(req.query.page),
+                                    limit: parseInt(req.query.limit),
+                                    user: req.user
                                 });
-                              }
+                          },
+                          json: function() {
+                            // inspired by Stripe's API response for list objects
+                            res.json({
+                                object: 'list',
+                                has_more: paginate.hasNextPages(req)(pageCount),
+                                data: albums
                             });
-                        }
-                    });
+                          }
+                        });
+                    }
+                });
 
-            }, { sortBy : { count : -1 }});
+            }).catch(function(err) {
+                return next(err);
+            });
 
         });
     
@@ -347,7 +303,7 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res) {
 
-            User.paginate({}, req.query.page, req.query.limit, function(err, pageCount, users, itemCount) {
+            User.paginate({}, {page: req.query.page, limit: req.query.limit, sortBy: {'local.name': 1}}).spread(function(users, pageCount, itemCount) {
 
                 var sort = function (prop, arr) {
                     prop = prop.split('.');
@@ -366,8 +322,6 @@ module.exports = function(passport){
                     });
                     return arr;
                 };
-
-                if (err) return next(err);
 
                 res.format({
                   html: function() {
@@ -391,7 +345,9 @@ module.exports = function(passport){
                   }
                 });
 
-            }, { sortBy : { 'local.name': 1 }});
+            }).catch(function(err) {
+                return next(err);
+            });
 
         });
 
@@ -625,8 +581,6 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res){
 
-            console.log(req.user);
-
             res.render('eboard', {
                 title: 'Eboard Profile',
                 user : req.user // get the user out of session and pass to template
@@ -642,9 +596,7 @@ module.exports = function(passport){
         })
         .get(isAuthenticated, function(req, res){
 
-            Song.paginate({}, req.query.page, req.query.limit, function(err, pageCount, songs, itemCount) {
-
-                if (err) return next(err);
+            Song.paginate({}, {page: req.query.page, limit: req.query.limit, sortBy: {id: -1}}).spread(function(songs, pageCount, itemCount) {
 
                 res.format({
                   html: function() {
@@ -666,8 +618,9 @@ module.exports = function(passport){
                     });
                   }
                 });
-
-            }, { sortBy : { id : -1 }});
+            }).catch(function(err) {
+                return next(err);
+            });
 
         });
     
