@@ -18,5 +18,17 @@ module.exports = function(){
     });
   });
 
+  router.get('/library', function(req, res) {
+    Album.find().sort({start_time: -1}).exec(function(err,albums) {
+       if(err) {
+            console.log("there was an error loading events");
+        } else {
+            res.send({
+                albums : albums
+            });
+        }
+    });
+  });
+
 return router;
 }
