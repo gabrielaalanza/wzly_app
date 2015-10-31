@@ -8,6 +8,20 @@ var Chart = require('../models/chart');
 var User = require('../models/user');
 var Song = require('../models/song');
 
+function sortUsers(_callback){
+  for (var i = users.length - 1; i >= 0; i--) {
+    delete users[i].local.password;
+    delete users[i].local.resetPasswordToken;
+    delete users[i].facebook;
+    delete users[i].picture;
+    delete users[i].bio;
+    delete users[i].bands;
+    delete users[i].playlists;
+    delete users[i].permanent;
+  };
+  _callback();    
+}
+
 module.exports = function(){
 
   router.get('/events', function(req, res) {
@@ -52,20 +66,11 @@ module.exports = function(){
             console.log("there was an error loading users");
         } else {
 
-          for (var i = users.length - 1; i >= 0; i--) {
-            delete users[i].local.password;
-            delete users[i].local.resetPasswordToken;
-            delete users[i].facebook;
-            delete users[i].picture;
-            delete users[i].bio;
-            delete users[i].bands;
-            delete users[i].playlists;
-            delete users[i].permanent;
-          };
-
-          res.send({
-              users : users
-          });
+          function sendUsers(){
+            sortUsers(function() {
+              res.send({ users : users });
+            });    
+          }
 
         }
     });
