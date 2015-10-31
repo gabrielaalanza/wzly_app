@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 
 var Event = require('../models/event');
+var Album = require('../models/album');
 
 module.exports = function(){
 
