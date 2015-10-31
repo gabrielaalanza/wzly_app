@@ -10,24 +10,30 @@ module.exports = function(){
     console.log(req.params);
     res.end();
   });
-*/
+
   router.post('/log-automated/:data', function(req, res) {
     console.log(req.params);
     res.end();
   });
+*/
 
-/*
   router.route('/log-automated')
     .post(function(req, res){
 
-        console.log("inside");
+        //console.log("inside");
         
-        /*save the song
+        //save the song
         var song = new Song();
-        song.name = req.body.name;
-        song.artist = req.body.artist;
-        song.album = req.body.album;
 
+        var song_data = req.params.data;
+        song_data = song_data.split(" - ");
+        song.name = song_data[0];
+        song.artist = song_data[0];
+        //song.album = req.body.album;
+
+        console.log(song);
+
+        /*
         console.log("Saving song: "+song+'\n');
 
         var position;
@@ -75,14 +81,15 @@ module.exports = function(){
                 }
             });
 
-        });
 
+        });
+*/
 
   }).get(function(req, res){
 
         console.log("inside");
     });
 
-*/
+
 return router;
 }
