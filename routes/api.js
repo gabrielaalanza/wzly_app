@@ -2,6 +2,8 @@
 var express = require('express');
 var router = express.Router();
 
+var async = require('async');
+
 var Event = require('../models/event');
 var Album = require('../models/album');
 var Chart = require('../models/chart');
@@ -81,7 +83,7 @@ module.exports = function(){
     var endIndex = req.query.end;
     var arr = [];
 
-    for (var i = startIndex; i >= endIndex; i++) {
+    for (var i = startIndex; i <= endIndex; i++) {
       arr.push(i);
     };
 
