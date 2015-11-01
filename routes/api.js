@@ -82,10 +82,10 @@ module.exports = function(){
     var index = endIndex-startIndex;
     var arr = [];
 
-    for (var i = startIndex; i >= endIndex; i++) {
+    for (var i = startIndex; i <= endIndex; i++) {
       arr.push(i);
       index--;
-      if (requests == 0) done(arr);
+      if (index == 0) done(arr);
     }
 
     function done(arr) {
@@ -103,8 +103,6 @@ module.exports = function(){
   router.get('/profile', function(req, res) {
 
     var dj = req.query.user;
-
-    console.log(dj);
 
     User.findOne({'local.username':dj}, function(err,user) {
        if(err) {
