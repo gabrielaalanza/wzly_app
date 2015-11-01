@@ -64,9 +64,28 @@ module.exports = function(){
         }
     });
   });
-
+/*
   router.get('/songs', function(req, res) {
     Song.find().sort({id: -1}).exec(function(err,songs) {
+       if(err) {
+            console.log("there was an error loading songs");
+        } else {
+            res.send({songs});
+        }
+    });
+  });
+*/
+  router.get('/songs', function(req, res) {
+
+    var startIndex = req.query.start;
+    var endIndex = req.query.end;
+    var arr = [];
+
+    for (var i = startIndex; i >= endIndex; i++) {
+      arr.push(i);
+    };
+
+    Song.find({'id': { $in: arr }).sort({id: -1}).exec(function(err,songs) {
        if(err) {
             console.log("there was an error loading songs");
         } else {
