@@ -85,7 +85,7 @@ module.exports = function(){
     console.log('endIndex: '+endIndex);
     var arr = [];
 
-    for (var i = 50; i <= 60; i++) {
+    for (var i = startIndex; i <= endIndex; i++) {
       console.log('inside loop');
       arr.push(i);
       console.log(arr);
