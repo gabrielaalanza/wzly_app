@@ -4,6 +4,8 @@ $( document ).ready(function() {
 	if(url.indexOf('?') == -1) {
 		checkForUpdates();
 	}
+
+	$('[data-toggle="tooltip"]').tooltip()
 	
 });
 
@@ -41,6 +43,7 @@ function checkForUpdates() {
 		        });
 
 		        $('.table-albums').append(trHTML);
+		        $('[data-toggle="tooltip"]').tooltip()
 	        }
 	    });
 	}, 10000);

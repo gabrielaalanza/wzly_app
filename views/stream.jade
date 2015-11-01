@@ -37,8 +37,9 @@ block content
           each song, i in songs
             - var now = moment()
             - var date = moment(song.date)
-            tr(title="Played by: #{song.playedBy}")
-              td #{song.name}
+            tr
+              td
+                span(data-toggle="tooltip", data-placement="top", title="Played by: #{song.playedBy}") #{song.name}
               td #{song.artist}
               td #{song.album}
               - if (now.diff(date, 'days') === 0)
