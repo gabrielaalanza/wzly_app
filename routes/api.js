@@ -79,16 +79,18 @@ module.exports = function(){
 
     var startIndex = req.query.start;
     var endIndex = req.query.end;
-    var index = endIndex-startIndex;
-    console.log('index at start: '+index);
+    var n = endIndex-startIndex;
+    console.log('n at start: '+n);
+    console.log('startIndex: '+startIndex);
+    console.log('endIndex: '+endIndex);
     var arr = [];
 
     for (var i = startIndex; i == endIndex; i++) {
       arr.push(i);
       console.log(arr);
-      index--;
-      console.log(index);
-      if (index == 0) done(arr);
+      n--;
+      console.log(n);
+      if (n == 0) done(arr);
     }
 
     function done(arr) {
