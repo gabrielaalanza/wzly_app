@@ -104,9 +104,14 @@ tr.collapsed {
 	margin-right: 10px;
 }
 
-
 .block { 
 	width: 100%
+}
+
+.hint {
+	font-size: 13px;
+	margin-bottom: 20px;
+	opacity: 0.85;
 }
 
 /* SELECTABLES */

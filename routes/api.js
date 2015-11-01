@@ -75,5 +75,20 @@ module.exports = function(){
     });
   });
 
+  router.get('/profile/data', function(req, res) {
+
+    var dj = req.params.data;
+
+    console.log(dj);
+
+    User.findOne({'local.username':dj}, function(err,user) {
+       if(err) {
+            console.log("there was an error loading this user");
+        } else {
+            res.send({user});
+        }
+    });
+  });
+
 return router;
 }
