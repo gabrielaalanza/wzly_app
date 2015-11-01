@@ -15,7 +15,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading events");
         } else {
-            res.send({events});
+            res.send(events);
         }
     });
   });
@@ -25,7 +25,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading albums");
         } else {
-            res.send({albums});
+            res.send(albums);
         }
     });
   });
@@ -35,7 +35,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading charts");
         } else {
-            res.send({charts});
+            res.send(charts);
         }
     });
   });
@@ -59,7 +59,7 @@ module.exports = function(){
           };
           */
 
-          res.send({users});
+          res.send(users);
 
         }
     });
@@ -93,7 +93,7 @@ module.exports = function(){
         if(err) {
           res.send("there was an error loading songs");
         } else {
-          res.send({songs});
+          res.send(songs);
         }
       }); 
     }
@@ -108,7 +108,7 @@ module.exports = function(){
        if(err) {
             console.log("there was an error loading this user");
         } else {
-            res.send({user});
+            res.send(user);
         }
     });
   });

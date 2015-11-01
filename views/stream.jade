@@ -37,7 +37,7 @@ block content
           each song, i in songs
             - var now = moment()
             - var date = moment(song.date)
-            tr
+            tr(title="Played by: #{song.playedBy}")
               td #{song.name}
               td #{song.artist}
               td #{song.album}
