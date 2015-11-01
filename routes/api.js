@@ -90,7 +90,7 @@ module.exports = function(){
             arr.push(i);
           };
 
-          done(err,arr)
+          done(arr)
 
         },
         function(arr, done) {
@@ -103,14 +103,7 @@ module.exports = function(){
             }
           });
         }
-      ], function(err) {
-        if (err) {
-          console.log(err);
-          //send error message
-          res.send('There was an error loading songs.');
-        } 
-        res.end();
-      });
+      ]);
 
   });
 
