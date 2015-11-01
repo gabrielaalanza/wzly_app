@@ -80,16 +80,19 @@ module.exports = function(){
     var startIndex = req.query.start;
     var endIndex = req.query.end;
     var index = endIndex-startIndex;
+    console.log('index at start: '+index);
     var arr = [];
 
-    for (var i = startIndex; i <= endIndex; i++) {
+    for (var i = startIndex; i == endIndex; i++) {
       arr.push(i);
+      console.log(arr);
       index--;
+      console.log(index);
       if (index == 0) done(arr);
     }
 
     function done(arr) {
-      Song.find({'id': { $in: arr }}).sort({id: -1}).exec(function(err,songs) {
+      Song.find({'id': { $in: arr }}).sort({id: 1}).exec(function(err,songs) {
         if(err) {
           res.send("there was an error loading songs");
         } else {
