@@ -75,9 +75,9 @@ module.exports = function(){
     });
   });
 
-  router.get('/profile/data', function(req, res) {
+  router.get('/profile', function(req, res) {
 
-    var dj = req.params.data;
+    var dj = req.query.id;
 
     console.log(dj);
 
