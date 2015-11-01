@@ -81,6 +81,10 @@ module.exports = function(){
     var endIndex = req.query.end;
     var arr = [];
 
+    console.log('start: '+startIndex);
+
+    console.log('end: '+endIndex);
+
     for (var i = startIndex; i >= endIndex; i++) {
       arr.push(i);
     };
@@ -88,7 +92,7 @@ module.exports = function(){
     console.log('arr');
     console.log(arr);
 
-    Song.find({'id': { $in: arr }}).sort({id: -1}).exec(function(err,songs) {
+    Song.find({'id': { $in: ['61','62','63'] }}).sort({id: -1}).exec(function(err,songs) {
        if(err) {
             console.log("there was an error loading songs");
         } else {
