@@ -79,31 +79,26 @@ module.exports = function(){
 */
   router.get('/songs', function(req, res) {
 
-    async.waterfall([
-        function(done) {
-          
-          var startIndex = req.query.start;
-          var endIndex = req.query.end;
-          var arr = [];
+    var startIndex = req.query.start;
+    var endIndex = req.query.end;
+    var index = endIndex-startIndex;
+    var arr = [];
 
-          for (var i = startIndex; i >= endIndex; i++) {
-            arr.push(i);
-          };
+    for (var i = startIndex; i >= endIndex; i++) {
+      arr.push(i);
+      index--;
+      if (requests == 0) done(arr);
+    }
 
-          done(arr)
-
-        },
-        function(arr, done) {
-
-          Song.find({'id': { $in: arr }}).sort({id: -1}).exec(function(err,songs) {
-            if(err) {
-              res.send("there was an error loading songs");
-            } else {
-              res.send({songs});
-            }
-          });
+    function done(arr) {
+      Song.find({'id': { $in: arr }}).sort({id: -1}).exec(function(err,songs) {
+        if(err) {
+          res.send("there was an error loading songs");
+        } else {
+          res.send({songs});
         }
-      ]);
+      }); 
+    }
 
   });
 
