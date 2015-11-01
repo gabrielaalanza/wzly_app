@@ -2,8 +2,6 @@
 var express = require('express');
 var router = express.Router();
 
-var async = require('async');
-
 var Event = require('../models/event');
 var Album = require('../models/album');
 var Chart = require('../models/chart');
