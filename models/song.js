@@ -11,7 +11,8 @@ var songSchema = mongoose.Schema({
     artist           : String,
     album            : String,
     id               : Number,
-    date             : { type: Date, default: Date.now }
+    date             : { type: Date, default: Date.now },
+    playedBy         : String
 
 });
 

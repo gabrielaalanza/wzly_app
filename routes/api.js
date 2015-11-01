@@ -80,21 +80,12 @@ module.exports = function(){
     var startIndex = req.query.start;
     var endIndex = req.query.end;
     var n = endIndex-startIndex+1;
-    //console.log('n at start: '+n);
-    //console.log('startIndex: '+startIndex);
-    //console.log('endIndex: '+endIndex);
     var arr = [];
 
     for (var i = startIndex; i <= endIndex; i++) {
-      console.log('inside loop');
       arr.push(parseInt(i));
-      console.log(arr);
       n--;
-      console.log(n);
-      if (n == 0) {
-        console.log('done');
-        done(arr);
-      }
+      if (n == 0) done(arr);
     }
 
     function done(arr) {

@@ -175,6 +175,7 @@ module.exports = function(passport){
             song.name = req.body.name;
             song.artist = req.body.artist;
             song.album = req.body.album;
+            song.playedBy = req.user.local.username;
 
             var position;
 
