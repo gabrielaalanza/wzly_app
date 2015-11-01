@@ -77,7 +77,7 @@ module.exports = function(){
 
   router.get('/profile', function(req, res) {
 
-    var dj = req.query.id;
+    var dj = req.query.user;
 
     console.log(dj);
 
