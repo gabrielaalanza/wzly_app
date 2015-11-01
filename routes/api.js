@@ -87,7 +87,9 @@ module.exports = function(){
       arr.push(i);
     };
 
-    Song.find({'id': { $in: [60,61,62,63,64,65] }}).sort({id: -1}).exec(function(err,songs) {
+    console.log(arr);
+
+    Song.find({'id': { $in: arr }}).sort({id: -1}).exec(function(err,songs) {
        if(err) {
             console.log("there was an error loading songs");
         } else {
