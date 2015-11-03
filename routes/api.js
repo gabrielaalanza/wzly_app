@@ -115,11 +115,17 @@ module.exports = function(){
 
   router.get('/eboard', function(req, res) {
 
-    User.find({'eboard.position': {$exists: true}}, function(err,user) {
+    User.find({'eboard.position': {$exists: true}}, function(err,users) {
        if(err) {
-            console.log("there was an error loading this user");
+          console.log("there was an error loading this user");
         } else {
-            res.send(user);
+          for (var i = users.length - 1; i >= 0; i--) {
+            if (users[i].eboard.position == "Administrator") {
+              users.splice(i,1);
+              break;
+            }
+          };
+          res.send(users);
         }
     });
   });
