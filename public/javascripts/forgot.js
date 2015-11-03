@@ -14,8 +14,9 @@ $( document ).ready(function() {
 
 	    $.post('/forgot-password', { username: username}, function(data) {
 	    	$('.form-signin')[0].reset();
+	    	console.log(data);
 	    	if(data) {
-	    		$('.loginerror').text('We had trouble reseting your password. Please try again later.');
+	    		$('.loginerror').text(data);
 	    	} else {
 	    		$('.loginerror').text('You got it, dude. We have sent a reset link to your email.');
 	    	}

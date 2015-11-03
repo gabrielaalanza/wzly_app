@@ -174,15 +174,15 @@ router.route('/reset/:token')
         function(token, done) {
           User.findOne({ 'local.username': req.body.username }, function(err, user) {
             if (!user) {
-              res.send('No account with that username exists.');
+              res.send('No account with that username exists. Contact the admin.');
               // send error message
+            } else {
+              user.local.resetPasswordToken = token;
+
+              user.save(function(err) {
+                done(err, token, user);
+              });
             }
-
-            user.local.resetPasswordToken = token;
-
-            user.save(function(err) {
-              done(err, token, user);
-            });
           });
         },
         function(token, user, done) {
@@ -212,7 +212,7 @@ router.route('/reset/:token')
         if (err) {
           console.log(err);
           //send error message
-          res.send('There was an error resetting your password.');
+          res.send('There was an error resetting your password. Please try again later or check with the admin.');
         } 
         res.end();
       });
