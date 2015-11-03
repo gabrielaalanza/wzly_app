@@ -30,11 +30,21 @@ block content
                     select(name="show")
                       option Select show name
                       each item in user.show
-                        option(data-name='#{item.showName}') #{item.showName}
+                        if (item.showName === "" || item.showName === undefined)
+                          - var date = moment().format("dddd, MMMM Do")
+                          option(data-name="Untitled") Untitled show on #{date}
+                        else
+                          option(data-name='#{item.showName}') #{item.showName}
+              else if (user.show.showName === "" || user.show.showName === undefined)
+                p It looks like you haven't added a show name yet. You can do that in the Profile tab, and your playlist will be filed under that show.
+                - var date = moment().format("dddd, MMMM Do")
+                input(type="hidden", name="show", value="Untitled show on #{date}")
               else
-                input(type="hidden", value="#{user.show[0].showName}")
+                input(type="hidden", name="show", value="#{user.show[0].showName}")
             else if (user.show == undefined || user.show.length == 0)
               p Note: You are not on the schedule, but you will still be able to log your show.
+              - var date = moment().format("dddd, MMMM Do")
+              input(type="hidden", name="show", value="Untitled show on #{date}")
           .modal-footer
               button.btn(type='button', data-dismiss='modal') Cancel
               button.btn.primary(type='submit', name='submit') Go live
@@ -94,6 +104,6 @@ block content
 
     script(type='text/javascript').                                   
       var user =!{JSON.stringify(user)}
+      console.log(user);
     include global-js
     script(src='/javascripts/log.js')
-    <script>console.log(user)</script>

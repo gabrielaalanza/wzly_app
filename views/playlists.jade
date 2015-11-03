@@ -33,7 +33,7 @@ block content
           option Choose date
           each item in user.playlists
             if (item.startIndex && item.endIndex)
-              option(data-start='#{item.startIndex}', data-end='#{item.endIndex}',) #{moment(item.date).format("MMMM Do YYYY")}
+              option(data-start='#{item.startIndex}', data-end='#{item.endIndex}',) #{moment(item.date).format("MMM Do, YYYY")}
       h2 Playlists
       - if(user.playlists.length > 0)
         p.emp.zero-state Select a date to see playlist
@@ -54,11 +54,9 @@ block content
             th Album
         tbody
     //end container
-    script(type='text/javascript').                                   
-      var songs =!{JSON.stringify(songs)}
-      console.log(songs)
+    script(type='text/javascript').
       var user =!{JSON.stringify(user)}
-      console.log(user)
+      var songs =!{JSON.stringify(songs)}
     include global-js
     script(src='/javascripts/moment.min.js')
     script(src='/javascripts/playlists.js')

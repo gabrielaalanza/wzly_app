@@ -12,7 +12,7 @@ block content
           h3.caps A profile picture
           p.emp Square pictures work best with Airwave.
           input(type='file', id='files', name='picture', accept="image/*")
-          p.status Please select an image
+          p.status.emp Please select an image
       form.profile-form.line-form(action='/app/profile', method='post', enctype="multipart/form-data")
         .row
           .col-xs-4
@@ -43,7 +43,7 @@ block content
                   - else 
                     input.input-block-level(type='text', name='#{showName}', placeholder='Show Name')
             else
-              p You are not on the schedule.
+              p.emp You are not on the schedule.
         .row
           .col-xs-12
             h3.caps A short bio

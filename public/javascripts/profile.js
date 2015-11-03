@@ -1,7 +1,5 @@
 $( document ).ready(function() {
 
-    console.log(user.show);
-
     if(user.live) {
         $('.pulse').show();
     }

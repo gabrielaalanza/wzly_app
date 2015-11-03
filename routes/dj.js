@@ -226,6 +226,7 @@ module.exports = function(passport){
 
             res.render('log', {
                 title: "Music Log",
+                moment: moment,
                 user : req.user // get the user out of session and pass to template
             });
 
