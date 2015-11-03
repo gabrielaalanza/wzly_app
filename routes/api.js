@@ -115,7 +115,7 @@ module.exports = function(){
 
   router.get('/eboard', function(req, res) {
 
-    User.findOne({'eboard.position': {$exists: true}}, function(err,user) {
+    User.find({'eboard.position': {$exists: true}}, function(err,user) {
        if(err) {
             console.log("there was an error loading this user");
         } else {
