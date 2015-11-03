@@ -1,12 +1,12 @@
 $( document ).ready(function() {
 
+    console.log(user.show);
+
     if(user.live) {
         $('.pulse').show();
     }
 
 	var profile = user;
-
-    console.log(profile);
 
     $('[name="bio"]').val(profile.bio);
     if(profile.bands) {

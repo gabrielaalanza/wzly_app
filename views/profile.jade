@@ -20,7 +20,7 @@ block content
             input.input-block-level(type='text', name='name', placeholder='Name', value="#{user.local.name}")
           .col-xs-8
             h3.caps Your Show
-            if (user.show)
+            if (user.show != undefined && user.show.length > 0)
               - var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
               each show, i in user.show
                 - var day = days[show.showTime.y]

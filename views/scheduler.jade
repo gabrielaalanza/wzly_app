@@ -18,6 +18,29 @@ html
         h2 Scheduler
         i.icon.icon-question-sign(title='Click for instructions', alt='Click for instructions')
       .row
+        .col-xs-2.sidebar
+            h2 Add an Entry
+
+            form.add-entry-form(action='#', method='get')
+                .actions
+                    input.entry-username(type='text', name='entry-username-1', placeholder='DJ Username')
+                    a(href="#" class="add-host") Add co-host
+                    button.btn.save(title='Add entries to the schedule', type="submit") Save
+                    button.cancel.btn.light(title='Cancel adding', type="reset") Cancel
+            .message-box
+                .info.message
+                .error.message
+            .hint
+                p.
+                 Guide: Enter a DJ's username in the box above, then select their show times in the table. To add multiple 
+                 DJs to one time slot, click "Add co-host". When you are finished selecting the correct time, click "Save". 
+                 To delete users from the schedule, just click on their time slot in the table.
+                p Hint: Click and drag across multiple cells for shows longer than half an hour.
+            .block-buttons
+                button.remove-entries.delete.btn.block.light(title='Remove all entries from the schedule')
+                    | Clear Schedule
+
+                button.show-rows.btn.block.light Show hidden times
         .col-xs-10
           table.schedule.table-condensed
             thead
@@ -247,25 +270,6 @@ html
                 td(data-x='2', data-y='4')
                 td(data-x='2', data-y='5')
                 td(data-x='2', data-y='6')
-        .col-xs-2.sidebar
-            h2 Add an Entry
-
-            form.add-entry-form(action='#', method='get')
-                .actions
-                    input.entry-username(type='text', name='entry-username-1', placeholder='DJ Username')
-                    a(href="#" class="add-host") Add co-host
-                    button.btn.save(title='Add entries to the schedule', type="submit") Save
-                    button.cancel.btn.light(title='Cancel adding', type="reset") Cancel
-            .message-box
-                .info.message
-                .error.message
-            .hint
-                p Hint: Click and drag across multiple cells for shows longer than half an hour.
-            .block-buttons
-                button.remove-entries.delete.btn.block.light(title='Remove all entries from the schedule')
-                    | Clear Schedule
-
-                button.show-rows.btn.block.light Show hidden times
             
     script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js')
     script(type='text/javascript', src='/javascripts/jqueryui_custom.js')

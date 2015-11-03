@@ -120,7 +120,7 @@ module.exports = function(){
           console.log("there was an error loading this user");
         } else {
           for (var i = users.length - 1; i >= 0; i--) {
-            if (users[i].eboard.position == "Administrator") {
+            if (users[i].local.username == "admin") {
               users.splice(i,1);
               break;
             }

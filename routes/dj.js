@@ -358,7 +358,7 @@ module.exports = function(passport){
 
             });
 
-            res.redirect('back');
+            res.redirect('/app/log');
         });
 
     router.route('/finish-playlist')

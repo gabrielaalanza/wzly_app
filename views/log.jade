@@ -33,6 +33,8 @@ block content
                         option(data-name='#{item.showName}') #{item.showName}
               else
                 input(type="hidden", value="#{user.show[0].showName}")
+            else if (user.show == undefined || user.show.length == 0)
+              p Note: You are not on the schedule, but you will still be able to log your show.
           .modal-footer
               button.btn(type='button', data-dismiss='modal') Cancel
               button.btn.primary(type='submit', name='submit') Go live
@@ -94,3 +96,4 @@ block content
       var user =!{JSON.stringify(user)}
     include global-js
     script(src='/javascripts/log.js')
+    <script>console.log(user)</script>
