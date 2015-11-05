@@ -61,15 +61,59 @@ function getCSV(data, res) {
     });
 }
 
-function clearSemester() {
 
-    Events.remove({}, function(err) {
+// Delete library, stream, schedule, and events
+function clearSemester(req, res, semester) {
+
+    //remove all events
+    Event.remove({}, function(err) {
         if (err) {
             console.log(err)
-        } else {
-            res.end('success');
         }
+        console.log("Removed all events");
     });
+
+    //remove all albums
+    Album.remove({}, function(err) {
+        if (err) {
+            console.log(err)
+        }
+        console.log("Removed all albums");
+    });
+
+    //remove all albums
+    Song.remove({}, function(err) {
+        if (err) {
+            console.log(err)
+        }
+        console.log("Removed all songs");
+    });
+
+    if(semester) {
+        //remove shows from users
+        User.find({}, function(err, users) {
+            if (err) {
+                console.log(err)
+            } else {
+                for (var i = users.length - 1; i >= 0; i--) {
+                    console.log(users[i].local.username);
+                    if(users[i].show != undefined) {
+                        users[i].show = [];
+                        users[i].save(function(err, result){
+                            if(err) {
+                                console.log("There was an error saving users after removing their shows: "+err);
+                            }
+                            console.log(result.local.username);
+                            console.log(result.show);
+                        });
+                    }
+                };
+                console.log("Removed all shows");
+            }
+        });
+
+        res.send("Semester was cleared successfully.");
+    }
 
 }
 
@@ -443,8 +487,10 @@ module.exports = function(passport){
             if(start_AMPM == 'PM') start_hour = parseInt(start_hour) + 12;
             if(end_AMPM == 'PM') end_hour = parseInt(end_hour) + 12;
 
-            newEvent.start_time = moment(req.body.date).hour(start_hour).minute(start_minute);
-            var end_time = moment(req.body.date).hour(end_hour).minute(end_minute);
+            console.log(req.body.date);
+
+            newEvent.start_time = moment(req.body.date, "YYYY-MM-DD").hour(start_hour).minute(start_minute);
+            var end_time = moment(req.body.date, "YYYY-MM-DD").hour(end_hour).minute(end_minute);
             if(start_hour > end_hour) end_time.add(1, 'days');
             newEvent.end_time = end_time;
 
@@ -822,22 +868,48 @@ module.exports = function(passport){
         .post(isAuthenticated, function(req, res){
 
             var password = req.body.password;
+            var semester = true;
 
             if (password == 'wellesleyzly') {
-                clearSemester();
+                clearSemester(req, res, semester);
             }
         });
 
     // Call clear-semester
-    // Also delete users, eboard, and charts
+    // Also delete users and charts
     // Don't delete admin user
     router.route('/clear-year')
         .post(isAuthenticated, function(req, res){
 
             var password = req.body.password;
+            var semester = false;
 
             if (password == 'wellesleyzly') {
-                
+                clearSemester(req,res, semester);
+
+                //remove all charts
+                Chart.remove({}, function(err) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    console.log("Removed all charts");
+                });
+
+                //remove all events
+                User.remove({"local.username" : {"$nin" : ['admin']}}, function(err) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    console.log("Removed all users");
+                });
+
+                if(req.user.local.username != 'admin') {
+                    console.log(req.user.local.username);
+                    res.redirect('/login')
+                } else {
+                    res.send("Year was cleared successfully.")
+                }
+
             }
         });
 

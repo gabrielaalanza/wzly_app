@@ -986,6 +986,17 @@ input.med {
 	width: 100%;
 }
 
+.user-message {
+	position: absolute;
+	margin-left: 100px;
+	background-color: rgba(215,215,215,0.20);
+	border: 1px solid rgba(215,215,215,0.40);
+	padding: 6px 10px;
+	border-radius: 3px;
+	text-align: center;
+	display: none;
+}
+
 /*****************************/
 /********** Manage ***********/
 /*****************************/
@@ -996,6 +1007,17 @@ input.med {
 
 .manage .clear-button {
 	margin-top: 37%;
+}
+
+.alert-message {
+	display: none;
+	background-color: rgba(215,215,215,0.20);
+	border: 1px solid rgba(215,215,215,0.40);
+	padding: 10px;
+	border-radius: 3px;
+	margin: 20px auto 0;
+	width: 255px;
+	text-align: center;
 }
 
 

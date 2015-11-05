@@ -1,7 +1,7 @@
 $( document ).ready(function() {
 
 	//add zero state if all events are out of date
-	if($('.events-table tbody').children().length == 0) {
+	if($('.events-table tbody').children().length == 0 && local_data.length > 0) {
 		$('.events-table').remove();
 		$('.content h2').after('<p class="emp zero-state">There are no more upcoming events.</p>');
 	}

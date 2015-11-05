@@ -143,6 +143,8 @@ $(function() {
 					$error.message("Hey!", "You didn't enter a name.");
 				} else if (!regDJ) {
 					$error.message(entryUsername," is not yet in the system.")
+				} else if (entryUsername == "admin") {
+					$error.message("Hey!","You can't add the admin to the schedule.")
 				} else {
 					// Add entry to each selected cell
 					var entry = '<span class="entry">' + entryUsername + '</span>';

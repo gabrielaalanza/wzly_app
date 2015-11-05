@@ -8,7 +8,7 @@ $( document ).ready(function() {
 		});
 	});
 
-	$('input:checkbox').change( function(){
+	$('input:checkbox').click( function(){
         if (!$(this).is(':checked')) {
             $('input[name="dj-email"]').animate({width:'toggle'},350);
         } else {
@@ -130,12 +130,14 @@ $( document ).ready(function() {
 
 					    $('.dropdown-toggle').dropdown();
 
-					    if($('input:checkbox').is(':checked')) {
+					    if(!$('input:checkbox').is(':checked')) {
 				            $('input[name="dj-email"]').animate({width:'toggle'},350);
 				            $('input:checkbox').prop('checked', true);
 				        }
 
 						$('input[name="dj-name"]').focus();
+
+		                $('.user-message').fadeIn().delay(1500).fadeOut();
 						
 			        }
 			    });

@@ -16,7 +16,7 @@ block content
               .modal-body
                 .row
                   .col-sm-12
-                    p To clear this data, please enter the Admin password.
+                    p.manage-info To clear this data, please enter the Admin password.
                 .row
                   .col-sm-4
                     label.inline(for='name') Password 
@@ -26,6 +26,9 @@ block content
                   button.btn(type='button', data-dismiss='modal') Cancel
                   button.btn.primary(type='submit', name='submit') Clear data
       h2 Application Settings
+      .row
+        .col-sm-12
+          p.alert-message
       .row
         .col-sm-9
           h4 Semester Clearing
@@ -42,5 +45,7 @@ block content
           button.btn.clear-button.clear-year Clear year
             
     //end container
+    script(type='text/javascript').
+      var user =!{JSON.stringify(user)}
     include global-js
     script(src='/javascripts/manage.js')
