@@ -2,6 +2,7 @@ $( document ).ready(function() {
 
 	var url = window.location.href;
 	var page = getQueryVariable("page");
+	console.log(page);
 	if(url.indexOf('?') == -1 || page == "1") {
 		checkForUpdates();
 	}

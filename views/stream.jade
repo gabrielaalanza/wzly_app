@@ -38,10 +38,19 @@ block content
             - var now = moment()
             - var date = moment(song.date)
             tr
-              td
-                span(data-toggle="tooltip", data-placement="top", title="Played by: #{song.playedBy}") #{song.name}
-              td #{song.artist}
-              td #{song.album}
+              if (song.name == "" || song.name == undefined)
+                td <emp>Untitled</emp>
+              else
+                td
+                  span(data-toggle="tooltip", data-placement="top", title="Played by: #{song.playedBy}") #{song.name}
+              if (song.artist == "" || song.artist == undefined)
+                td
+              else
+                td #{song.artist}
+              if (song.album == "" || song.album == undefined)
+                td 
+              else
+                td #{song.album}
               - if (now.diff(date, 'days') === 0)
                 td #{moment(song.date).format('h:mm a')}
               - else if (now.diff(date, 'days') === 1)
