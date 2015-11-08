@@ -1,13 +1,24 @@
 $( document ).ready(function() {
 
 	var url = window.location.href;
-	if(url.indexOf('?') == -1) {
+	var page = getQueryVariable("page");
+	if(url.indexOf('?') == -1 || page == "1") {
 		checkForUpdates();
 	}
 
 	$('[data-toggle="tooltip"]').tooltip()
 	
 });
+
+function getQueryVariable(variable) {
+   var query = window.location.search.substring(1);
+   var vars = query.split("&");
+   for (var i=0;i<vars.length;i++) {
+           var pair = vars[i].split("=");
+           if(pair[0] == variable){return pair[1];}
+   }
+   return(false);
+}
 
 function checkForUpdates() {
 	setInterval(function(){
