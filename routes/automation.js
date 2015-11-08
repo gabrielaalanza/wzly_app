@@ -25,8 +25,8 @@ module.exports = function(){
 
         var song_data = req.params.data;
         song_data = song_data.split(" - ");
-        song.name = song_data[0];
-        song.artist = song_data[1];
+        song.name = song_data[1];
+        song.artist = song_data[0];
         song.playedBy = "Robo DJ"
         //song.album = req.body.album;
 
