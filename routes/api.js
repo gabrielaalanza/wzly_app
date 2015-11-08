@@ -133,7 +133,7 @@ module.exports = function(){
   router.get('/currently-playing', function(req, res) {
 
     Song.find({}).sort('date').limit(10).exec(function(err, songs){
-      console.log(songs);
+      res.send(songs);
        /*if(err) {
           console.log("there was an error loading this user");
         } else {
