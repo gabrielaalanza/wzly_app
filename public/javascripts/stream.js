@@ -50,12 +50,19 @@ function checkForUpdates() {
 	                	display = moment(item.date).format('MMM Do') + " at " + moment(item.date).format('h:mm a')
 	                }
 
-		            trHTML += '<tr><td>' + item.name + '</td><td>' + item.artist + '</td><td>' + item.album + '</td><td>' + display + '</td></tr>';
+	                var name = item.name;
+					if (name == "" || name == undefined) name = "<emp>No title</emp>";
+					var artist = item.artist;
+					if (artist== "" || artist == undefined) artist = "";
+					var album = item.album;
+					if (album == "" || album == undefined) album = "";
+
+		            trHTML += '<tr><td>' + name + '</td><td>' + artist + '</td><td>' + album + '</td><td>' + display + '</td></tr>';
 		        
 		        });
 
 		        $('.table-albums').append(trHTML);
-		        $('[data-toggle="tooltip"]').tooltip()
+		        $('[data-toggle="tooltip"]').tooltip();
 	        }
 	    });
 	}, 10000);
