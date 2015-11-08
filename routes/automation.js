@@ -19,8 +19,6 @@ module.exports = function(){
 
   router.route('/log-automated/:data')
     .post(function(req, res){
-
-        //console.log("inside");
         
         //save the song
         var song = new Song();
@@ -29,14 +27,10 @@ module.exports = function(){
         song_data = song_data.split(" - ");
         song.name = song_data[0];
         song.artist = song_data[0];
+        song.playedBy = "Robo DJ"
         //song.album = req.body.album;
 
         console.log(song);
-
-        /*
-        console.log("Saving song: "+song+'\n');
-
-        var position;
 
         Song.nextCount(function(err, count) {
 
@@ -44,46 +38,10 @@ module.exports = function(){
                 if(err) {
                     console.log("There was an error adding this song: "+err);
                 } else {
-
-                    console.log('Song Added');
+                    console.log('Song added from robo dj');
                 }
             });
-            console.log("Song position is: "+count+'\n');
-            position = count;
         });
-
-        //then, update user profile to claim this song in playlist
-        var query = {'_id': req.user.id};
-
-        User.findOne(query, function(err, user) {
-
-            //get the playlist
-
-            var playlist = user.playlists[user.playlists.length-1];
-            console.log("Playlist: "+playlist+'\n');
-
-            //check to see if this is the first song in the playlists
-            if(typeof playlist.startIndex == 'undefined') {
-                //if so, update the start index
-                playlist.startIndex = position;
-
-            } else {
-                //if not, update the end index
-                playlist.endIndex = position;
-            }
-
-            user.save(function(err, result){
-                if(err) {
-                    console.log('error saving ('+user.local.username+') playlist index: '+err);
-                } else {
-
-                    console.log(user.local.username+"'s playlist has been saved \n");
-                }
-            });
-
-
-        });
-*/
 
   }).get(function(req, res){
 
