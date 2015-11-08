@@ -58,7 +58,6 @@ function checkForUpdates() {
 					if (album == "" || album == undefined) album = "";
 
 		            trHTML += '<tr><td><span data-toggle="tooltip" data-placement="top" title="Played by: '+item.playedBy+'">' + name + '</span></td><td>' + artist + '</td><td>' + album + '</td><td>' + display + '</td></tr>';
-		        	console.log(trHTML);
 		        });
 
 		        $('.table-albums').append(trHTML);
