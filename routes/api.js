@@ -130,5 +130,23 @@ module.exports = function(){
     });
   });
 
+  router.get('/currently-playing', function(req, res) {
+
+    Song.find({}).sort('date').limit(10).exec(function(err, songs){
+      console.log(songs);
+       /*if(err) {
+          console.log("there was an error loading this user");
+        } else {
+          for (var i = users.length - 1; i >= 0; i--) {
+            if (users[i].local.username == "admin") {
+              users.splice(i,1);
+              break;
+            }
+          };
+          res.send(users);
+        }*/
+    });
+  });
+
 return router;
 }
