@@ -17,7 +17,7 @@ module.exports = function(){
   });
 */
 
-  router.route('/log-automated/')
+  router.route('/log-automated')
     .post(function(req, res){
 
         var song = req.query.song;
