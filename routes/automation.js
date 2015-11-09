@@ -20,14 +20,16 @@ module.exports = function(){
   router.route('/log-automated')
     .post(function(req, res){
 
+        console.log(req.query);
+
         var song = req.query.song;
-        console.log(song);
+        //console.log(song);
 
         var artist = req.query.artist;
-        console.log(artist);
+        //console.log(artist);
 
         var album = req.query.album;
-        console.log(album);
+        //console.log(album);
         
         //save the song
         var song = new Song();
