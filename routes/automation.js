@@ -21,6 +21,7 @@ module.exports = function(){
     .post(function(req, res){
 
         console.log(req.query);
+        console.log(req.params);
 
         var song = req.query.song;
         //console.log(song);
