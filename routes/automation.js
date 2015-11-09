@@ -17,7 +17,7 @@ module.exports = function(){
   });
 */
 
-  router.route('/log-automated')
+  router.route('/log-automated/:data')
     .post(function(req, res){
 
         console.log(req.query);
