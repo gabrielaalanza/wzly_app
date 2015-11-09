@@ -17,12 +17,21 @@ module.exports = function(){
   });
 */
 
-  router.route('/log-automated/:data')
+  router.route('/log-automated/')
     .post(function(req, res){
+
+        var song = req.query.song;
+        console.log(song);
+
+        var artist = req.query.artist;
+        console.log(artist);
+
+        var album = req.query.album;
+        console.log(album);
         
         //save the song
         var song = new Song();
-
+        /*
         var song_data = req.params.data;
         song_data = song_data.split(" - ");
         song.name = song_data[1];
@@ -42,6 +51,7 @@ module.exports = function(){
                 }
             });
         });
+*/
 
   }).get(function(req, res){
 
