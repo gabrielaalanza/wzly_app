@@ -19,29 +19,16 @@ module.exports = function(){
 
   router.route('/log-automated/:nowplaying/:album')
     .post(function(req, res){
-
-        console.log(req.params);
-        console.log(req.params.nowplaying);
-        console.log(req.params.album);
-
-        //var song = req.query.song;
-        //console.log(song);
-
-        //var artist = req.query.artist;
-        //console.log(artist);
-
-        //var album = req.query.album;
-        //console.log(album);
         
         //save the song
         var song = new Song();
-        /*
-        var song_data = req.params.data;
+        
+        var song_data = req.params.nowplaying;
         song_data = song_data.split(" - ");
         song.name = song_data[1];
         song.artist = song_data[0];
+        song.album = req.params.album;
         song.playedBy = "Robo DJ"
-        //song.album = req.body.album;
 
         console.log(song);
 
@@ -55,7 +42,6 @@ module.exports = function(){
                 }
             });
         });
-*/
 
   }).get(function(req, res){
 
