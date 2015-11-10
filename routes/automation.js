@@ -17,19 +17,20 @@ module.exports = function(){
   });
 */
 
-  router.route('/log-automated/:data')
+  router.route('/log-automated/:nowplaying/:album')
     .post(function(req, res){
 
-        console.log(req.query);
         console.log(req.params);
+        console.log(req.params.nowplaying);
+        console.log(req.params.album);
 
-        var song = req.query.song;
+        //var song = req.query.song;
         //console.log(song);
 
-        var artist = req.query.artist;
+        //var artist = req.query.artist;
         //console.log(artist);
 
-        var album = req.query.album;
+        //var album = req.query.album;
         //console.log(album);
         
         //save the song
