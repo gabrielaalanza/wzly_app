@@ -45,7 +45,7 @@ module.exports = function(){
 
   }).get(function(req, res){
 
-        console.log("inside");
+        res.end();
     });
 
 

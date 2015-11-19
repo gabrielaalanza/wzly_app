@@ -44,7 +44,20 @@ module.exports = function(passport){
       } else {
         console.log("logging in: "+user.local.username);
         req.logIn(user, function(err) {
+          
           if (err) { return next(err); }
+
+          //double check that users are not live
+          user.live = false;
+
+          user.save(function(err, result){
+            if(err) {
+                console.log('error setting user ('+user.local.username+') to not live: '+err);
+            } else {
+                console.log('double checked that '+user.local.username+' is not live');
+            }
+          });
+
           return res.redirect('/app/profile');
         });
       }

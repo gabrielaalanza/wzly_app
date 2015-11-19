@@ -44,6 +44,9 @@ var json2csv = require('json2csv');
 // ** Nodemailer ** //
 var nodemailer = require('nodemailer');
 
+// ** Node Schedule ** //
+var schedule = require('node-schedule');
+
 // ** For password reset ** //
 var bcrypt = require('bcrypt-nodejs');
 var async = require('async');

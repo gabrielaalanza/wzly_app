@@ -32,6 +32,19 @@ var nodemailer = require('nodemailer');
 var json2csv = require('json2csv');
 var fs = require('fs');
 
+var schedule = require('node-schedule');
+
+// ****** Schedule that automatic charting ****** //
+
+var rule = new schedule.RecurrenceRule();
+rule.dayOfWeek = 0;
+rule.hour = 0;
+rule.minute = 0;
+
+var j = schedule.scheduleJob(rule, function(){
+    createChart();
+});
+
 // ****** Check to see if user is authenticated ****** //
 
 var isAuthenticated = function (req, res, next) {
@@ -59,6 +72,37 @@ function getCSV(data, res) {
       });
 
     });
+}
+
+function createChart() {
+
+    chart = new Chart();
+
+    Album.find().sort({count: 1}).exec(function(err,charts){
+       if(err) {
+            console.log("there was an error loading charts");
+        } else {
+            for (var i = charts.length - 1; i >= 0; i--) {
+                var chartArtist = charts[i].artist;
+                var chartAlbum = charts[i].album;
+                var chartCount = charts[i].count;
+
+                var alb = {artist: chartArtist, album: chartAlbum, count: chartCount};
+                (chart.list).push(alb);
+            };
+
+            chart.save(function(err){
+                if(err) {
+                    console.log("This is an error: "+err);
+                } else {
+                    Album.update({ 'count': { $gt: 0 } }, { $set: { 'count': '0' } }, {multi: true}, function(err, result){
+                        if(err) console.log("Count not update charts count: "+err);
+                    });
+                }   
+            })
+            
+        }
+    })
 }
 
 
@@ -179,38 +223,7 @@ module.exports = function(passport){
     // ****** Get albums from database ****** //
     router.route('/charts')
         .post(isAuthenticated, function(req, res) {
-            chart = new Chart();
-
-            Album.find().sort({count: 1}).exec(function(err,charts){
-               if(err) {
-                    console.log("there was an error loading charts");
-                } else {
-                    for (var i = charts.length - 1; i >= 0; i--) {
-                        var chartArtist = charts[i].artist;
-                        var chartAlbum = charts[i].album;
-                        var chartCount = charts[i].count;
-
-                        var alb = {artist: chartArtist, album: chartAlbum, count: chartCount};
-                        (chart.list).push(alb);
-                    };
-
-                    chart.save(function(err){
-                        if(err) {
-                            console.log("This is an error: "+err);
-                        } else {
-                            Album.update({ 'count': { $gt: 0 } }, { $set: { 'count': '0' } }, {multi: true}, function(err, result){
-                                console.log(result);
-
-                                if(err)
-                                    console.log("Count not update charts count: "+err);
-
-                                res.redirect('back');
-                            });
-                        }   
-                    })
-                    
-                }
-            })
+            
 
         })
         .get(isAuthenticated, function(req, res) {

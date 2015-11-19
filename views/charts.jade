@@ -6,8 +6,6 @@ block content
     include admin-sidebar
     .content.charts
       .current-week
-        form(action='/admin/charts', method='post')
-          button.btn.pull-right(type="submit") Start new week
         h2 Week #{week} Charts
           a.see-charts(href='#') See past weeks
         - if(!charts[0])
