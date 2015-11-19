@@ -31,6 +31,7 @@
     "mongoose-paginate": "4.2.0",
     "morgan": "~1.2.3",
     "multer": "^0.1.4",
+    "node-schedule": "^0.5.1",
     "nodemailer": "0.7.0",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
