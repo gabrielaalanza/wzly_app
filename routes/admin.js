@@ -111,26 +111,30 @@ function clearSemester(req, res, semester) {
 
     //remove all events
     Event.remove({}, function(err) {
-        if (err) {
-            console.log(err)
-        }
+        if (err) console.log(err);
         console.log("Removed all events");
     });
 
     //remove all albums
     Album.remove({}, function(err) {
-        if (err) {
-            console.log(err)
-        }
+        if (err) console.log(err);
         console.log("Removed all albums");
     });
 
-    //remove all albums
+    //remove all songs
     Song.remove({}, function(err) {
-        if (err) {
-            console.log(err)
-        }
+        if (err) console.log(err);
         console.log("Removed all songs");
+    });
+
+    //set album and song counts back to 0
+    
+    Song.resetCount(function(err, nextCount) {
+        if(err) console.log("There was an error setting the count of songs back to 0: "+err);
+    });
+
+    Album.resetCount(function(err, nextCount) {
+        if(err) console.log("There was an error setting the count of albums back to 0: "+err);
     });
 
     if(semester) {
@@ -140,15 +144,12 @@ function clearSemester(req, res, semester) {
                 console.log(err)
             } else {
                 for (var i = users.length - 1; i >= 0; i--) {
-                    console.log(users[i].local.username);
                     if(users[i].show != undefined) {
                         users[i].show = [];
                         users[i].save(function(err, result){
                             if(err) {
                                 console.log("There was an error saving users after removing their shows: "+err);
                             }
-                            console.log(result.local.username);
-                            console.log(result.show);
                         });
                     }
                 };
