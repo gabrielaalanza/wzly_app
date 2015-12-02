@@ -457,12 +457,52 @@ module.exports = function(passport){
                     console.log('There was an error finding this user: '+err)
                 } else {
 
-                    user.eboard = undefined;
+                    user.eboard.position = undefined;
                     user.save(function(err) {
                         if (err) {
                             console.log('There was an error updating the position: '+err)
                         }
                         res.redirect('back');
+                    })
+                }
+            });
+        });
+
+    router.route('/hide-user/:id')
+        .post(isAuthenticated, function(req,res){
+            User.findOne({
+                _id: req.params.id
+            }, function(err, user) {
+                if (err) {
+                    console.log('There was an error finding this user: '+err)
+                } else {
+
+                    user.eboard.display = false;
+                    user.save(function(user, err) {
+                        if (err) {
+                            console.log('There was an error hiding the user: '+err)
+                        }
+                        res.end();
+                    })
+                }
+            });
+        });
+
+    router.route('/show-user/:id')
+        .post(isAuthenticated, function(req,res){
+            User.findOne({
+                _id: req.params.id
+            }, function(err, user) {
+                if (err) {
+                    console.log('There was an error finding this user: '+err)
+                } else {
+
+                    user.eboard.display = true;
+                    user.save(function(user, err) {
+                        if (err) {
+                            console.log('There was an error showing the user: '+err)
+                        }
+                        res.end();
                     })
                 }
             });

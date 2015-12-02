@@ -7,5 +7,23 @@ $( document ).ready(function() {
     $('body').css('background-image', 'url(' + url +')');
 
     $('body').addClass('login');
+    
+    $(".form-signin button[type='submit']").click(function() {
+
+		event.preventDefault();
+
+		var username = $('input[name="username"]').val();
+		var password = $('input[name="password"]').val();
+
+	    $.post('/login', { username: username, password: password}, function(data) {
+	    	$('.form-signin')[0].reset();
+	    	if(typeof data.redirect == 'string') {
+	    		window.location = data.redirect;
+	    	} else {
+	    		$('.loginerror').text(data);
+	    	}
+		});  
+
+	});
 	
 });

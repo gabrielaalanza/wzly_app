@@ -16,6 +16,7 @@ module.exports = function(passport){
                     User.findOne({ 'local.username' :  username }, function(err, user) {
                         console.log("supplied username: "+username);
                         console.log("user?: "+user);
+                        console.log("hi!");
 
                         // In case of any error, return using the done method
                         if (err)

@@ -24,6 +24,30 @@ $( document ).ready(function() {
 		});  
 	});
 
+	$('.hide-user').click(function() {
+		var id = $(this).closest('tr').data('id');
+
+	    $.post('/admin/hide-user/'+id, function(data) {
+	    	location.reload();
+		});  
+	});
+
+	$('.show-user').click(function() {
+		var id = $(this).closest('tr').data('id');
+
+	    $.post('/admin/show-user/'+id, function(data) {
+	    	location.reload();
+		});  
+	});
+
+	$('.delete-user').click(function() {
+		var id = $(this).closest('tr').data('id');
+
+	    $.post('/admin/user/'+id, function(data) {
+	    	location.reload();
+		});  
+	});
+
 	$('.position-save').click(function(){
 		var position = $('input[name="position-name"]').val();
 		var id = $('input[name="position-name"]').data('id');

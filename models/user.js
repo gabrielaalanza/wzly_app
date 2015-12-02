@@ -60,7 +60,8 @@ var userSchema = new Schema({
         bands            : String,
         concert          : String,
         thoughts         : String,
-        interview        : String
+        interview        : String,
+        display          : {type: Boolean, default: true },
     }
 
 });

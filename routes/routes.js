@@ -33,13 +33,14 @@ module.exports = function(passport){
         return next(err); 
       }
       if (!user) { 
-        return res.redirect('/login'); 
+        //return res.redirect('/login'); 
+        return res.send('No account with that username exists. Contact the executive board.'); 
       }
       if(user.local.username == "admin") {
         console.log("logging in: "+user.local.username);
         req.logIn(user, function(err) {
           if (err) { return next(err); }
-          return res.redirect('/admin/library');
+          return res.send({redirect: '/admin/library'});
         });
       } else {
         console.log("logging in: "+user.local.username);
@@ -58,7 +59,7 @@ module.exports = function(passport){
             }
           });
 
-          return res.redirect('/app/profile');
+          return res.send({redirect: '/app/profile'});
         });
       }
     })(req, res, next);
@@ -187,7 +188,7 @@ router.route('/reset/:token')
         function(token, done) {
           User.findOne({ 'local.username': req.body.username }, function(err, user) {
             if (!user) {
-              res.send('No account with that username exists. Contact the admin.');
+              res.send('No account with that username exists. Contact the executive board.');
               // send error message
             } else {
               user.local.resetPasswordToken = token;
@@ -211,7 +212,7 @@ router.route('/reset/:token')
             from: 'airwave.app@gmail.com',
             subject: 'Reset your Airwave Password',
             text: 'Hello '+user.local.name+',\n\n'+
-              "Don't worry to much about your password. Mistakes happen.\n\n" +
+              "Don't worry too much about your password. Mistakes happen.\n\n" +
               'Please click on the following link, or paste this into your browser to reset it:\n\n' +
               'http://'+req.headers.host+'/reset/' + token + '\n\n' +
               'Thanks,\n'+'Airwave'
