@@ -115,7 +115,7 @@ module.exports = function(){
 
   router.get('/eboard', function(req, res) {
 
-    User.find({'eboard.position': {$exists: true}, 'eboard.display': { $not: false }}).sort('local.name').exec(function(err,users) {
+    User.find({'eboard.position': {$exists: true}}).sort('local.name').exec(function(err,users) {
        if(err) {
           console.log("there was an error loading eboarders");
         } else {
