@@ -144,20 +144,21 @@ router.route('/reset/:token')
 
       User.findOne({ 'local.resetPasswordToken': req.params.token}, function(err, user) {
           if (!user) {
-              req.flash('error', 'Password reset token is invalid or has expired.');
-              return res.redirect('back');
-          }
+              return res.send('Password reset token is invalid or has expired. Contact the executive board.');
+              console.log("no user found");
+          } else {
 
-          user.local.password = req.body.password;
-          user.local.resetPasswordToken = undefined;
+            user.local.password = req.body.password;
+            user.local.resetPasswordToken = undefined;
 
-          user.save(function(err) {
-            if (err) { return next(err); }
-            req.logIn(user, function(err) {
+            user.save(function(err) {
               if (err) { return next(err); }
-              return res.redirect('/app/profile');
+              req.logIn(user, function(err) {
+                if (err) { return next(err); }
+                return res.send({redirect: '/app/profile'});
+              });
             });
-          });
+          }
       });
 
   })

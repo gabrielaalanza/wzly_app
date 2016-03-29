@@ -20,7 +20,10 @@ $( document ).ready(function() {
 		var postTo = '/reset/'+token;
 
 	    $.post(postTo, { password: password}, function(data) {
-	    	if(data) {
+	    	$('.form-signin')[0].reset();
+	    	if(typeof data.redirect == 'string') {
+	    		window.location = data.redirect;
+	    	} else {
 	    		$('.loginerror').text(data);
 	    	} 
 		});  
